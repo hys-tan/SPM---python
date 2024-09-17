@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkcalendar import DateEntry
 
 def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius=10, **kwargs):
     points = [
@@ -29,10 +30,86 @@ def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius=10, **kwargs):
 def vent_registro():
     # Ventana registro
     new_reg = tk.Toplevel(root)
-    new_reg.title("Agregar Nuevo Registro")
-    new_reg.geometry("1000x600")
+    new_reg.title("Nuevo Registro")
+    new_reg.geometry("624x600")
     new_reg.resizable(False, False)
     new_reg.configure(bg="#373737")
+
+    # Crear un Canvas en la ventana de registro
+    canvas_reg = tk.Canvas(new_reg, width=624, height=600, bg="#373737", highlightthickness=0)
+    canvas_reg.pack()
+
+    # Nuevo registro
+    canvas_reg.create_text(170, 10, text="Nuevo Registro", anchor="nw", font=("Raleway", 30, "bold"), fill="White")
+    
+    # Cuadro 1
+    create_rounded_rectangle(canvas_reg, 10, 80, 307, 550, radius=10, fill="#959595", outline="#959595")
+
+    # Cuadro 2
+    create_rounded_rectangle(canvas_reg, 317, 80, 614, 550, radius=10, fill="#959595", outline="#959595")
+
+    # coti--
+    canvas_reg.create_text(20, 92, text="N° de Cotización", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_reg, 20, 110, 297, 140, radius=10, fill="white", outline="#959595")
+
+    input_coti = tk.Text(new_reg, font=("Raleway", 11), bd=0) #Entry
+    input_coti.place(x=25, y=115, width=267, height=20)
+    
+    # nombre--
+    canvas_reg.create_text(20, 156, text="Empresa", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    create_rounded_rectangle(canvas_reg, 20, 174, 297, 204, radius=10, fill="white", outline="#959595")
+    
+    input_nom = tk.Text(new_reg, font=("Raleway", 11), bd=0) #Entry
+    input_nom.place(x=25, y=179, width=267, height=20)
+    
+    # descripcion--
+    canvas_reg.create_text(20, 220, text="Descripción", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    create_rounded_rectangle(canvas_reg, 20, 238, 297, 328, radius=10, fill="white", outline="#959595")
+    
+    input_desc = tk.Text(new_reg, font=("Raleway", 11), bd=0, wrap="word")
+    input_desc.place(x=25, y=243, width=267, height=80)
+    
+    # tiempo de ejecucion
+    canvas_reg.create_text(20, 344, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    create_rounded_rectangle(canvas_reg, 20, 362, 297, 392, radius=10, fill="white", outline="#959595")
+    
+    input_temp = tk.Text(new_reg, font=("Raleway", 11), bd=0) #Entry
+    input_temp.place(x=25, y=367, width=267, height=20)
+    
+    # costo
+    canvas_reg.create_text(20, 408, text="Costo Estimado", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    create_rounded_rectangle(canvas_reg, 20, 426, 297, 456, radius=10, fill="white", outline="#959595")
+    
+    label_costo = tk.Label(new_reg, text="S/.", font=("Raleway", 10), bg="white")
+    label_costo.place(x=25, y=429)
+    
+    input_costo = tk.Text(new_reg, font=("Raleway", 11), bd=0) #Entry
+    input_costo.place(x=50, y=431, width=242, height=20)
+    
+    # fecha de coti
+    canvas_reg.create_text(20, 472, text="Fecha de Cotización", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    date_entry = DateEntry(new_reg, font=("Raleway", 11), width=17, background='darkblue', foreground='white', borderwidth=2)
+    date_entry.place(x=20, y=491, width=278, height=30)
+    
+    # DOCUMENTOS A ADJUNTAR
+    
+    # Cotizacion
+    canvas_reg.create_text(327, 92, text="Doc. Cotización", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    
+    
+    # botones
+    button_save = tk.Button(new_reg, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    button_save.place(x=207, y=560)
+    
+    button_cancel = tk.Button(new_reg, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=new_reg.destroy)
+    button_cancel.place(x=317, y=560)
 
 # Crear la ventana principal
 root = tk.Tk()
@@ -88,12 +165,12 @@ search_entry.place(x=1010, y=29, width=280, height=30)
 
 
 # Tabla del cuadro base
-tree = ttk.Treeview(root, columns=("cotizacion", "nombre", "ruc", "descripcion", "fecha", "cancelado"), show="headings", )
-tree.place(x=312, y=88, width=978, height=564) #w-977 / h-567
+tree = ttk.Treeview(root, columns=("cotizacion", "nombre", "ruc", "descripcion", "fecha", "cancelado"), show="headings")
+tree.place(x=312, y=88, width=978, height=564)
 
 # Configurar las columnas
 tree.heading("cotizacion", text="N° de Cotización")
-tree.heading("nombre", text="Nombre/Empresa")
+tree.heading("nombre", text="Empresa")
 tree.heading("ruc", text="RUC")
 tree.heading("descripcion", text="Descripción")
 tree.heading("fecha", text="Fecha de Registro")
