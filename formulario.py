@@ -1,8 +1,39 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from tkinter import filedialog
 from tkcalendar import DateEntry
 import os
+import sqlite3
+import time
+import shutil
+
+
+# Conectar o crear base de datos
+def crear_db():
+    conexion = sqlite3.connect('registros.db')
+    cursor = conexion.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS registros (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        num_cotizacion TEXT NOT NULL,
+                        empresa TEXT NOT NULL,
+                        ruc_dni TEXT NOT NULL,
+                        descripcion TEXT,
+                        tiempo_ejecucion TEXT,
+                        costo_estimado TEXT,
+                        fecha_cotizacion TEXT,
+                        cancelado TEXT,
+                        comentarios TEXT
+                    )''')
+    conexion.commit()
+    conexion.close()
+    
+crear_db()  # Crear la base de datos al iniciar
+
+
+# Crear la carpeta para los documentos adjuntados
+if not os.path.exists("documentos_adjuntados"):
+    os.makedirs("documentos_adjuntados")
+
 
 def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius=10, **kwargs):
     points = [
@@ -30,6 +61,72 @@ def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius=10, **kwargs):
     return canvas.create_polygon(points, smooth=True, **kwargs)
 
 
+
+def cargar_datos_tree():
+    # Cargar los datos de la base de datos y mostrarlos en el treeview
+    for row in tree.get_children():
+        tree.delete(row)
+
+    conexion = sqlite3.connect('registros.db')
+    cursor = conexion.cursor()
+    cursor.execute("SELECT num_cotizacion, empresa, ruc_dni, descripcion, fecha_cotizacion, cancelado FROM registros")
+    registros = cursor.fetchall()
+    
+    for registro in registros:
+        tree.insert('', tk.END, values=registro)
+
+    conexion.close()
+
+
+
+def actualizar_registros():
+    # Función que simula la actualización de los registros con una barra de progreso
+    # Contar la cantidad de registros en la base de datos
+    conexion = sqlite3.connect('registros.db')
+    cursor = conexion.cursor()
+    cursor.execute("SELECT COUNT(*) FROM registros")
+    total_registros = cursor.fetchone()[0]
+    conexion.close()
+
+    # Si no hay registros, simplemente muestra el mensaje de lista actualizada
+    if total_registros == 0:
+        messagebox.showinfo("Actualización", "No hay registros que actualizar.")
+        return
+
+    # Crear ventana emergente con barra de progreso
+    progreso_ventana = tk.Toplevel(root)
+    progreso_ventana.title("Actualizando Registros")
+    progreso_ventana.geometry("400x150")
+    progreso_ventana.resizable(False, False)
+
+    # Mensaje de advertencia
+    label_info = tk.Label(progreso_ventana, text="Actualizando los registros, por favor espere...")
+    label_info.pack(pady=10)
+
+    # Barra de progreso
+    barra_progreso = ttk.Progressbar(progreso_ventana, orient="horizontal", length=300, mode="determinate")
+    barra_progreso.pack(pady=10)
+
+    # Función para actualizar la barra de progreso
+    def iniciar_progreso():
+        progreso = 0
+        increment = 100 / total_registros  # Incremento basado en el número de registros
+
+        for i in range(total_registros):
+            progreso += increment
+            barra_progreso["value"] = progreso
+            progreso_ventana.update_idletasks()
+            time.sleep(0.1)  # Simular tiempo de carga por registro
+
+        # Cerrar la ventana de progreso y mostrar mensaje de confirmación
+        progreso_ventana.destroy()
+        messagebox.showinfo("Actualización", f"Lista actualizada exitosamente!\nSe encontraron {total_registros} registros")
+
+    # Iniciar la barra de progreso
+    progreso_ventana.after(100, iniciar_progreso)
+
+
+
 def ajustar_texto(texto, max_length=20):
     #Ajusta el texto para que no exceda la longitud máxima y agrega '...' al final si es necesario.
     if len(texto) > max_length:
@@ -39,10 +136,97 @@ def ajustar_texto(texto, max_length=20):
 def adjuntar_archivo(label):
     archivo = filedialog.askopenfilename(title="Seleccionar archivo")
     if archivo:
-        # Obtener solo el nombre del archivo
         nombre_archivo = os.path.basename(archivo)
         texto_ajustado = ajustar_texto(nombre_archivo)
         label.config(text=texto_ajustado)
+
+        # Copiar el archivo seleccionado a la carpeta 'documentos_adjuntados'
+        destino = os.path.join("documentos_adjuntados", nombre_archivo)
+        shutil.copy(archivo, destino)  # Copia el archivo al destino
+        return destino  # Devuelve la nueva ruta del archivo copiado
+    return None
+
+
+
+def validar_datos():
+    # Verificar si los campos obligatorios están llenos
+    if not input_coti.get("1.0", tk.END).strip():
+        return False
+    if not input_nom.get("1.0", tk.END).strip():
+        return False
+    if not input_ruc.get("1.0", tk.END).strip():
+        return False
+    if not input_desc.get("1.0", tk.END).strip():
+        return False
+    if not input_temp.get("1.0", tk.END).strip():
+        return False
+    if not input_costo.get("1.0", tk.END).strip():
+        return False
+    if cbo_cancelado.get() == "Seleccione una opción":
+        return False
+    return True
+
+
+def guardar_datos(new_reg):
+    # Función para guardar los datos después de la validación.
+    if not validar_datos():
+        messagebox.showwarning("Advertencia", "Datos no registrados, por favor complete los campos restantes")
+        return
+    
+    # Obtener datos de la interfaz
+    num_cotizacion = input_coti.get("1.0", tk.END).strip()
+    empresa = input_nom.get("1.0", tk.END).strip()
+    ruc_dni = input_ruc.get("1.0", tk.END).strip()
+    descripcion = input_desc.get("1.0", tk.END).strip()
+    tiempo_ejecucion = input_temp.get("1.0", tk.END).strip()
+    costo_estimado = input_costo.get("1.0", tk.END).strip()
+    fecha_cotizacion = date_entry.get()
+    cancelado = cbo_cancelado.get()
+    comentarios = input_cm.get("1.0", tk.END).strip()
+
+    # Guardar en base de datos
+    conexion = sqlite3.connect('registros.db')
+    cursor = conexion.cursor()
+    cursor.execute('''INSERT INTO registros (num_cotizacion, empresa, ruc_dni, descripcion, tiempo_ejecucion, 
+                    costo_estimado, fecha_cotizacion, cancelado, comentarios) VALUES (?,?,?,?,?,?,?,?,?)''',
+                   (num_cotizacion, empresa, ruc_dni, descripcion, tiempo_ejecucion, costo_estimado, 
+                    fecha_cotizacion, cancelado, comentarios))
+    conexion.commit()
+    conexion.close()
+
+    # Guardar documentos adjuntados
+    guardar_documento(archivo_coti, 'cotizacion')
+    guardar_documento(archivo_oc, 'orden_compra')
+    guardar_documento(archivo_gr, 'guia_remision')
+
+    # Mostrar mensaje de confirmación
+    messagebox.showinfo("Confirmación", "Datos guardados correctamente")
+    
+    # Recargar los datos en la tabla
+    cargar_datos_tree()
+    
+    new_reg.destroy()  # Cierra la ventana de "Nuevo Registro"
+    root.deiconify()  # Muestra nuevamente la ventana principal
+    
+    
+def guardar_documento(ruta_archivo, tipo_doc):
+    if ruta_archivo:
+        # Crear carpeta si no existe
+        if not os.path.exists('documentos_adjuntados'):
+            os.makedirs('documentos_adjuntados')
+        
+        # Guardar archivo en la carpeta
+        nombre_archivo = os.path.basename(ruta_archivo)
+        destino = os.path.join('documentos_adjuntados', f"{tipo_doc}_{nombre_archivo}")
+        os.rename(ruta_archivo, destino)
+
+def confirmar_cancelacion(new_reg):
+    # Mostrar mensaje de advertencia
+    respuesta = messagebox.askquestion("Confirmación", "¿Desea cancelar el registro?")
+    if respuesta == 'yes':
+        new_reg.destroy()   # Cierra la ventana de registro
+        root.deiconify()    # Muestra nuevamente la ventana principal
+
 
 def placeholder_search(event):
     if search_entry.get() == "":
@@ -55,8 +239,19 @@ def clear_placeholder(event):
         search_entry.config(fg='black')
 
 
-
 def vent_registro():
+    
+    global input_coti, input_nom, input_ruc, input_desc, input_temp, input_costo, date_entry, cbo_cancelado, input_cm
+    global archivo_coti, archivo_oc, archivo_gr
+    
+    # Ocultar la ventana principal
+    root.withdraw()
+    
+    # Inicialización de variables de archivos
+    archivo_coti = None
+    archivo_oc = None
+    archivo_gr = None
+    
     # Ventana registro
     new_reg = tk.Toplevel(root)
     new_reg.title("Nuevo Registro")
@@ -159,7 +354,7 @@ def vent_registro():
     label_oc.place(x=450, y=175, width=155, height=29)
     
     
-            # Guía dere remisión
+            # Guía de remisión
     canvas_reg.create_text(327, 220, text="Guía de Remisión", anchor="nw", font=("Raleway", 10), fill="black")
     
     button_gr = tk.Button(new_reg, text="Seleccionar archivo", command=lambda: adjuntar_archivo(label_gr))
@@ -187,10 +382,10 @@ def vent_registro():
     
 
     # botones
-    button_save = tk.Button(new_reg, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    button_save = tk.Button(new_reg, text="Guardar", width=13, height=1, font=("Raleway", 9), command=lambda: guardar_datos(new_reg))
     button_save.place(x=207, y=560)
     
-    button_cancel = tk.Button(new_reg, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=new_reg.destroy)
+    button_cancel = tk.Button(new_reg, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=lambda: confirmar_cancelacion(new_reg))
     button_cancel.place(x=317, y=560)
 
 
@@ -230,7 +425,7 @@ button_ant.place(x=1118, y=661)
 button_nr = tk.Button(root, text="Agregar Nuevo Registro", width=37, height=1, font=("Raleway", 9), command=vent_registro)
 button_nr.place(x=22, y=88)
 
-button_ar = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9))
+button_ar = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=actualizar_registros)
 button_ar.place(x=22, y=134)
 
 button_vd = tk.Button(root, text="Ver Detalles", width=37, height=1, font=("Raleway", 9))
@@ -282,6 +477,8 @@ tree.column("descripcion", anchor="center", width=280)
 tree.column("fecha", anchor="center", width=100)
 tree.column("cancelado", anchor="center", width=50)
 
+# Cargar los datos en la tabla al iniciar
+cargar_datos_tree()
 
 # Ejecutar la interfaz
 root.mainloop()
