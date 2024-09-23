@@ -276,6 +276,201 @@ def vent_registro():
     button_cancel.place(x=317, y=560)
 
 
+def crear_coti():
+    
+    global input_gcoti, input_gfecha, input_gpersona, input_gempresa, input_gservicio, input_gejecucion, input_gpago 
+    global cbo_igv, cbo_moneda, input_gdesc, input_gmateriales, input_gunidad, cbo_unidad, input_gpunit, input_gcuenta
+    global cbo_cuenta, input_gbanco, tree_materiales
+    
+    # Ocultar la ventana principal
+    root.withdraw()
+    
+    # Ventana registro
+    crear_coti = tk.Toplevel(root)
+    crear_coti.title("Crear Cotización")
+    crear_coti.geometry("605x756")
+    crear_coti.resizable(False, False)
+    crear_coti.configure(bg="#373737")
+    crear_coti.protocol("WM_DELETE_WINDOW", cerrar_programa)
+    
+    # Crear un Canvas en la ventana de registro
+    canvas_coti = tk.Canvas(crear_coti, width=605, height=772, bg="#373737", highlightthickness=0)
+    canvas_coti.pack()
+    
+    # Nuevo registro
+    canvas_coti.create_text(125, 0, text="Generar Cotización", anchor="nw", font=("Raleway", 30, "bold"), fill="White")
+    
+    # Cuadro arriba
+    create_rounded_rectangle(canvas_coti, 10, 66, 595, 262, radius=10, fill="#959595", outline="#959595")
+
+    # Cuadro centro
+    create_rounded_rectangle(canvas_coti, 10, 272, 595, 468, radius=10, fill="#959595", outline="#959595")
+    
+    # Cuadro abajo
+    create_rounded_rectangle(canvas_coti, 10, 518, 595, 706, radius=10, fill="#959595", outline="#959595")
+                                            #-523
+
+    # Definimos las columnas para la tabla de materiales
+    columns = ("descripcion", "material", "unidad", "precio_unit")
+    
+    # Creamos la tabla
+    tree_materiales = ttk.Treeview(crear_coti, columns=columns, show="headings")
+    tree_materiales.place(x=10, y=518, width=586, height=189)
+                                        #----586
+    
+    # Configuramos los encabezados de cada columna
+    tree_materiales.heading("descripcion", text="Descripción")
+    tree_materiales.heading("material", text="Material")
+    tree_materiales.heading("unidad", text="Unidad(es)")
+    tree_materiales.heading("precio_unit", text="Precio Unit.")
+    
+    # Configuramos el ancho de cada columna
+    tree_materiales.column("descripcion", anchor="center", width=200)
+    tree_materiales.column("material", anchor="center", width=120)
+    tree_materiales.column("unidad", anchor="center", width=50)
+    tree_materiales.column("precio_unit", anchor="center", width=100)
+    
+
+    # n° de cotizacion
+    canvas_coti.create_text(20, 76, text="N° de Cotización", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 20, 94, 200, 124, radius=10, fill="white", outline="#959595")
+
+    input_gcoti = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gcoti.place(x=25, y=99, width=170, height=20)
+    
+    # fecha
+    canvas_coti.create_text(210, 76, text="Fecha", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 210, 94, 405, 124, radius=10, fill="white", outline="#959595")
+
+    input_gfecha = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gfecha.place(x=215, y=99, width=185, height=20)
+    
+    # persona
+    canvas_coti.create_text(415, 76, text="Persona de Contacto", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 415, 94, 585, 124, radius=10, fill="white", outline="#959595")
+
+    input_gpersona = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gpersona.place(x=420, y=99, width=160, height=20)
+    
+    # empresa
+    canvas_coti.create_text(20, 140, text="Empresa", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 20, 158, 200, 188, radius=10, fill="white", outline="#959595")
+
+    input_gempresa = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gempresa.place(x=25, y=163, width=170, height=20)
+    
+    # servicio
+    canvas_coti.create_text(210, 140, text="Servicio", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 210, 158, 585, 188, radius=10, fill="white", outline="#959595")
+
+    input_gservicio = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gservicio.place(x=215, y=163, width=365, height=20)
+    
+    # tiempo de ejecucion
+    canvas_coti.create_text(20, 204, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 20, 222, 225, 252, radius=10, fill="white", outline="#959595")
+
+    input_gejecucion = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gejecucion.place(x=25, y=227, width=195, height=20)
+    
+    # forma de pago
+    canvas_coti.create_text(235, 204, text="Forma de Pago", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 235, 222, 355, 252, radius=10, fill="white", outline="#959595")
+
+    input_gpago = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gpago.place(x=240, y=227, width=110, height=20)
+    
+    # igv
+    canvas_coti.create_text(365, 204, text="IGV", anchor="nw", font=("Raleway", 10), fill="black")
+
+    cbo_igv = ttk.Combobox(canvas_coti, values=["SI", "NO"], state="readonly", font=("Raleway", 10))
+    cbo_igv.place(x=365, y=222, width=70, height=31)
+    cbo_igv.current(0)
+    
+    # tipo de moneda
+    canvas_coti.create_text(445, 204, text="Tipo de Moneda", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    cbo_moneda = ttk.Combobox(canvas_coti, values=["PEN", "USD"], state="readonly", font=("Raleway", 10))
+    cbo_moneda.place(x=445, y=222, width=140, height=31)
+    cbo_moneda.current(0)
+    
+    # descripcion
+    canvas_coti.create_text(20, 282, text="Descripción", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 20, 300, 585, 330, radius=10, fill="white", outline="#959595")
+
+    input_gdesc = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gdesc.place(x=25, y=305, width=555, height=20)
+    
+    # materiales
+    canvas_coti.create_text(20, 346, text="Materiales", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 20, 364, 290, 394, radius=10, fill="white", outline="#959595")
+
+    input_gmateriales = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gmateriales.place(x=25, y=369, width=260, height=20)
+    
+    # unidades
+    canvas_coti.create_text(300, 346, text="Unidad(es)", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 300, 364, 350, 394, radius=10, fill="white", outline="#959595")
+
+    input_gunidad = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gunidad.place(x=305, y=369, width=40, height=20)
+    
+    cbo_unidad = ttk.Combobox(canvas_coti, values=["PIEZA", "JUEGO", "UNIDAD"], state="readonly", font=("Raleway", 10))
+    cbo_unidad.place(x=360, y=364, width=92, height=31)
+    cbo_unidad.current(0)
+    
+    # precio unit
+    canvas_coti.create_text(462, 346, text="Precio Unit.", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 462, 364, 585, 394, radius=10, fill="white", outline="#959595")
+    
+    input_gpunit = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gpunit.place(x=467, y=369, width=113, height=20)
+    
+    # nro de cuenta
+    canvas_coti.create_text(20, 410, text="N° de Cuenta", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 20, 428, 190, 458, radius=10, fill="white", outline="#959595")
+    
+    input_gcuenta = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gcuenta.place(x=25, y=433, width=160, height=20)
+    
+    cbo_cuenta = ttk.Combobox(canvas_coti, values=["SOLES", "DÓLARES"], state="readonly", font=("Raleway", 10))
+    cbo_cuenta.place(x=200, y=428, width=90, height=31)
+    cbo_cuenta.current(0)
+    
+    # tipo de banco
+    canvas_coti.create_text(300, 410, text="Banco", anchor="nw", font=("Raleway", 10), fill="black")
+
+    create_rounded_rectangle(canvas_coti, 300, 428, 585, 458, radius=10, fill="white", outline="#959595")
+    
+    input_gbanco = tk.Entry(canvas_coti, font=("Arial", 11), bd=0)
+    input_gbanco.place(x=305, y=433, width=275, height=20)
+    
+    # botones
+    button_am = tk.Button(canvas_coti, text="Agregar Material/es", width=27, height=1, font=("Raleway", 9))
+    button_am.place(x=10, y=478)
+    
+    button_lc = tk.Button(canvas_coti, text="Limpiar Campos", width=27, height=1, font=("Raleway", 9))
+    button_lc.place(x=220, y=478)
+    
+    button_gc = tk.Button(canvas_coti, text="Generar Cotización", width=27, height=1, font=("Raleway", 9))
+    button_gc.place(x=10, y=717)
+    
+    button_gcancel = tk.Button(canvas_coti, text="Cancelar", width=27, height=1, font=("Raleway", 9))
+    button_gcancel.place(x=220, y=717)
+
+
 # Crear la ventana principal
 root = tk.Tk()
 root.title("Inicio")
@@ -313,7 +508,7 @@ button_ant.place(x=1118, y=661)
 button_regcoti = tk.Button(root, text="Registrar Nueva Cotización", width=37, height=1, font=("Raleway", 9), command=vent_registro)
 button_regcoti.place(x=22, y=88)
 
-button_gencoti = tk.Button(root, text="Crear Cotización", width=37, height=1, font=("Raleway", 9))
+button_gencoti = tk.Button(root, text="Crear Cotización", width=37, height=1, font=("Raleway", 9), command=crear_coti)
 button_gencoti.place(x=22, y=134)
 
 button_verdet = tk.Button(root, text="Ver detalles", width=37, height=1, font=("Raleway", 9))
