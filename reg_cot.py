@@ -4,14 +4,44 @@ from tkinter import filedialog
 from tkcalendar import DateEntry
 import os
 import shutil
+import sqlite3
+from PIL import Image, ImageTk
+from tkinter import Toplevel, Label, Button, PhotoImage
+
+id_persona_contacto = 1
+id_area_trabajo = 1
+id_direccion = 1
+
+# Crear o conectar a la base de datos
+conn = sqlite3.connect('clientes.db')
+c = conn.cursor()
+
+# Crear tabla Clientes
+c.execute('''
+    CREATE TABLE IF NOT EXISTS Clientes (
+        id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
+        persona_contacto TEXT,
+        area_trabajo TEXT,
+        razon_social TEXT,
+        ruc TEXT,
+        direccion TEXT
+    )
+''')
+conn.commit()
 
 
-def cerrar_programa():
-    # Mostrar mensaje de confirmación al cerrar
-    if messagebox.askokcancel("Salir", "¿Está seguro de que desea salir?"):
-        root.quit()  # Detiene la ejecución del programa por completo
 
 
+
+
+
+def centrar_ventana(ventana):
+    ventana.update_idletasks()
+    width = ventana.winfo_width()
+    height = ventana.winfo_height()
+    x = (ventana.winfo_screenwidth() // 2) - (width // 2)
+    y = (ventana.winfo_screenheight() // 2) - (height // 2)
+    ventana.geometry(f"{width}x{height}+{x}+{y}")
 
 
 # Función para crear las carpetas si no existen
@@ -20,7 +50,7 @@ def crear_carpetas_adjuntar():
     carpeta_principal = "documentos_adjuntar"
     
     # Subcarpetas para cada tipo de documento
-    carpetas_sub = ["cotizacion", "orden_compra"]
+    carpetas_sub = ["cotizacion", "orden_compra", "guia_remision", "acta_conformidad", "informe_tecnico", "doc_planos", "doc_factura"]
     
     # Crear la carpeta principal si no existe
     if not os.path.exists(carpeta_principal):
@@ -113,7 +143,82 @@ def clear_placeholder(event):
     if search_entry.get() == "Buscar...":
         search_entry.delete(0, tk.END)
         search_entry.config(fg='black')
-        
+
+
+
+def ventana_advertencia(mensaje, accion_confirmar):
+    advertencia = Toplevel(root)
+    advertencia.title("Advertencia")
+    advertencia.geometry("380x112")
+    advertencia.resizable(False, False)
+    advertencia.configure(bg="#ffffff")
+
+    # Cargar el ícono de advertencia y ajustarlo al tamaño de 32x32
+    icono_advertencia = PhotoImage(file="icons/alert.png").subsample(2, 2)  # Ajustar tamaño
+    Label(advertencia, image=icono_advertencia, bg="#ffffff").place(x=20, y=20)
+    
+    # Mensaje de advertencia en la posición especificada
+    Label(advertencia, text=mensaje, bg="#ffffff", font=("Arial", 10)).place(x=77, y=27)
+    
+    # Botones de Sí y No en las coordenadas especificadas
+    Button(advertencia, text="Sí", command=lambda: [accion_confirmar(), advertencia.destroy()], font=("Arial", 10)).place(x=85, y=72)
+    Button(advertencia, text="No", command=advertencia.destroy, font=("Arial", 10)).place(x=195, y=72)
+
+    advertencia.transient(root)  # La mantiene sobre la ventana principal
+    advertencia.grab_set()  # Bloquea la interacción con otras ventanas hasta que esta se cierre
+    advertencia.mainloop()
+
+
+def ventana_confirmacion(mensaje, accion_confirmar):
+    confirmacion = Toplevel()
+    confirmacion.title("Confirmación")
+    confirmacion.geometry("300x150")
+    confirmacion.resizable(False, False)
+    confirmacion.configure(bg="#ffffff")
+
+    # Cargar el ícono de confirmación
+    icono_confirmacion = PhotoImage(file="iconos/confirmacion.png")
+    Label(confirmacion, image=icono_confirmacion, bg="#ffffff").pack(pady=10)
+    
+    # Mensaje de confirmación
+    Label(confirmacion, text=mensaje, bg="#ffffff", font=("Arial", 10)).pack(pady=5)
+    
+    # Botones de Sí y No
+    Button(confirmacion, text="Sí", command=lambda: [accion_confirmar(), confirmacion.destroy()], font=("Arial", 10)).pack(side="left", padx=20, pady=10)
+    Button(confirmacion, text="No", command=confirmacion.destroy, font=("Arial", 10)).pack(side="right", padx=20, pady=10)
+    
+    confirmacion.transient()  # La mantiene sobre la ventana principal
+    confirmacion.grab_set()  # Bloquea la interacción con otras ventanas hasta que esta se cierre
+    confirmacion.mainloop()
+
+
+def cerrar_programa():
+    ventana_confirmacion("¿Está seguro de que desea salir?", root.quit)
+
+# Ejemplo de función para eliminar una fila con confirmación
+def eliminar_columna():
+    # Aquí va la lógica para eliminar la fila seleccionada de la tabla
+    print("Columna eliminada")  # Este print es solo un ejemplo
+    ventana_advertencia("Columna eliminada")
+
+# Función para advertencia de selección de fila para editar
+def verificar_seleccion_editar(tabla, mensaje):
+    selected_item = tabla.selection()
+    if not selected_item:
+        ventana_advertencia(mensaje)
+        return None
+    item = tabla.item(selected_item)
+    return item
+
+
+
+
+
+
+
+
+
+    
 
      
 # ventana crear cot
@@ -133,6 +238,8 @@ def crear_cotiz():
     crear_coti.geometry("700x714")
     crear_coti.resizable(False, False)
     crear_coti.configure(bg="#373737")
+    
+    centrar_ventana(crear_coti) # centrar ventana
 
 
     # Crear un Canvas en la ventana de registro
@@ -367,6 +474,8 @@ def abrir_editar_material():
     editar_material.resizable(False, False)
     editar_material.configure(bg="#373737")
     
+    centrar_ventana(editar_material)
+    
     
     # Evitar que la ventana principal se edite mientras la subventana está activa
     editar_material.grab_set()  # Bloquea la ventana principal hasta que la subventana se cierre
@@ -436,16 +545,120 @@ def abrir_editar_material():
 
 def registro_clientes():
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    def eliminar_fila(tabla, campo_actual):
+        # Seleccionar la fila en la tabla
+        selected_item = tabla.selection()
+        if not selected_item:
+            mostrar_advertencia()  # Muestra la advertencia usando messagebox
+            return
+
+        # Obtener el valor actual
+        item = tabla.item(selected_item)
+        valor_actual = item['values'][1]
+
+        # Confirmación de eliminación usando messagebox
+        respuesta = messagebox.askyesno("Confirmación", f"¿Desea eliminar la columna '{valor_actual}'?")
+        if respuesta:  # Si el usuario selecciona "Sí"
+            # Eliminar la fila seleccionada de la tabla
+            tabla.delete(selected_item)
+            
+            # Confirmación de eliminación exitosa
+            messagebox.showinfo("Confirmación", "Columna eliminada")  # Modal de confirmación
+
+    def mostrar_advertencia():
+        # Esta función bloqueará la interfaz hasta que el usuario cierre la advertencia
+        messagebox.showwarning("Advertencia", "Seleccione una fila para editar.")
+    
+
+    
+    
+    
     # Ocultar la ventana principal
     root.withdraw()
     
     global reg_persona, reg_ar_tb, reg_rs_cli, reg_ruc_cli, reg_direx
+    global tabla_per_cont, tabla_ar_trab, tabla_direx
     
     reg_cliente = tk.Toplevel(root)
     reg_cliente.title("Registro de Clientes")
     reg_cliente.geometry("710x562")
     reg_cliente.resizable(False, False)
     reg_cliente.configure(bg="#373737")
+    
+    centrar_ventana(reg_cliente)
+
+    
+    # BD ------------------------------------------------
+
+    def agregar_persona_contacto():
+        global id_persona_contacto
+        # Obtener el texto ingresado en el campo de persona de contacto
+        persona_contacto = reg_persona.get()
+        
+        # Insertar el texto en la tabla correspondiente sin guardarlo en la BD
+        if persona_contacto:
+            tabla_per_cont.insert("", tk.END, values=(id_persona_contacto, persona_contacto))
+            reg_persona.delete(0, tk.END)  # Limpiar el campo después de agregar
+            id_persona_contacto += 1  # Incrementa el contador
+
+    def agregar_area_trabajo():
+        global id_area_trabajo
+        area_trabajo = reg_ar_tb.get()
+        
+        if area_trabajo:
+            tabla_ar_trab.insert("", tk.END, values=(id_area_trabajo, area_trabajo))
+            reg_ar_tb.delete(0, tk.END)
+            id_area_trabajo += 1
+
+    def agregar_direccion():
+        global id_direccion
+        direccion = reg_direx.get()
+        
+        if direccion:
+            tabla_direx.insert("", tk.END, values=(id_direccion, direccion))
+            reg_direx.delete(0, tk.END)
+            id_direccion += 1
+
+
+    def guardar_cliente():
+        # Obtener datos de los campos de entrada
+        persona_contacto = reg_persona.get()
+        area_trabajo = reg_ar_tb.get()
+        razon_social = reg_rs_cli.get()
+        ruc = reg_ruc_cli.get()
+        direccion = reg_direx.get()
+
+        # Insertar datos en la base de datos
+        c.execute('''
+            INSERT INTO Clientes (persona_contacto, area_trabajo, razon_social, ruc, direccion)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (persona_contacto, area_trabajo, razon_social, ruc, direccion))
+        conn.commit()
+
+        # Limpiar campos después de guardar
+        reg_persona.delete(0, tk.END)
+        reg_ar_tb.delete(0, tk.END)
+        reg_rs_cli.delete(0, tk.END)
+        reg_ruc_cli.delete(0, tk.END)
+        reg_direx.delete(0, tk.END)
+
+        messagebox.showinfo("Éxito", "Cliente registrado exitosamente")
+
+    # BD ------------------------------------------------
+
 
     # Asignar la acción para la 'X' (cerrar) y validar campos llenos o vacíos
     reg_cliente.protocol("WM_DELETE_WINDOW", lambda: confirmar_cancelacion(reg_cliente))
@@ -468,26 +681,30 @@ def registro_clientes():
     reg_persona.place(x=25, y=99, width=310, height=20)
     
         # botones
-    btn_ag_persona = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+    btn_ag_persona = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), command=agregar_persona_contacto)
     btn_ag_persona.place(x=20, y=134)
     
     btn_ed_persona = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=edit_persona_cont)
     btn_ed_persona.place(x=130, y=134)
     
     btn_del_persona = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+    btn_del_persona.config(command=lambda: eliminar_fila(tabla_per_cont, "persona_contacto_actual"))
     btn_del_persona.place(x=240, y=134)
     
         # tabla
     create_rounded_rectangle(canvas_reg_cliente, 10, 184, 350, 304, radius=10, fill="#959595", outline="#959595")
     
-    tabla_per_cont = ttk.Treeview(reg_cliente, columns=("per_cont"), show="headings")
+    tabla_per_cont = ttk.Treeview(reg_cliente, columns=("id_per","per_cont"), show="headings")
     tabla_per_cont.place(x=10, y=184, width=341, height=121)
 
     # Configurar las columnas
+    tabla_per_cont.heading("id_per", text="ID")
     tabla_per_cont.heading("per_cont", text="Persona de Contacto")
 
+
     # Ajustar el tamaño de las columnas
-    tabla_per_cont.column("per_cont", anchor="center")
+    tabla_per_cont.column("id_per", anchor="center", width=41)
+    tabla_per_cont.column("per_cont", anchor="center", width=298)
     
     
     
@@ -503,26 +720,29 @@ def registro_clientes():
     reg_ar_tb.place(x=25, y=347, width=310, height=20)
     
         # botones
-    btn_ag_trabajo = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+    btn_ag_trabajo = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), command=agregar_area_trabajo)
     btn_ag_trabajo.place(x=20, y=382)
     
     btn_ed_trabajo = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=edit_area_trabajo)
     btn_ed_trabajo.place(x=130, y=382)
     
     btn_del_trabajo = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+    btn_del_trabajo.config(command=lambda: eliminar_fila(tabla_ar_trab, "area_trabajo_actual"))
     btn_del_trabajo.place(x=240, y=382)
     
         # tabla
     create_rounded_rectangle(canvas_reg_cliente, 10, 432, 350, 552, radius=10, fill="#959595", outline="#959595")
     
-    tabla_ar_trab = ttk.Treeview(reg_cliente, columns=("trab_ar"), show="headings")
+    tabla_ar_trab = ttk.Treeview(reg_cliente, columns=("id_trab", "trab_ar"), show="headings")
     tabla_ar_trab.place(x=10, y=432, width=341, height=121)
 
     # Configurar las columnas
+    tabla_ar_trab.heading("id_trab", text="ID")
     tabla_ar_trab.heading("trab_ar", text="Área de Trabajo")
 
     # Ajustar el tamaño de las columnas
-    tabla_ar_trab.column("trab_ar", anchor="center")
+    tabla_ar_trab.column("id_trab", anchor="center", width=41)
+    tabla_ar_trab.column("trab_ar", anchor="center", width=298)
     
     
 
@@ -558,37 +778,50 @@ def registro_clientes():
     reg_direx.place(x=375, y=235, width=310, height=20)
     
         # botones
-    btn_ag_direx = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+    btn_ag_direx = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), command=agregar_direccion)
     btn_ag_direx.place(x=370, y=270)
     
     btn_ed_direx = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=edit_direx)
     btn_ed_direx.place(x=480, y=270)
     
     btn_del_direx = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+    btn_del_direx.config(command=lambda: eliminar_fila(tabla_direx, "direccion_actual"))
     btn_del_direx.place(x=590, y=270)
     
         # tabla
     create_rounded_rectangle(canvas_reg_cliente, 360, 320, 700, 513, radius=10, fill="#959595", outline="#959595")
 
-    tabla_direx = ttk.Treeview(reg_cliente, columns=("direx"), show="headings")
+    tabla_direx = ttk.Treeview(reg_cliente, columns=("id_direx", "direx"), show="headings")
     tabla_direx.place(x=360, y=320, width=341, height=194)
 
     # Configurar las columnas
+    tabla_direx.heading("id_direx", text="ID")
     tabla_direx.heading("direx", text="Dirección")
 
     # Ajustar el tamaño de las columnas
-    tabla_direx.column("direx", anchor="center")
+    tabla_direx.column("id_direx", anchor="center", width=41)
+    tabla_direx.column("direx", anchor="center", width=298)
     
-
+    
 
     btn_cli_canc = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=lambda: confirmar_cancelacion(reg_cliente))
     btn_cli_canc.place(x=425, y=523)
     
-    btn_cli_reg = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9))
+    btn_cli_reg = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), command=guardar_cliente)
     btn_cli_reg.place(x=535, y=523)
 
 
 def edit_persona_cont():
+    
+    selected_item = tabla_per_cont.selection()
+    if not selected_item:
+        mostrar_advertencia()  # Muestra la advertencia personalizada
+        return
+
+    # Continuar con la obtención del valor si se seleccionó una fila
+    item = tabla_per_cont.item(selected_item)
+    persona_contacto_actual = item['values'][1]
+    
     
     global inpt_ed_pers_con
     
@@ -597,6 +830,9 @@ def edit_persona_cont():
     ed_pers.geometry("340x128")
     ed_pers.resizable(False, False)
     ed_pers.configure(bg="#373737")
+    
+    centrar_ventana(ed_pers)
+    
 
     ed_pers.grab_set()
 
@@ -615,7 +851,15 @@ def edit_persona_cont():
     inpt_ed_pers_con = tk.Entry(ed_pers, font=("Arial", 11), bd=0)
     inpt_ed_pers_con.place(x=25, y=43, width=290, height=20)
     
-    btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    
+    # Función para guardar el cambio
+    def guardar_cambio_persona():
+        nuevo_valor = inpt_ed_pers_con.get()
+        tabla_per_cont.item(selected_item, values=(item['values'][0], nuevo_valor))
+        ed_pers.destroy()
+    
+    
+    btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9), command=guardar_cambio_persona)
     btn_save_pers.place(x=10, y=88)
 
     btn_canc_pers = tk.Button(ed_pers, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=ed_pers.destroy)
@@ -624,6 +868,15 @@ def edit_persona_cont():
 
 def edit_area_trabajo():
     
+    selected_item = tabla_ar_trab.selection()
+    if not selected_item:
+        mostrar_advertencia()  # Muestra la advertencia personalizada
+        return
+
+    # Continuar con la obtención del valor si se seleccionó una fila
+    item = tabla_ar_trab.item(selected_item)
+    area_trabajo_actual = item['values'][1]
+
     global inpt_ed_ar_trab
     
     ed_ar_trabajo = tk.Toplevel(root)
@@ -631,6 +884,9 @@ def edit_area_trabajo():
     ed_ar_trabajo.geometry("340x128")
     ed_ar_trabajo.resizable(False, False)
     ed_ar_trabajo.configure(bg="#373737")
+    
+    centrar_ventana(ed_ar_trabajo)
+    
 
     ed_ar_trabajo.grab_set()
 
@@ -649,7 +905,14 @@ def edit_area_trabajo():
     inpt_ed_ar_trab = tk.Entry(ed_ar_trabajo, font=("Arial", 11), bd=0)
     inpt_ed_ar_trab.place(x=25, y=43, width=290, height=20)
     
-    btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    
+    def guardar_cambio_area():
+        nuevo_valor = inpt_ed_ar_trab.get()
+        tabla_ar_trab.item(selected_item, values=(item['values'][0], nuevo_valor))
+        ed_ar_trabajo.destroy()
+    
+    
+    btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9), command=guardar_cambio_area)
     btn_save_ar_trab.place(x=10, y=88)
 
     btn_canc_ar_trab = tk.Button(ed_ar_trabajo, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=ed_ar_trabajo.destroy)
@@ -658,6 +921,15 @@ def edit_area_trabajo():
 
 def edit_direx():
     
+    selected_item = tabla_direx.selection()
+    if not selected_item:
+        mostrar_advertencia()  # Muestra la advertencia personalizada
+        return
+
+    # Continuar con la obtención del valor si se seleccionó una fila
+    item = tabla_direx.item(selected_item)
+    direccion_actual = item['values'][1]
+    
     global inpt_ed_direx
     
     ed_direccion = tk.Toplevel(root)
@@ -665,6 +937,9 @@ def edit_direx():
     ed_direccion.geometry("340x128")
     ed_direccion.resizable(False, False)
     ed_direccion.configure(bg="#373737")
+    
+    centrar_ventana(ed_direccion)
+    
 
     ed_direccion.grab_set()
 
@@ -683,11 +958,25 @@ def edit_direx():
     inpt_ed_direx = tk.Entry(ed_direccion, font=("Arial", 11), bd=0)
     inpt_ed_direx.place(x=25, y=43, width=290, height=20)
     
-    btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    
+    def guardar_cambio_direccion():
+        nuevo_valor = inpt_ed_direx.get()
+        tabla_direx.item(selected_item, values=(item['values'][0], nuevo_valor))
+        ed_direccion.destroy()
+    
+    
+    btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9), command=guardar_cambio_direccion)
     btn_save_direx.place(x=10, y=88)
 
     btn_canc_direx = tk.Button(ed_direccion, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=ed_direccion.destroy)
     btn_canc_direx.place(x=120, y=88)
+
+
+
+def mostrar_advertencia():
+    # Esta función bloqueará la interfaz hasta que el usuario cierre la advertencia
+    messagebox.showwarning("Advertencia", "Seleccione una fila para editar.")
+
 
 
 def registro_orden_compra():
@@ -707,6 +996,9 @@ def registro_orden_compra():
     reg_oc.geometry("530x358")
     reg_oc.resizable(False, False)
     reg_oc.configure(bg="#373737")
+    
+    centrar_ventana(reg_oc)
+    
 
     # Crear un Canvas en la ventana de registro
     canvas_oc = tk.Canvas(reg_oc, width=530, height=358, bg="#373737", highlightthickness=0)
@@ -768,7 +1060,7 @@ def registro_orden_compra():
             # COTIZACION
     canvas_oc.create_text(280, 192, text="Cotización", anchor="nw", font=("Raleway", 10), fill="black")
     
-    button_coti = tk.Button(reg_oc, text="Adjuntar doc...", command=lambda: adjuntar_archivo(label_coti, "cotizacion"))
+    button_coti = tk.Button(reg_oc, text="Adjuntar doc.", command=lambda: adjuntar_archivo(label_coti, "cotizacion"))
     button_coti.place(x=280, y=210, width=93, height=30)
     
     # Etiqueta para mostrar el nombre del archivo seleccionado
@@ -780,7 +1072,7 @@ def registro_orden_compra():
             # ORDEN DE COMPRA
     canvas_oc.create_text(280, 250, text="Orden de Compra", anchor="nw", font=("Raleway", 10), fill="black")
     
-    button_oc = tk.Button(reg_oc, text="Adjuntar doc...", command=lambda: adjuntar_archivo(label_oc, "orden_compra"))
+    button_oc = tk.Button(reg_oc, text="Adjuntar doc.", command=lambda: adjuntar_archivo(label_oc, "orden_compra"))
     button_oc.place(x=280, y=268, width=93, height=30)
     
     global label_oc
@@ -806,6 +1098,9 @@ def busqueda():
     vent_busq.geometry("430x396")
     vent_busq.resizable(False, False)
     vent_busq.configure(bg="#373737")
+    
+    centrar_ventana(vent_busq)
+    
 
     canv_busq = tk.Canvas(vent_busq, width=430, height=396, bg="#373737", highlightthickness=0)
     canv_busq.pack()
@@ -846,6 +1141,139 @@ def busqueda():
     btn_atras.place(x=165, y=348)
 
 
+def seguimiento_factura():
+    
+    # Ocultar la ventana principal
+    root.withdraw()
+    
+    seg_fact = tk.Toplevel(root)
+    seg_fact.title("Seguimiento de Factura")
+    seg_fact.geometry("570x474")
+    seg_fact.resizable(False, False)
+    seg_fact.configure(bg="#373737")
+    
+    centrar_ventana(seg_fact)
+    
+
+    canvas_fact = tk.Canvas(seg_fact, width=570, height=474, bg="#373737", highlightthickness=0)
+    canvas_fact.pack()
+    
+    canvas_fact.create_text(62, 0, text="Seguimiento de Factura", anchor="nw", font=("Raleway", 30, "bold"), fill="White")
+
+    create_rounded_rectangle(canvas_fact, 10, 66, 280, 424, radius=10, fill="#959595", outline="#959595")
+
+    create_rounded_rectangle(canvas_fact, 290, 66, 560, 424, radius=10, fill="#959595", outline="#959595")
+
+        # DOCUMENTOS
+        
+            # COTIZACION
+    canvas_fact.create_text(20, 76, text="Cotización", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    
+    
+            # ORDEN DE COMRRA
+    canvas_fact.create_text(20, 134, text="Orden de Compra", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    
+    
+            # GUIA DE REMISION
+    canvas_fact.create_text(20, 192, text="Guía de Remisión", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    button_guia = tk.Button(seg_fact, text="Adjuntar doc.", command=lambda: adjuntar_archivo(label_guia, "guia_remision"))
+    button_guia.place(x=20, y=210, width=100, height=30)
+    
+    global label_guia
+    label_guia = tk.Label(seg_fact, text="Guía de Remisión", font=("Raleway", 9), bg="#373737", fg="white")
+    label_guia.place(x=130, y=210, width=140, height=30)
+    
+    
+            # ACTA DE CONFORMIDAD
+    canvas_fact.create_text(20, 250, text="Acta de Conformidad", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    button_acta = tk.Button(seg_fact, text="Adjuntar doc.", command=lambda: adjuntar_archivo(label_acta, "acta_conformidad"))
+    button_acta.place(x=20, y=268, width=100, height=30)
+    
+    global label_acta
+    label_acta = tk.Label(seg_fact, text="Acta de Conformidad", font=("Raleway", 9), bg="#373737", fg="white")
+    label_acta.place(x=130, y=268, width=140, height=30)
+    
+    
+            # INFORME TECNICO
+    canvas_fact.create_text(20, 308, text="Informe Técnico", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    button_informe = tk.Button(seg_fact, text="Adjuntar doc.", command=lambda: adjuntar_archivo(label_informe, "informe_tecnico"))
+    button_informe.place(x=20, y=326, width=100, height=30)
+    
+    global label_informe
+    label_informe = tk.Label(seg_fact, text="Informe Técnico", font=("Raleway", 9), bg="#373737", fg="white")
+    label_informe.place(x=130, y=326, width=140, height=30)
+    
+    
+            # PLANOS
+    canvas_fact.create_text(20, 366, text="Planos", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    button_planos = tk.Button(seg_fact, text="Adjuntar doc.", command=lambda: adjuntar_archivo(label_planos, "doc_planos"))
+    button_planos.place(x=20, y=384, width=100, height=30)
+    
+    global label_planos
+    label_planos = tk.Label(seg_fact, text="Planos", font=("Raleway", 9), bg="#373737", fg="white")
+    label_planos.place(x=130, y=384, width=140, height=30)
+    
+
+            # FACTURA
+    canvas_fact.create_text(300, 76, text="Factura", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    button_fact = tk.Button(seg_fact, text="Adjuntar doc.", command=lambda: adjuntar_archivo(label_fact, "doc_factura"))
+    button_fact.place(x=300, y=94, width=100, height=30)
+    
+    global label_fact
+    label_fact = tk.Label(seg_fact, text="Factura", font=("Raleway", 9), bg="#373737", fg="white")
+    label_fact.place(x=410, y=94, width=140, height=30)
+    
+    
+    
+    # nro de cotzcn
+    canvas_fact.create_text(300, 134, text="Nro de Cotización", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    create_rounded_rectangle(canvas_fact, 300, 152, 550, 182, radius=10, fill="white", outline="#959595")
+
+    seg_fact_nro_ctzc = tk.Entry(seg_fact, font=("Arial", 11), bd=0)
+    seg_fact_nro_ctzc.place(x=305, y=157, width=240, height=20)
+    
+    # nro de fact
+    canvas_fact.create_text(300, 192, text="Nro de Factura", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    create_rounded_rectangle(canvas_fact, 300, 210, 550, 240, radius=10, fill="white", outline="#959595")
+
+    seg_fact_nro_fact = tk.Entry(seg_fact, font=("Arial", 11), bd=0)
+    seg_fact_nro_fact.place(x=305, y=215, width=240, height=20)
+    
+    # fecha de facturacion
+    canvas_fact.create_text(300, 250, text="Fecha de Facturación", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    date_fact = DateEntry(seg_fact, font=("Raleway", 11),state="readonly" , width=17, background='darkblue', foreground='white', borderwidth=2)
+    date_fact.place(x=300, y=268, width=250, height=30)
+    
+    # estado
+    canvas_fact.create_text(300, 308, text="Estado", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    cbo_estado_fact = ttk.Combobox(seg_fact, values=["Seleccione una Opción", "Cancelado", "Pendiente", "No Cancelado"], state="readonly", font=("Raleway", 10))
+    cbo_estado_fact.place(x=300, y=326, width=250, height=31)
+    cbo_estado_fact.current(0)
+    
+    # forma de pago
+    canvas_fact.create_text(300, 366, text="Forma de Pago", anchor="nw", font=("Raleway", 10), fill="black")
+    
+    cbo_forma_pag = ttk.Combobox(seg_fact, values=["Seleccione una Opción", "30 días", "60 días", "90 días", "180 días", "Al contado"], state="readonly", font=("Raleway", 10))
+    cbo_forma_pag.place(x=300, y=384, width=250, height=31)
+    cbo_forma_pag.current(0)
+    
+    
+    btn_canc_fact = tk.Button(seg_fact, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=cerrar_programa)
+    btn_canc_fact.place(x=180, y=435)
+    
+    btn_reg_fact = tk.Button(seg_fact, text="Registrar", width=13, height=1, font=("Raleway", 9))
+    btn_reg_fact.place(x=290, y=435)
 
 
 # Crear la ventana principal
@@ -853,7 +1281,10 @@ root = tk.Tk()
 root.title("Inicio")
 root.geometry("1400x700")
 root.resizable(False, False)  # Evitar que la ventana se redimensione
-root.configure(bg="#373737")  
+root.configure(bg="#373737")
+
+centrar_ventana(root)
+
 root.protocol("WM_DELETE_WINDOW", cerrar_programa)
 
 # Crear un Canvas
@@ -885,7 +1316,7 @@ btn_cot.place(x=20, y=125)
 btn_oc = tk.Button(root, text="Registrar Orden de Compra", width=37, height=1, font=("Raleway", 9), command=registro_orden_compra)
 btn_oc.place(x=20, y=170)
 
-btn_sef = tk.Button(root, text="Seguimiento de Factura", width=37, height=1, font=("Raleway", 9))
+btn_sef = tk.Button(root, text="Seguimiento de Factura", width=37, height=1, font=("Raleway", 9), command=seguimiento_factura)
 btn_sef.place(x=20, y=215)
 
 btn_bus = tk.Button(root, text="Búsqueda de Documentos", width=37, height=1, font=("Raleway", 9), command=busqueda)
@@ -894,7 +1325,7 @@ btn_bus.place(x=20, y=260)
 btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9))
 btn_act.place(x=20, y=305)
 
-btn_ex = tk.Button(root, text="Salir", width=37, height=1, font=("Raleway", 9), command=cerrar_programa)
+btn_ex = tk.Button(root, text="Salir del Programa", width=37, height=1, font=("Raleway", 9), command=cerrar_programa)
 btn_ex.place(x=20, y=350)
 
 
@@ -931,9 +1362,6 @@ search_entry.insert(0, "Buscar...")  # Insertar texto de placeholder
 search_entry.bind("<FocusIn>", clear_placeholder)  # Limpiar cuando el usuario hace clic
 search_entry.bind("<FocusOut>", placeholder_search)  # Volver a mostrar si está vacío
 search_entry.place(x=6, y=7, width=337, height=27)
-
-
-
 
 
 
