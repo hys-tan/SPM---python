@@ -6,12 +6,30 @@ import os
 import shutil
 import tkinter as tk
 from tkinter import PhotoImage
+import sqlite3
 
 
-def cerrar_programa():
-    # Mostrar mensaje de confirmación al cerrar
-    if messagebox.askokcancel("Salir", "¿Está seguro de que desea salir?"):
-        root.quit()  # Detiene la ejecución del programa por completo
+# BD ---------------------------------
+
+def crear_base_datos():
+    conexion = sqlite3.connect("clientes.db")
+    cursor = conexion.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS clientes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            persona_contacto TEXT,
+            area_trabajo TEXT,
+            razon_social TEXT,
+            ruc TEXT,
+            direccion TEXT
+        )
+    """)
+    conexion.commit()
+    conexion.close()
+
+crear_base_datos()
+
+# BD ---------------------------------
 
 
 def centrar_ventana(ventana):
@@ -97,20 +115,7 @@ def adjuntar_archivo(label, tipo_doc):
 
 
 
-def confirmar_cancelacion(reg_cliente):
-    # Verificar si los campos están vacíos
-    campos_vacios = not reg_persona.get().strip() and not reg_ar_tb.get().strip() and not reg_rs_cli.get().strip() and not reg_ruc_cli.get().strip() and not reg_direx.get().strip()
 
-    # Si los campos están vacíos, omitir la advertencia y cerrar directamente
-    if campos_vacios:
-        reg_cliente.destroy()   # Cierra la ventana de registro
-        root.deiconify()    # Muestra nuevamente la ventana principal
-    else:
-        # Mostrar mensaje de advertencia si hay datos ingresados
-        respuesta = messagebox.askquestion("Confirmación", "¿Desea cancelar el registro?")
-        if respuesta == 'yes':
-            reg_cliente.destroy()   # Cierra la ventana de registro
-            root.deiconify()    # Muestra nuevamente la ventana principal
 
 
 def placeholder_search(event):
@@ -162,6 +167,41 @@ def salida():
     canvas_salida.image = icono_alert_ex
 
 
+# CONFIRMAR CANCELACION
+def confirmar_cancelacion():
+    
+    cancel_reg=tk.Toplevel(root)
+    cancel_reg.title("Cancelación")
+    cancel_reg.geometry("300x110")
+    cancel_reg.resizable(False, False)
+    cancel_reg.configure(bg="#FFFFFF")
+    
+    cancel_reg.grab_set()
+    
+    centrar_ventana(cancel_reg)
+
+    cancel_reg.protocol("WM_DELETE_WINDOW", lambda: None)
+    
+    cvs_cancel_reg = tk.Canvas(cancel_reg, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+    cvs_cancel_reg.pack()
+    
+    # Cargar el icono
+    icon_cancel_reg = tk.PhotoImage(file="icons/alert.png")
+    cvs_cancel_reg.create_image(30, 17, anchor="nw", image=icon_cancel_reg)
+    
+    create_rounded_rectangle(cvs_cancel_reg, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+    
+    cvs_cancel_reg.create_text(79, 26, text="¿Desea cancelar el registro?", anchor="nw", font=("Arial", 10), fill="Black")
+    
+    btn_cancel_si = tk.Button(cancel_reg, text="Si", width=9, height=1, font=("Raleway", 9))
+    btn_cancel_si.place(x=73, y=73)
+
+    btn_cancel_no = tk.Button(cancel_reg, text="No", width=9, height=1, font=("Raleway", 9), command=cancel_reg.destroy)
+    btn_cancel_no.place(x=158, y=73)
+    
+    cvs_cancel_reg.image = icon_cancel_reg
+
+
 # SELECCIONAR LA FILA PARA EDITARLA
 def seleccionar_ed_fila():
     
@@ -187,8 +227,8 @@ def seleccionar_ed_fila():
     
     canvas_select_fila.create_text(79, 26, text="Seleccione una fila para editar", anchor="nw", font=("Arial", 10), fill="Black")
     
-    btn_ok = tk.Button(select_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=select_fila.destroy)
-    btn_ok.place(x=115, y=73)
+    btn_ed_ok = tk.Button(select_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=select_fila.destroy)
+    btn_ed_ok.place(x=115, y=73)
 
     canvas_select_fila.image = icono_alert_ed
 
@@ -262,7 +302,7 @@ def quest_eliminar_fila():
 def confirm_fila_eliminada():
     
     fila_eliminada=tk.Toplevel(root)
-    fila_eliminada.title("Advertencia")
+    fila_eliminada.title("Confirmación")
     fila_eliminada.geometry("300x110")
     fila_eliminada.resizable(False, False)
     fila_eliminada.configure(bg="#FFFFFF")
@@ -283,10 +323,73 @@ def confirm_fila_eliminada():
     
     cvs_fila_eliminada.create_text(95, 26, text="Columna eliminada", anchor="nw", font=("Arial", 10), fill="Black")
     
-    btn_ok = tk.Button(fila_eliminada, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=fila_eliminada.destroy)
-    btn_ok.place(x=115, y=73)
+    btn_del_ok = tk.Button(fila_eliminada, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=fila_eliminada.destroy)
+    btn_del_ok.place(x=115, y=73)
 
     cvs_fila_eliminada.image = ico_confirm_del
+
+
+# DATOS REGISTRADOS
+def datos_registrados():
+    
+    datos_reg=tk.Toplevel(root)
+    datos_reg.title("Confirmación")
+    datos_reg.geometry("300x110")
+    datos_reg.resizable(False, False)
+    datos_reg.configure(bg="#FFFFFF")
+
+    datos_reg.grab_set()
+    
+    centrar_ventana(datos_reg)
+    
+    datos_reg.protocol("WM_DELETE_WINDOW", lambda: None)
+    
+    cvs_dato_reg = tk.Canvas(datos_reg, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+    cvs_dato_reg.pack()
+    
+    ico_dato_comfirm = tk.PhotoImage(file="icons/confirm.png")
+    cvs_dato_reg.create_image(30, 17, anchor="nw", image=ico_dato_comfirm)
+    
+    create_rounded_rectangle(cvs_dato_reg, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+    
+    cvs_dato_reg.create_text(80, 26, text="Datos registrados correctamente", anchor="nw", font=("Arial", 10), fill="Black")
+    
+    btn_dato_reg = tk.Button(datos_reg, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=lambda: [datos_reg.destroy(), reg_cliente.destroy(), root.deiconify()])
+    btn_dato_reg.place(x=115, y=73)
+
+    cvs_dato_reg.image = ico_dato_comfirm
+
+
+# REGISTRO SIN DATOS
+def reg_sin_datos():
+    
+    reg_no_datos=tk.Toplevel(root)
+    reg_no_datos.title("Confirmación")
+    reg_no_datos.geometry("370x110")
+    reg_no_datos.resizable(False, False)
+    reg_no_datos.configure(bg="#FFFFFF")
+
+    reg_no_datos.grab_set()
+    
+    centrar_ventana(reg_no_datos)
+    
+    reg_no_datos.protocol("WM_DELETE_WINDOW", lambda: None)
+    
+    cvs_no_datos = tk.Canvas(reg_no_datos, width=370, height=110, bg="#FFFFFF", highlightthickness=0)
+    cvs_no_datos.pack()
+    
+    ico_no_datos = tk.PhotoImage(file="icons/alert.png")
+    cvs_no_datos.create_image(30, 17, anchor="nw", image=ico_no_datos)
+    
+    create_rounded_rectangle(cvs_no_datos, 0, 66, 370, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+    
+    cvs_no_datos.create_text(85, 26, text="Por favor, complete los campos obligatorios", anchor="nw", font=("Arial", 10), fill="Black")
+    
+    btn_dato_reg = tk.Button(reg_no_datos, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_no_datos.destroy)
+    btn_dato_reg.place(x=150, y=73)
+
+    cvs_no_datos.image = ico_no_datos
+    
 
 
 
@@ -621,6 +724,7 @@ def registro_clientes():
     
     global reg_persona, reg_ar_tb, reg_rs_cli, reg_ruc_cli, reg_direx
     global tabla_per_cont, tabla_ar_trab, tabla_direx
+    global reg_cliente
     
     reg_cliente = tk.Toplevel(root)
     reg_cliente.title("Registro de Clientes")
@@ -630,9 +734,84 @@ def registro_clientes():
     
     centrar_ventana(reg_cliente)
 
+    
+    # BD ----------------------------------------------------
+    
+    def guardar_datos():
+        persona_contacto = reg_persona.get()
+        area_trabajo = reg_ar_tb.get()
+        razon_social = reg_rs_cli.get()
+        ruc = reg_ruc_cli.get()
+        direccion = reg_direx.get()
+
+        conexion = sqlite3.connect("clientes.db")
+        cursor = conexion.cursor()
+        cursor.execute("""
+            INSERT INTO clientes (persona_contacto, area_trabajo, razon_social, ruc, direccion)
+            VALUES (?, ?, ?, ?, ?)
+        """, (persona_contacto, area_trabajo, razon_social, ruc, direccion))
+        conexion.commit()
+        conexion.close()
+        
+        
+    def agregar_persona_contacto():
+        # Insertar el dato en tabla_per_cont
+        persona = reg_persona.get().strip()
+        if persona:  # Verificar que el campo no esté vacío
+            # Insertar el dato en la tabla con un contador
+            tabla_per_cont.insert("", "end", values=(tabla_per_cont.get_children().__len__() + 1, persona))
+            reg_persona.delete(0, tk.END)  # Limpiar el campo después de agregar
+
+    def agregar_area_trabajo():
+        # Insertar el dato en tabla_ar_trab
+        area = reg_ar_tb.get().strip()
+        if area:  # Verificar que el campo no esté vacío
+            # Insertar el dato en la tabla con un contador
+            tabla_ar_trab.insert("", "end", values=(tabla_ar_trab.get_children().__len__() + 1, area))
+            reg_ar_tb.delete(0, tk.END)  # Limpiar el campo después de agregar
+
+    def agregar_direccion():
+        # Insertar el dato en tabla_direx
+        direccion = reg_direx.get().strip()
+        if direccion:  # Verificar que el campo no esté vacío
+            # Insertar el dato en la tabla con un contador
+            tabla_direx.insert("", "end", values=(tabla_direx.get_children().__len__() + 1, direccion))
+            reg_direx.delete(0, tk.END)  # Limpiar el campo después de agregar
+    
+    
+    # Función para consolidar los datos en las tablas visuales
+    def agregar_a_tablas():
+        agregar_persona_contacto()
+        agregar_area_trabajo()
+        agregar_direccion()
+
+    # Función principal que guarda y muestra los datos en la interfaz
+    def registrar_cliente():
+        # Comprobación de campos obligatorios
+        if not reg_rs_cli.get().strip() or not reg_ruc_cli.get().strip():
+            reg_sin_datos()  # Si faltan datos en Razón Social o RUC, mostrar advertencia
+            return
+
+        # Verificación de filas en las tablas (Persona de Contacto, Área de Trabajo, Dirección)
+        if not tabla_per_cont.get_children() or not tabla_ar_trab.get_children() or not tabla_direx.get_children():
+            reg_sin_datos()  # Si alguna de las tablas está vacía, mostrar advertencia
+            return
+
+        # Si pasa todas las validaciones, procede a guardar y mostrar la confirmación
+        guardar_datos()          # Guarda datos en la BD
+        agregar_a_tablas()        # Añadir a las tablas de la interfaz sin guardar nuevamente
+        datos_registrados()
+        
+
+
+    
+    
+    
+    # BD ----------------------------------------------------
+    
 
     # Asignar la acción para la 'X' (cerrar) y validar campos llenos o vacíos
-    reg_cliente.protocol("WM_DELETE_WINDOW", lambda: confirmar_cancelacion(reg_cliente))
+#    reg_cliente.protocol("WM_DELETE_WINDOW", lambda: confirmar_cancelacion(reg_cliente))
     
     # Crear el canvas para la ventana de reg clientes
     canvas_reg_cliente = tk.Canvas(reg_cliente, width=710, height=562, bg="#373737", highlightthickness=0)
@@ -653,6 +832,7 @@ def registro_clientes():
     
         # botones
     btn_ag_persona = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+    btn_ag_persona.config(command=agregar_persona_contacto)
     btn_ag_persona.place(x=20, y=134)
     
     btn_ed_persona = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=seleccionar_ed_fila  )
@@ -691,6 +871,7 @@ def registro_clientes():
     
         # botones
     btn_ag_trabajo = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+    btn_ag_trabajo.config(command=agregar_area_trabajo)
     btn_ag_trabajo.place(x=20, y=382)
     
     btn_ed_trabajo = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=edit_area_trabajo)
@@ -748,6 +929,7 @@ def registro_clientes():
     
         # botones
     btn_ag_direx = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+    btn_ag_direx.config(command=agregar_direccion)
     btn_ag_direx.place(x=370, y=270)
     
     btn_ed_direx = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=edit_direx)
@@ -772,10 +954,11 @@ def registro_clientes():
     
 
 
-    btn_cli_canc = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=lambda: confirmar_cancelacion(reg_cliente))
+    btn_cli_canc = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=reg_sin_datos)
     btn_cli_canc.place(x=425, y=523)
     
     btn_cli_reg = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9))
+    btn_cli_reg.config(command=registrar_cliente)
     btn_cli_reg.place(x=535, y=523)
 
 
@@ -992,7 +1175,7 @@ def registro_orden_compra():
     
     
     
-    btn_canc_oc = tk.Button(reg_oc, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=cerrar_programa)
+    btn_canc_oc = tk.Button(reg_oc, text="Cancelar", width=13, height=1, font=("Raleway", 9))
     btn_canc_oc.place(x=160, y=319)
 
     btn_reg_oc = tk.Button(reg_oc, text="Registrar", width=13, height=1, font=("Raleway", 9))
@@ -1180,11 +1363,21 @@ def seguimiento_factura():
     cbo_forma_pag.current(0)
     
     
-    btn_canc_fact = tk.Button(seg_fact, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=cerrar_programa)
+    btn_canc_fact = tk.Button(seg_fact, text="Cancelar", width=13, height=1, font=("Raleway", 9))
     btn_canc_fact.place(x=180, y=435)
     
     btn_reg_fact = tk.Button(seg_fact, text="Registrar", width=13, height=1, font=("Raleway", 9))
     btn_reg_fact.place(x=290, y=435)
+
+
+
+
+
+
+
+
+
+
 
 
 # Crear la ventana principal
@@ -1196,7 +1389,7 @@ root.configure(bg="#373737")
 
 centrar_ventana(root)
 
-root.protocol("WM_DELETE_WINDOW", cerrar_programa)
+root.protocol("WM_DELETE_WINDOW", salida)
 
 # Crear un Canvas
 canvas = tk.Canvas(root, width=1400, height=700, bg="#373737", highlightthickness=0)
