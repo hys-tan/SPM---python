@@ -115,9 +115,6 @@ def adjuntar_archivo(label, tipo_doc):
 
 
 
-
-
-
 def placeholder_search(event):
     if search_entry.get() == "":
         search_entry.insert(0, "Buscar...")
@@ -132,7 +129,7 @@ def clear_placeholder(event):
 
 # ALERTAS / CONFIRMACIONES --------------------------------------------
 
-# CERRAR EL PROGRAMA
+# CERRAR EL PROGRAMA --
 def salida():
     
     salida=tk.Toplevel(root)
@@ -153,7 +150,8 @@ def salida():
     # Cargar el icono
     icono_alert_ex = tk.PhotoImage(file="icons/alert.png")
     canvas_salida.create_image(30, 17, anchor="nw", image=icono_alert_ex)
-    
+    canvas_salida.image = icono_alert_ex
+
     create_rounded_rectangle(canvas_salida, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
     canvas_salida.create_text(79, 26, text="¿Está seguro de que desea salir?", anchor="nw", font=("Arial", 10), fill="Black")
@@ -163,11 +161,9 @@ def salida():
 
     btn_no = tk.Button(salida, text="No", width=9, height=1, font=("Raleway", 9), command=salida.destroy)
     btn_no.place(x=158, y=73)
-    
-    canvas_salida.image = icono_alert_ex
 
 
-# CONFIRMAR CANCELACION
+# CONFIRMAR CANCELACION --
 def confirmar_cancelacion():
     
     cancel_reg=tk.Toplevel(root)
@@ -188,21 +184,26 @@ def confirmar_cancelacion():
     # Cargar el icono
     icon_cancel_reg = tk.PhotoImage(file="icons/alert.png")
     cvs_cancel_reg.create_image(30, 17, anchor="nw", image=icon_cancel_reg)
+    cvs_cancel_reg.image = icon_cancel_reg
     
     create_rounded_rectangle(cvs_cancel_reg, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
     cvs_cancel_reg.create_text(79, 26, text="¿Desea cancelar el registro?", anchor="nw", font=("Arial", 10), fill="Black")
     
-    btn_cancel_si = tk.Button(cancel_reg, text="Si", width=9, height=1, font=("Raleway", 9))
+    
+    def confirmar_cancelacion_si(cancel_reg):
+        cancel_reg.destroy()  # Cerrar la ventana de confirmación
+        reg_cliente.destroy()  # Cerrar la ventana de registro de clientes
+        root.deiconify()       # Mostrar la ventana principal
+    
+    btn_cancel_si = tk.Button(cancel_reg, text="Si", width=9, height=1, font=("Raleway", 9), command=lambda: confirmar_cancelacion_si(cancel_reg))
     btn_cancel_si.place(x=73, y=73)
 
     btn_cancel_no = tk.Button(cancel_reg, text="No", width=9, height=1, font=("Raleway", 9), command=cancel_reg.destroy)
     btn_cancel_no.place(x=158, y=73)
-    
-    cvs_cancel_reg.image = icon_cancel_reg
 
 
-# SELECCIONAR LA FILA PARA EDITARLA
+# SELECCIONAR LA FILA PARA EDITARLA --
 def seleccionar_ed_fila():
     
     select_fila=tk.Toplevel(root)
@@ -222,6 +223,7 @@ def seleccionar_ed_fila():
     
     icono_alert_ed = tk.PhotoImage(file="icons/alert.png")
     canvas_select_fila.create_image(30, 17, anchor="nw", image=icono_alert_ed)
+    canvas_select_fila.image = icono_alert_ed
     
     create_rounded_rectangle(canvas_select_fila, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
@@ -229,8 +231,6 @@ def seleccionar_ed_fila():
     
     btn_ed_ok = tk.Button(select_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=select_fila.destroy)
     btn_ed_ok.place(x=115, y=73)
-
-    canvas_select_fila.image = icono_alert_ed
 
 
 # SELECCIONAR LA FILA PARA ELIMINARLA
@@ -253,6 +253,7 @@ def selec_fila_del():
     
     icono_alert_del = tk.PhotoImage(file="icons/delete.png")
     canvas_fila_del.create_image(30, 17, anchor="nw", image=icono_alert_del)
+    canvas_fila_del.image = icono_alert_del
     
     create_rounded_rectangle(canvas_fila_del, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
@@ -260,8 +261,6 @@ def selec_fila_del():
     
     btn_fila_del = tk.Button(sel_fila_delete, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=sel_fila_delete.destroy)
     btn_fila_del.place(x=115, y=73)
-
-    canvas_fila_del.image = icono_alert_del
 
 
 # PREGUNTA PARA ELIMINAR LA FILA
@@ -284,6 +283,7 @@ def quest_eliminar_fila():
     
     icono_quest_deled = tk.PhotoImage(file="icons/question.png")
     canvas_delete_fila.create_image(30, 17, anchor="nw", image=icono_quest_deled)
+    canvas_delete_fila.image = icono_quest_deled
     
     create_rounded_rectangle(canvas_delete_fila, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
@@ -294,8 +294,6 @@ def quest_eliminar_fila():
     
     btn_quest_no = tk.Button(delete_fila, text="No", width=9, height=1, font=("Raleway", 9), command=delete_fila.destroy)
     btn_quest_no.place(x=158, y=73)
-
-    canvas_delete_fila.image = icono_quest_deled
 
 
 # CONFIRMACION DE FILA ELIMINADA
@@ -318,15 +316,14 @@ def confirm_fila_eliminada():
     
     ico_confirm_del = tk.PhotoImage(file="icons/confirm.png")
     cvs_fila_eliminada.create_image(30, 17, anchor="nw", image=ico_confirm_del)
+    cvs_fila_eliminada.image = ico_confirm_del
     
     create_rounded_rectangle(cvs_fila_eliminada, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
-    cvs_fila_eliminada.create_text(95, 26, text="Columna eliminada", anchor="nw", font=("Arial", 10), fill="Black")
+    cvs_fila_eliminada.create_text(95, 26, text="Fila eliminada", anchor="nw", font=("Arial", 10), fill="Black")
     
     btn_del_ok = tk.Button(fila_eliminada, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=fila_eliminada.destroy)
     btn_del_ok.place(x=115, y=73)
-
-    cvs_fila_eliminada.image = ico_confirm_del
 
 
 # DATOS REGISTRADOS
@@ -349,6 +346,7 @@ def datos_registrados():
     
     ico_dato_comfirm = tk.PhotoImage(file="icons/confirm.png")
     cvs_dato_reg.create_image(30, 17, anchor="nw", image=ico_dato_comfirm)
+    cvs_dato_reg.image = ico_dato_comfirm
     
     create_rounded_rectangle(cvs_dato_reg, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
@@ -356,8 +354,6 @@ def datos_registrados():
     
     btn_dato_reg = tk.Button(datos_reg, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=lambda: [datos_reg.destroy(), reg_cliente.destroy(), root.deiconify()])
     btn_dato_reg.place(x=115, y=73)
-
-    cvs_dato_reg.image = ico_dato_comfirm
 
 
 # REGISTRO SIN DATOS
@@ -380,6 +376,7 @@ def reg_sin_datos():
     
     ico_no_datos = tk.PhotoImage(file="icons/alert.png")
     cvs_no_datos.create_image(30, 17, anchor="nw", image=ico_no_datos)
+    cvs_no_datos.image = ico_no_datos
     
     create_rounded_rectangle(cvs_no_datos, 0, 66, 370, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
@@ -387,8 +384,6 @@ def reg_sin_datos():
     
     btn_dato_reg = tk.Button(reg_no_datos, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_no_datos.destroy)
     btn_dato_reg.place(x=150, y=73)
-
-    cvs_no_datos.image = ico_no_datos
     
 
 
@@ -733,8 +728,11 @@ def registro_clientes():
     reg_cliente.configure(bg="#373737")
     
     centrar_ventana(reg_cliente)
-
     
+    # Asignar la acción para la 'X' (cerrar) y validar campos llenos o vacíos
+    reg_cliente.protocol("WM_DELETE_WINDOW", confirmar_cancelacion)
+
+
     # BD ----------------------------------------------------
     
     def guardar_datos():
@@ -801,18 +799,27 @@ def registro_clientes():
         guardar_datos()          # Guarda datos en la BD
         agregar_a_tablas()        # Añadir a las tablas de la interfaz sin guardar nuevamente
         datos_registrados()
-        
-
-
     
     
+    def cancelar_registro_cliente():
+        # Verificar si hay datos en los campos o en las tablas
+        if (reg_persona.get().strip() or reg_ar_tb.get().strip() or 
+            reg_rs_cli.get().strip() or reg_ruc_cli.get().strip() or 
+            reg_direx.get().strip() or 
+            tabla_per_cont.get_children() or 
+            tabla_ar_trab.get_children() or 
+            tabla_direx.get_children()):
+            
+            # Mostrar confirmación si hay datos en los campos o tablas
+            confirmar_cancelacion()
+        else:
+            # Si no hay datos, regresar directamente a la interfaz principal
+            reg_cliente.destroy()
+            root.deiconify()
     
     # BD ----------------------------------------------------
     
 
-    # Asignar la acción para la 'X' (cerrar) y validar campos llenos o vacíos
-#    reg_cliente.protocol("WM_DELETE_WINDOW", lambda: confirmar_cancelacion(reg_cliente))
-    
     # Crear el canvas para la ventana de reg clientes
     canvas_reg_cliente = tk.Canvas(reg_cliente, width=710, height=562, bg="#373737", highlightthickness=0)
     canvas_reg_cliente.pack()
@@ -835,7 +842,21 @@ def registro_clientes():
     btn_ag_persona.config(command=agregar_persona_contacto)
     btn_ag_persona.place(x=20, y=134)
     
-    btn_ed_persona = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=seleccionar_ed_fila  )
+    # ////////////
+    
+    # Función interna para la lógica de edición
+    def editar_persona_contacto():
+        selected_item = tabla_per_cont.selection()
+        if not selected_item:
+            seleccionar_ed_fila()  # Advertencia si no hay selección
+            return
+        item = tabla_per_cont.item(selected_item)
+        edit_persona_cont(selected_item, item)  # Llamar a edit_persona_cont con el item seleccionado
+    
+    # ////////////
+    
+    btn_ed_persona = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9))
+    btn_ed_persona.config(command=editar_persona_contacto)
     btn_ed_persona.place(x=130, y=134)
     
     btn_del_persona = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), command=confirm_fila_eliminada)
@@ -874,7 +895,22 @@ def registro_clientes():
     btn_ag_trabajo.config(command=agregar_area_trabajo)
     btn_ag_trabajo.place(x=20, y=382)
     
-    btn_ed_trabajo = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=edit_area_trabajo)
+    # ////////////
+    
+    # Función para manejar la edición del área de trabajo
+    def editar_area_trab():
+        selected_item = tabla_ar_trab.selection()
+        if not selected_item:
+            seleccionar_ed_fila()  # Advertencia si no hay selección
+            return
+
+        item = tabla_ar_trab.item(selected_item)
+        edit_area_trabajo(selected_item, item)  # Llamar a la ventana de edición con el item seleccionado
+    
+    # ////////////
+    
+    btn_ed_trabajo = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9))
+    btn_ed_trabajo.config(command=editar_area_trab)
     btn_ed_trabajo.place(x=130, y=382)
     
     btn_del_trabajo = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
@@ -932,7 +968,21 @@ def registro_clientes():
     btn_ag_direx.config(command=agregar_direccion)
     btn_ag_direx.place(x=370, y=270)
     
-    btn_ed_direx = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=edit_direx)
+    # ////////////
+    
+    # Función para manejar la edición de la direccion
+    def edi_direccion():
+        selected_item = tabla_direx.selection()
+        if not selected_item:
+            seleccionar_ed_fila()  # Advertencia si no hay selección
+            return
+        item = tabla_direx.item(selected_item)
+        edit_direx(selected_item, item)  # Llamar a la ventana de edición con el item seleccionado
+    
+    # ////////////
+    
+    btn_ed_direx = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9))
+    btn_ed_direx.config(command=edi_direccion)
     btn_ed_direx.place(x=480, y=270)
     
     btn_del_direx = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
@@ -954,7 +1004,8 @@ def registro_clientes():
     
 
 
-    btn_cli_canc = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=reg_sin_datos)
+    btn_cli_canc = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+    btn_cli_canc.config(command=cancelar_registro_cliente)
     btn_cli_canc.place(x=425, y=523)
     
     btn_cli_reg = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9))
@@ -962,9 +1013,9 @@ def registro_clientes():
     btn_cli_reg.place(x=535, y=523)
 
 
-def edit_persona_cont():
+def edit_persona_cont(selected_item, item):
     
-    global inpt_ed_pers_con
+    global inpt_ed_pers_con, ed_pers
     
     ed_pers = tk.Toplevel(root)
     ed_pers.title("Editar Persona de Contacto")
@@ -973,12 +1024,11 @@ def edit_persona_cont():
     ed_pers.configure(bg="#373737")
     
     centrar_ventana(ed_pers)
-    
 
     ed_pers.grab_set()
 
     ed_pers.protocol("WM_DELETE_WINDOW", lambda: None)
-
+    
     canvas_ed_pers = tk.Canvas(ed_pers, width=340, height=128, bg="#373737", highlightthickness=0)
     canvas_ed_pers.pack()
 
@@ -992,16 +1042,25 @@ def edit_persona_cont():
     inpt_ed_pers_con = tk.Entry(ed_pers, font=("Arial", 11), bd=0)
     inpt_ed_pers_con.place(x=25, y=43, width=290, height=20)
     
+    
+    def guardar_cambios():
+        nuevo_valor = inpt_ed_pers_con.get().strip()
+        if nuevo_valor:
+            tabla_per_cont.item(selected_item, values=(item['values'][0], nuevo_valor))
+            ed_pers.destroy()
+    
+    
     btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    btn_save_pers.config(command=guardar_cambios)
     btn_save_pers.place(x=10, y=88)
 
     btn_canc_pers = tk.Button(ed_pers, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=ed_pers.destroy)
     btn_canc_pers.place(x=120, y=88)
 
 
-def edit_area_trabajo():
+def edit_area_trabajo(selected_item, item):
     
-    global inpt_ed_ar_trab
+    global inpt_ed_ar_trab, ed_ar_trabajo
     
     ed_ar_trabajo = tk.Toplevel(root)
     ed_ar_trabajo.title("Editar Área de Trabajo")
@@ -1029,16 +1088,26 @@ def edit_area_trabajo():
     inpt_ed_ar_trab = tk.Entry(ed_ar_trabajo, font=("Arial", 11), bd=0)
     inpt_ed_ar_trab.place(x=25, y=43, width=290, height=20)
     
+    
+    def guardar_cambios():
+        nuevo_valor = inpt_ed_ar_trab.get().strip()
+        if nuevo_valor:
+            # Actualizar el valor en la tabla
+            tabla_ar_trab.item(selected_item, values=(item['values'][0], nuevo_valor))
+            ed_ar_trabajo.destroy()  # Cerrar la ventana de edición
+
+    
     btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    btn_save_ar_trab.config(command=guardar_cambios)
     btn_save_ar_trab.place(x=10, y=88)
 
     btn_canc_ar_trab = tk.Button(ed_ar_trabajo, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=ed_ar_trabajo.destroy)
     btn_canc_ar_trab.place(x=120, y=88)
 
 
-def edit_direx():
+def edit_direx(selected_item, item):
     
-    global inpt_ed_direx
+    global inpt_ed_direx, ed_direccion
     
     ed_direccion = tk.Toplevel(root)
     ed_direccion.title("Editar Dirección")
@@ -1066,7 +1135,17 @@ def edit_direx():
     inpt_ed_direx = tk.Entry(ed_direccion, font=("Arial", 11), bd=0)
     inpt_ed_direx.place(x=25, y=43, width=290, height=20)
     
+    
+    def guardar_cambios():
+        nuevo_valor = inpt_ed_direx.get().strip()
+        if nuevo_valor:
+            # Actualizar el valor en la tabla
+            tabla_direx.item(selected_item, values=(item['values'][0], nuevo_valor))
+            ed_direccion.destroy()  # Cerrar la ventana de edición
+    
+
     btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9))
+    btn_save_direx.config(command=guardar_cambios)
     btn_save_direx.place(x=10, y=88)
 
     btn_canc_direx = tk.Button(ed_direccion, text="Cancelar", width=13, height=1, font=("Raleway", 9), command=ed_direccion.destroy)
@@ -1368,11 +1447,6 @@ def seguimiento_factura():
     
     btn_reg_fact = tk.Button(seg_fact, text="Registrar", width=13, height=1, font=("Raleway", 9))
     btn_reg_fact.place(x=290, y=435)
-
-
-
-
-
 
 
 
