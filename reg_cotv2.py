@@ -4,7 +4,6 @@ from tkinter import filedialog
 from tkcalendar import DateEntry
 import os
 import shutil
-import tkinter as tk
 from tkinter import PhotoImage
 import sqlite3
 
@@ -14,6 +13,8 @@ import sqlite3
 def crear_base_datos():
     conexion = sqlite3.connect("clientes.db")
     cursor = conexion.cursor()
+    
+    # Tabla de Clientes
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS clientes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,6 +25,23 @@ def crear_base_datos():
             direccion TEXT
         )
     """)
+    
+    # Tabla de Ordenes de Compra
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS ordenes_compra (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cliente_id INTEGER,
+            nro_orden TEXT,
+            estado TEXT,
+            servicio TEXT,
+            tiempo_ejecucion TEXT,
+            fecha_registro DATE,
+            ruta_cotizacion TEXT,
+            ruta_orden_compra TEXT,
+            FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+        )
+    """)
+    
     conexion.commit()
     conexion.close()
 
@@ -127,13 +145,59 @@ def clear_placeholder(event):
 
 
 
+# FUNCION PARA GESTIONAR EL FLUJO DE LA FILA SELECCIONADA --------------------------------------------------------
+def eliminar_persona_contacto():
+    selected_item = tabla_per_cont.selection()
+    if not selected_item:
+        selec_fila_del()  # Muestra advertencia si no se ha seleccionado ninguna fila
+        return
+
+    def confirmar_eliminar(delete_fila):
+        tabla_per_cont.delete(selected_item)  # Elimina la fila seleccionada
+        delete_fila.destroy()  # Cierra la ventana de confirmación
+        confirm_fila_eliminada()  # Muestra confirmación de eliminación exitosa
+
+    # Llama a la función para mostrar la ventana de confirmación
+    quest_eliminar_fila(confirmar_eliminar)
+
+
+def eliminar_area_trabajo():
+    selected_item = tabla_ar_trab.selection()
+    if not selected_item:
+        selec_fila_del()  # Muestra advertencia si no se ha seleccionado ninguna fila
+        return
+
+    def confirmar_eliminar(delete_fila):
+        tabla_ar_trab.delete(selected_item)
+        delete_fila.destroy() 
+        confirm_fila_eliminada()
+
+    quest_eliminar_fila(confirmar_eliminar)
+
+
+def eliminar_direccion():
+    selected_item = tabla_direx.selection()
+    if not selected_item:
+        selec_fila_del()
+        return
+    
+    def confirmar_eliminar(delete_fila):
+        tabla_direx.delete(selected_item)
+        delete_fila.destroy()
+        confirm_fila_eliminada()
+        
+    quest_eliminar_fila(confirmar_eliminar)
+
+# -----------------------------------------------------------------------------------------------------------------
+
+
 # ALERTAS / CONFIRMACIONES --------------------------------------------
 
 # CERRAR EL PROGRAMA --
 def salida():
     
     salida=tk.Toplevel(root)
-    salida.title("Salir")
+    salida.title("")
     salida.geometry("300x110")
     salida.resizable(False, False)
     salida.configure(bg="#FFFFFF")
@@ -263,8 +327,8 @@ def selec_fila_del():
     btn_fila_del.place(x=115, y=73)
 
 
-# PREGUNTA PARA ELIMINAR LA FILA
-def quest_eliminar_fila():
+# PREGUNTA PARA ELIMINAR LA FILA --
+def quest_eliminar_fila(confirmar_callback):
     
     delete_fila=tk.Toplevel(root)
     delete_fila.title("Advertencia")
@@ -289,14 +353,14 @@ def quest_eliminar_fila():
     
     canvas_delete_fila.create_text(84, 26, text="¿Desea eliminar la fila?", anchor="nw", font=("Arial", 10), fill="Black")
                                     # 79
-    btn_quest_si = tk.Button(delete_fila, text="Si", width=9, height=1, font=("Raleway", 9))
+    btn_quest_si = tk.Button(delete_fila, text="Si", width=9, height=1, font=("Raleway", 9), command=lambda: confirmar_callback(delete_fila))
     btn_quest_si.place(x=73, y=73)
     
     btn_quest_no = tk.Button(delete_fila, text="No", width=9, height=1, font=("Raleway", 9), command=delete_fila.destroy)
     btn_quest_no.place(x=158, y=73)
 
 
-# CONFIRMACION DE FILA ELIMINADA
+# CONFIRMACION DE FILA ELIMINADA --
 def confirm_fila_eliminada():
     
     fila_eliminada=tk.Toplevel(root)
@@ -320,13 +384,13 @@ def confirm_fila_eliminada():
     
     create_rounded_rectangle(cvs_fila_eliminada, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
     
-    cvs_fila_eliminada.create_text(95, 26, text="Fila eliminada", anchor="nw", font=("Arial", 10), fill="Black")
+    cvs_fila_eliminada.create_text(111, 26, text="Fila eliminada", anchor="nw", font=("Arial", 10), fill="Black")
     
     btn_del_ok = tk.Button(fila_eliminada, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=fila_eliminada.destroy)
     btn_del_ok.place(x=115, y=73)
 
 
-# DATOS REGISTRADOS
+# DATOS REGISTRADOS --
 def datos_registrados():
     
     datos_reg=tk.Toplevel(root)
@@ -356,7 +420,7 @@ def datos_registrados():
     btn_dato_reg.place(x=115, y=73)
 
 
-# REGISTRO SIN DATOS
+# REGISTRO SIN DATOS --
 def reg_sin_datos():
     
     reg_no_datos=tk.Toplevel(root)
@@ -384,7 +448,8 @@ def reg_sin_datos():
     
     btn_dato_reg = tk.Button(reg_no_datos, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_no_datos.destroy)
     btn_dato_reg.place(x=150, y=73)
-    
+
+
 
 
 
@@ -859,7 +924,8 @@ def registro_clientes():
     btn_ed_persona.config(command=editar_persona_contacto)
     btn_ed_persona.place(x=130, y=134)
     
-    btn_del_persona = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), command=confirm_fila_eliminada)
+    btn_del_persona = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+    btn_del_persona.config(command=eliminar_persona_contacto)
     btn_del_persona.place(x=240, y=134)
     
         # tabla
@@ -914,6 +980,7 @@ def registro_clientes():
     btn_ed_trabajo.place(x=130, y=382)
     
     btn_del_trabajo = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+    btn_del_trabajo.config(command=eliminar_area_trabajo)
     btn_del_trabajo.place(x=240, y=382)
     
         # tabla
@@ -986,6 +1053,7 @@ def registro_clientes():
     btn_ed_direx.place(x=480, y=270)
     
     btn_del_direx = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+    btn_del_direx.config(command=eliminar_direccion)
     btn_del_direx.place(x=590, y=270)
     
         # tabla
@@ -1177,7 +1245,7 @@ def registro_orden_compra():
     canvas_oc = tk.Canvas(reg_oc, width=530, height=358, bg="#373737", highlightthickness=0)
     canvas_oc.pack()
     
-    canvas_oc.create_text(25, 0, text="Reg. de Orden de Compra", anchor="nw", font=("Raleway", 30, "bold"), fill="White")
+    canvas_oc.create_text(70, 5, text="Reg. de Orden de Compra", anchor="nw", font=("Raleway", 25, "bold"), fill="White")
 
     create_rounded_rectangle(canvas_oc, 10, 66, 260, 308, radius=10, fill="#959595", outline="#959595")
 
@@ -1225,7 +1293,7 @@ def registro_orden_compra():
     # fecha reg
     canvas_oc.create_text(280, 134, text="Fecha de Registro", anchor="nw", font=("Raleway", 10), fill="black")
     
-    fecha_entry = DateEntry(reg_oc, font=("Raleway", 11),state="readonly" , width=17, background='darkblue', foreground='white', borderwidth=2)
+    fecha_entry = DateEntry(reg_oc, font=("Raleway", 11),state="readonly" , width=17, background='darkblue', foreground='black', borderwidth=2)
     fecha_entry.place(x=280, y=152, width=230, height=30)
     
         # DOCUMENTOS
@@ -1450,10 +1518,6 @@ def seguimiento_factura():
 
 
 
-
-
-
-
 # Crear la ventana principal
 root = tk.Tk()
 root.title("Inicio")
@@ -1503,7 +1567,7 @@ btn_bus.place(x=20, y=260)
 btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9))
 btn_act.place(x=20, y=305)
 
-btn_ex = tk.Button(root, text="Salir", width=37, height=1, font=("Raleway", 9), command=salida)
+btn_ex = tk.Button(root, text="Salir", width=37, height=1, font=("Raleway", 9), command=salida, bg="#4CAF50", fg="white", activebackground="#2196F3", activeforeground="black")
 btn_ex.place(x=20, y=350)
 
 
@@ -1523,8 +1587,15 @@ cbo_oc.current(0)  # 484
 # filtro fac
 canvas.create_text(20, 520, text="Por Factura", anchor="nw", font=("Raleway", 10), fill="black")
 
-cbo_fac = ttk.Combobox(root, values=["Todos los registros", "Cancelado", "Pendiente", "No Cancelado"], state="readonly", font=("Raleway", 10))
+cbo_fac = ttk.Combobox(root, values=["Todos los registros", "Cancelado", "Pendiente", "No Cancelado"], state="readonly", font=("Raleway", 10), style="TCombobox")
 cbo_fac.place(x=20, y=538, width=269, height=30)
+style = ttk.Style()
+style.configure("TCombobox",
+               fieldbackground="#4CAF50",  # Verde (color base)
+               foreground="white",        # Texto blanco (color base)
+               selectbackground="#2196F3",  # Azul (al seleccionar)
+               selectforeground="black"   # Texto negro (al seleccionar)
+               )
 cbo_fac.current(0)
 
 
