@@ -41,12 +41,12 @@ def fade_color_step(color, button, is_background):
 
 def on_enter(btn):
     # Cambia el color de fondo y texto al pasar el mouse
-    fade_color((240, 240, 240), (55, 55, 55), 10, 10, btn, is_background=True)  # Fade del fondo
+    fade_color((240, 240, 240), (85, 85, 85), 10, 10, btn, is_background=True)  # Fade del fondo
     fade_color((0, 0, 0), (255, 255, 255), 10, 10, btn, is_background=False)  # Fade del texto
 
 def on_leave(btn):
     # Restaura el color de fondo y texto al salir el mouse
-    fade_color((55, 55, 55), (240, 240, 240), 10, 10, btn, is_background=True)  # Fade del fondo
+    fade_color((85, 85, 85), (240, 240, 240), 10, 10, btn, is_background=True)  # Fade del fondo
     fade_color((255, 255, 255), (0, 0, 0), 10, 10, btn, is_background=False)  # Fade del texto
 
 
