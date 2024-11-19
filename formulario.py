@@ -12,7 +12,7 @@ import utils
 class alertas:
     def __init__(self, parent):
         self.parent = parent
-    
+     
     # CERRAR EL PROGRAMA --
     def cerrar_prog(self):
         salida=tk.Toplevel(self.parent)
@@ -225,7 +225,7 @@ class alertas:
         utils.create_rounded_rectangle(canvas_camb_confirm, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
         canvas_camb_confirm.create_text(80, 26, text="Cambios realizados con éxtio", anchor="nw", font=("Arial", 10), fill="Black")
-        
+
         btn_cr_ok = tk.Button(cambios_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=cambios_confirm.destroy)
         btn_cr_ok.place(x=115, y=73)
 
@@ -279,6 +279,114 @@ class alertas:
         
         btn_qd_ok = tk.Button(quest_datos, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=quest_datos.destroy)
         btn_qd_ok.place(x=115, y=73)
+        
+    # REGISTRO CORRECTO
+    def registro_confirm(self):
+        reg_confirm=tk.Toplevel(self.parent)
+        reg_confirm.title("")
+        reg_confirm.geometry("300x110")
+        reg_confirm.resizable(False, False)
+        reg_confirm.configure(bg="#FFFFFF")
+        reg_confirm.grab_set()
+        utils.centrar_ventana(reg_confirm)
+        reg_confirm.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_reg_confirm = tk.Canvas(reg_confirm, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_reg_confirm.pack()
+        
+        icon_reg_confirm = tk.PhotoImage(file="SPM---python/icons/confirm.png")
+        canvas_reg_confirm.create_image(30, 17, anchor="nw", image=icon_reg_confirm)
+        canvas_reg_confirm.image = icon_reg_confirm
+        
+        utils.create_rounded_rectangle(canvas_reg_confirm, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        canvas_reg_confirm.create_text(103, 26, text="¡Registro exitoso!", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_reg_conf = tk.Button(reg_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_confirm.destroy)
+        btn_reg_conf.place(x=115, y=73)
+        
+    # CANCELAR REGISTRO
+    def cancelar_registro(self):
+        cancel_reg=tk.Toplevel(self.parent)
+        cancel_reg.title("")
+        cancel_reg.geometry("300x110")
+        cancel_reg.resizable(False, False)
+        cancel_reg.configure(bg="#FFFFFF")
+        cancel_reg.grab_set()
+        utils.centrar_ventana(cancel_reg)
+        cancel_reg.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        can_cancel_reg = tk.Canvas(cancel_reg, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        can_cancel_reg.pack()
+        
+        icon_cancel_reg = tk.PhotoImage(file="SPM---python/icons/alert.png")
+        can_cancel_reg.create_image(30, 17, anchor="nw", image=icon_cancel_reg)
+        can_cancel_reg.image = icon_cancel_reg
+        
+        utils.create_rounded_rectangle(can_cancel_reg, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        can_cancel_reg.create_text(76, 26, text="¿Desea cancelar el registro?", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_cc_si = tk.Button(cancel_reg, text="Si", width=9, height=1, font=("Raleway", 9))
+        btn_cc_si.place(x=73, y=73)
+
+        btn_cc_no = tk.Button(cancel_reg, text="No", width=9, height=1, font=("Raleway", 9), command=cancel_reg.destroy)
+        btn_cc_no.place(x=158, y=73)
+        
+    # CAMBIOS SIN GUARDAR
+    def cambios_sin_guardar(self):
+        unsaved_changes=tk.Toplevel(self.parent)
+        unsaved_changes.title("")
+        unsaved_changes.geometry("300x110")
+        unsaved_changes.resizable(False, False)
+        unsaved_changes.configure(bg="#FFFFFF")
+        unsaved_changes.grab_set()
+        utils.centrar_ventana(unsaved_changes)
+        unsaved_changes.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        can_uns_ch = tk.Canvas(unsaved_changes, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        can_uns_ch.pack()
+        
+        icon_uns_ch = tk.PhotoImage(file="SPM---python/icons/alert.png")
+        can_uns_ch.create_image(30, 17, anchor="nw", image=icon_uns_ch)
+        can_uns_ch.image = icon_uns_ch
+        
+        utils.create_rounded_rectangle(can_uns_ch, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        can_uns_ch.create_text(79, 19, text="Tiene cambios sin guardar,", anchor="nw", font=("Arial", 10), fill="Black")
+        can_uns_ch.create_text(102, 33, text="¿Desea cancelar?", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_uns_si = tk.Button(unsaved_changes, text="Si", width=9, height=1, font=("Raleway", 9))
+        btn_uns_si.place(x=73, y=73)
+
+        btn_uns_no = tk.Button(unsaved_changes, text="No", width=9, height=1, font=("Raleway", 9), command=unsaved_changes.destroy)
+        btn_uns_no.place(x=158, y=73)
+        
+    # REGISTRO ACTUALIZADO
+    def registro_actualizado(self):
+        reg_updated=tk.Toplevel(self.parent)
+        reg_updated.title("")
+        reg_updated.geometry("300x110")
+        reg_updated.resizable(False, False)
+        reg_updated.configure(bg="#FFFFFF")
+        reg_updated.grab_set()
+        utils.centrar_ventana(reg_updated)
+        reg_updated.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_reg_updated = tk.Canvas(reg_updated, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_reg_updated.pack()
+        
+        icon_reg_updated = tk.PhotoImage(file="SPM---python/icons/confirm.png")
+        canvas_reg_updated.create_image(30, 17, anchor="nw", image=icon_reg_updated)
+        canvas_reg_updated.image = icon_reg_updated
+        
+        utils.create_rounded_rectangle(canvas_reg_updated, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        canvas_reg_updated.create_text(92, 26, text="¡Registro actualizado!", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_reg_upd = tk.Button(reg_updated, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_updated.destroy)
+        btn_reg_upd.place(x=115, y=73)
+        
 
 class generator_cot:
     def __init__(self, root, gen_cot):
@@ -525,6 +633,7 @@ class generator_cot:
         btn_ed_save = tk.Button(ed_material, text="Guardar", width=15, height=1, font=("Raleway", 9))
         btn_ed_save.place(x=134, y=146)
 
+
 class clientes:
     def __init__(self, root, vent_clientes):
         
@@ -555,7 +664,7 @@ class clientes:
         btn_reg_cli = tk.Button(vent_clientes, text="Registrar Cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_cliente)
         btn_reg_cli.place(x=22, y=80)
         
-        btn_ed_cli = tk.Button(vent_clientes, text="Editar cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ed_cli = tk.Button(vent_clientes, text="Editar cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.detalle_cliente)
         btn_ed_cli.place(x=22, y=125)
         
         btn_menu = tk.Button(vent_clientes, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -583,7 +692,7 @@ class clientes:
         utils.create_rounded_rectangle(search_canvas_cliente, 0, 0, 191, 40, radius=10, fill="white", outline="gray")
         search_canvas_cliente.create_line(156, 7, 156, 34, fill="gray", width=2)
                 
-        search_icon_cliente = tk.PhotoImage(file="SPM---python/icons/loupe.png")
+        search_icon_cliente = tk.PhotoImage(file="SPM---python/icons/search.png")
         search_icon_id_cliente = search_canvas_cliente.create_image(162, 8, anchor="nw", image=search_icon_cliente)
         search_canvas_cliente.image = search_icon_cliente
                 
@@ -869,10 +978,259 @@ class clientes:
 
         btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9))
         btn_save_direx.place(x=120, y=88)
-    
-    
-    
+
+    def detalle_cliente(self):
         
+        self.vent_clientes.withdraw()
+        
+        det_cliente = tk.Toplevel(self.vent_clientes)
+        det_cliente.title("Detalle del Cliente")
+        det_cliente.geometry("710x502")
+        det_cliente.resizable(False, False)
+        det_cliente.configure(bg="#373737")
+        utils.centrar_ventana(det_cliente)
+        
+        det_cliente.protocol("WM_DELETE_WINDOW", lambda: None)
+
+        canvas_det_cli = tk.Canvas(det_cliente, width=710, height=502, bg="#373737", highlightthickness=0)
+        canvas_det_cli.pack()
+        
+        utils.create_rounded_rectangle(canvas_det_cli, 10, 10, 350, 136, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_det_cli, 10, 146, 350, 254, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_det_cli, 10, 264, 350, 412, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_det_cli, 360, 10, 700, 118, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_det_cli, 360, 128, 700, 246, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_det_cli, 360, 256, 700, 364, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_det_cli, 360, 374, 700, 492, radius=10, fill="#959595", outline="#959595")
+
+        canvas_det_cli.create_text(20, 20, text="Razón Social / Empresa / Cliente", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cli, 20, 38, 340, 68, radius=10, fill="white", outline="#959595")
+        det_rs_cli = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        det_rs_cli.place(x=25, y=43, width=310, height=20)
+        
+        canvas_det_cli.create_text(20, 78, text="RUC", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cli, 20, 96, 340, 126, radius=10, fill="white", outline="#959595")
+        det_ruc_cli = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        det_ruc_cli.place(x=25, y=101, width=310, height=20)
+        
+        canvas_det_cli.create_text(20, 156, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cli, 20, 174, 340, 204, radius=10, fill="white", outline="#959595")
+        det_persona = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        det_persona.place(x=25, y=179, width=310, height=20)
+        
+        canvas_det_cli.create_text(370, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cli, 370, 38, 690, 68, radius=10, fill="white", outline="#959595")
+        det_ar_tb = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        det_ar_tb.place(x=375, y=43, width=310, height=20)
+
+        canvas_det_cli.create_text(370, 266, text="Dirección", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cli, 370, 284, 690, 314, radius=10, fill="white", outline="#959595")
+        det_direx = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        det_direx.place(x=375, y=289, width=310, height=20)
+        
+        btn_det_ag_persona = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+        btn_det_ag_persona.place(x=20, y=214)
+        
+        btn_det_ed_persona = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=self.edit_persona_cont)
+        btn_det_ed_persona.place(x=130, y=214)
+        
+        btn_det_del_persona = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+        btn_det_del_persona.place(x=240, y=214)
+        
+        
+        btn_det_ag_trabajo = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+        btn_det_ag_trabajo.place(x=370, y=78)
+        
+        btn_det_ed_trabajo = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=self.edit_area_trabajo)
+        btn_det_ed_trabajo.place(x=480, y=78)
+        
+        btn_det_del_trabajo = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+        btn_det_del_trabajo.place(x=590, y=78)
+        
+        
+        btn_det_ag_direx = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9))
+        btn_det_ag_direx.place(x=370, y=324)
+        
+        btn_det_ed_direx = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), command=self.edit_direx)
+        btn_det_ed_direx.place(x=480, y=324)
+        
+        btn_det_del_direx = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+        btn_det_del_direx.place(x=590, y=324)
+        
+        
+        btn_det_canc = tk.Button(det_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_det_canc.place(x=75, y=462)
+
+        btn_det_save = tk.Button(det_cliente, text="Guardar", width=13, height=1, font=("Raleway", 9))
+        btn_det_save.place(x=185, y=462)
+        
+        
+        t_det_persona = ttk.Treeview(det_cliente, columns=("id_dp", "dpersona"), show="headings", style="Custom.Treeview")
+        t_det_persona.place(x=10, y=264, width=341, height=149)
+        
+        t_det_persona.heading("id_dp", text="ID")
+        t_det_persona.heading("dpersona", text="Persona de contacto")
+        t_det_persona.column("id_dp", anchor="center", width=35, stretch=False)
+        t_det_persona.column("dpersona", anchor="center", width=290, stretch=False)
+        
+        datos_t_dpersona = [
+            ("1", "AAA"),
+            ("2", "BBB"),
+            ("3", "CCC"),
+            ("4", "DDD"),
+            ("5", "EEE"),
+        ]
+
+        for d_persona in datos_t_dpersona:
+            t_det_persona.insert("", "end", values=d_persona)
+        
+        scrollbar_t_dpersona = ttk.Scrollbar(det_cliente, orient="vertical", command=t_det_persona.yview)
+        t_det_persona.configure(yscrollcommand=scrollbar_t_dpersona.set)
+        scrollbar_t_dpersona.place(x=337, y=264, height=149)
+        
+        
+        t_det_area = ttk.Treeview(det_cliente, columns=("id_da", "darea"), show="headings", style="Custom.Treeview")
+        t_det_area.place(x=360, y=128, width=341, height=119)
+        
+        t_det_area.heading("id_da", text="ID")
+        t_det_area.heading("darea", text="Área de trabajo")
+        t_det_area.column("id_da", anchor="center", width=35, stretch=False)
+        t_det_area.column("darea", anchor="center", width=290, stretch=False)
+        
+        datos_t_darea = [
+            ("1", "AAA"),
+            ("2", "BBB"),
+            ("3", "CCC"),
+            ("4", "DDD"),
+            ("5", "EEE")
+        ]
+
+        for d_area in datos_t_darea:
+            t_det_area.insert("", "end", values=d_area)
+        
+        scrollbar_t_darea = ttk.Scrollbar(det_cliente, orient="vertical", command=t_det_area.yview)
+        t_det_area.configure(yscrollcommand=scrollbar_t_darea.set)
+        scrollbar_t_darea.place(x=687, y=128, height=119)
+        
+        
+        t_det_direx = ttk.Treeview(det_cliente, columns=("id_dd", "ddirex"), show="headings", style="Custom.Treeview")
+        t_det_direx.place(x=360, y=374, width=341, height=119)
+        
+        t_det_direx.heading("id_dd", text="ID")
+        t_det_direx.heading("ddirex", text="Dirección")
+        t_det_direx.column("id_dd", anchor="center", width=35, stretch=False)
+        t_det_direx.column("ddirex", anchor="center", width=290, stretch=False)
+        
+        datos_t_ddirex = [
+            ("1", "AAA"),
+            ("2", "BBB"),
+            ("3", "CCC"),
+            ("4", "DDD"),
+            ("5", "EEE")
+        ]
+        
+        for d_direx in datos_t_ddirex:
+            t_det_direx.insert("", "end", values=d_direx)
+        
+        scrollbar_t_ddirex = ttk.Scrollbar(det_cliente, orient="vertical", command=t_det_direx.yview)
+        t_det_direx.configure(yscrollcommand=scrollbar_t_ddirex.set)
+        scrollbar_t_ddirex.place(x=687, y=374, height=119)   
+
+
+
+
+
+class buscador:
+    def __init__(self, root, buscar_doc):
+        
+        self.root = root
+        self.buscar_doc = buscar_doc
+        self.root.withdraw()
+        
+        self.buscar_doc = buscar_doc
+        self.buscar_doc.title("Buscar Documentos")
+        self.buscar_doc.geometry("1100x664")
+        self.buscar_doc.resizable(False, False)
+        self.buscar_doc.configure(bg="#373737")
+        utils.centrar_ventana(self.buscar_doc)
+        self.alerta = alertas(buscar_doc)
+        
+        self.buscar_doc.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_buscar_doc = tk.Canvas(buscar_doc, width=1100, height=664, bg="#373737", highlightthickness=0)
+        canvas_buscar_doc.pack()
+        
+        utils.create_rounded_rectangle(canvas_buscar_doc, 10, 66, 1090, 126, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_buscar_doc, 10, 136, 1090, 614, radius=10, fill="#959595", outline="#959595")
+
+        canvas_buscar_doc.create_text(395, 15, text="BUSCAR DOCUMENTOS", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        
+        search_canvas_buscador = tk.Canvas(buscar_doc, width=400, height=40, bg="#373737", highlightthickness=0)
+        search_canvas_buscador.place(x=350, y=76)
+        
+        utils.create_rounded_rectangle(search_canvas_buscador, 0, 0, 400, 40, radius=10, fill="white", outline="#959595")
+        search_canvas_buscador.create_line(365, 7, 365, 34, fill="gray", width=2)
+        
+        search_icon_buscador = tk.PhotoImage(file="SPM---python/icons/search.png")
+        search_icon_id_buscador = search_canvas_buscador.create_image(371, 8, anchor="nw", image=search_icon_buscador)
+        search_canvas_buscador.image = search_icon_buscador
+        
+        search_canvas_buscador.tag_bind(search_icon_id_buscador, "<Button-1>", lambda e: self.alerta.no_datos())
+        search_entry_buscador = tk.Entry(search_canvas_buscador, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
+        search_entry_buscador.insert(0, "Buscar...")
+        search_entry_buscador.bind("<FocusIn>", lambda event: utils.clear_placeholder(event, search_entry_buscador))
+        search_entry_buscador.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry_buscador))
+        search_entry_buscador.place(x=6, y=7, width=351, height=27)
+
+        t_buscadoc = ttk.Treeview(buscar_doc, columns=("id_doc", "doc", "date_doc", "ruta"), show="headings", style="Custom.Treeview")
+        t_buscadoc.place(x=10, y=136, width=1081, height=479)
+        
+        t_buscadoc.heading("id_doc", text="ID")
+        t_buscadoc.heading("doc", text="Documento")
+        t_buscadoc.heading("date_doc", text="Fecha")
+        t_buscadoc.heading("ruta", text="Ruta")
+        
+        t_buscadoc.column("id_doc", anchor="center", width=65, stretch=False)
+        t_buscadoc.column("doc", anchor="center", width=402, stretch=False)
+        t_buscadoc.column("date_doc", anchor="center", width=100, stretch=False)
+        t_buscadoc.column("ruta", anchor="center", width=510, stretch=False)
+        
+        datos_t_buscadoc = [
+            ("1", "Factura_001", "2023-11-01", "C:/Documentos/Facturas/Factura_001.pdf"),
+            ("2", "Contrato_2023", "2023-10-15", "C:/Documentos/Contratos/Contrato_2023.pdf"),
+            ("3", "Informe_TI", "2023-09-20", "D:/Proyectos/Informes/Informe_TI.docx"),
+            ("4", "Plan_Marketing", "2023-08-25", "E:/Marketing/Planes/Plan_Marketing.xlsx"),
+            ("5", "Guía_Despacho", "2023-07-18", "C:/Despachos/Guias/Guía_Despacho.pdf"),
+            ("6", "Acta_Reunión", "2023-06-22", "C:/Reuniones/Actas/Acta_Reunión.docx"),
+            ("7", "Propuesta_Cliente", "2023-05-30", "D:/Ventas/Propuestas/Propuesta_Cliente.pdf"),
+            ("8", "Manual_Usuario", "2023-04-12", "E:/Soporte/Manuales/Manual_Usuario.pdf"),
+            ("9", "Reporte_Anual", "2023-03-28", "C:/Reportes/Anuales/Reporte_Anual.pdf"),
+            ("10", "Evaluación_Técnica", "2023-02-11", "D:/Evaluaciones/Técnicas/Evaluación_Técnica.pdf"),
+            ("11", "Lista_Precios", "2023-01-15", "C:/Precios/Listas/Lista_Precios.xlsx"),
+            ("12", "Política_Calidad", "2022-12-05", "D:/Calidad/Políticas/Política_Calidad.pdf"),
+            ("13", "Memorandum_Interno", "2022-11-22", "C:/Memorandos/Memorandum_Interno.docx"),
+            ("14", "Certificado_Garantía", "2022-10-13", "E:/Garantías/Certificados/Certificado_Garantía.pdf"),
+            ("15", "Acta_Cierre", "2022-09-07", "C:/Proyectos/Cierre/Acta_Cierre.pdf"),
+            ("16", "Solicitud_Cliente", "2022-08-20", "D:/Clientes/Solicitudes/Solicitud_Cliente.docx"),
+            ("17", "Protocolo_Seguridad", "2022-07-11", "C:/Seguridad/Protocolos/Protocolo_Seguridad.pdf"),
+            ("18", "Guía_Operativa", "2022-06-02", "E:/Operaciones/Guías/Guía_Operativa.pdf"),
+            ("19", "Plan_Financiero", "2022-05-19", "C:/Finanzas/Planes/Plan_Financiero.xlsx"),
+            ("20", "Hoja_Cotización", "2022-04-25", "D:/Cotizaciones/Hojas/Hoja_Cotización.pdf"),
+        ]
+        
+        datos_mostrados = datos_t_buscadoc[:15]
+        
+        for dato in datos_mostrados:
+            t_buscadoc.insert("", "end", values=dato)
+        
+        cbo_busq_page = ttk.Combobox(buscar_doc, values=["1", "2"], state="readonly", font=("Arial", 10))
+        cbo_busq_page.place(x=10, y=624, width=70, height=30)
+        cbo_busq_page.current(0)
+        
+        btn_menu = tk.Button(buscar_doc, text="Atrás", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_menu.place(x=500, y=624)
+
+
 class ventana_inicio:
     def __init__(self, root):
         self.root = root
@@ -915,10 +1273,10 @@ class ventana_inicio:
         btn_seg_fact = tk.Button(root, text="Seguimiento de Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_seg_fact.place(x=22, y=305)
 
-        btn_search = tk.Button(root, text="Buscar Documentos", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_search = tk.Button(root, text="Buscar Documentos", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_buscador)
         btn_search.place(x=22, y=350)
 
-        btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=self.alerta.material_delete, activebackground="#7F7F7F", activeforeground="white")
+        btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=self.alerta.registro_actualizado, activebackground="#7F7F7F", activeforeground="white")
         btn_act.place(x=22, y=395)
 
         btn_exit = tk.Button(self.root, text="Salir", width=37, height=1, font=("Raleway", 9), command=self.alerta.cerrar_prog, activebackground="#7F7F7F", activeforeground="white")
@@ -961,14 +1319,14 @@ class ventana_inicio:
         utils.create_rounded_rectangle(search_canvas, 0, 0, 350, 40, radius=10, fill="white", outline="gray")
         search_canvas.create_line(315, 7, 315, 34, fill="gray", width=2)
         
-        search_icon = tk.PhotoImage(file="SPM---python/icons/loupe.png")
+        search_icon = tk.PhotoImage(file="SPM---python/icons/search.png")
         search_icon_id = search_canvas.create_image(321, 8, anchor="nw", image=search_icon)
         search_canvas.image = search_icon
         
         search_canvas.tag_bind(search_icon_id, "<Button-1>", lambda e: self.alerta.no_datos())
         
         search_entry = tk.Entry(search_canvas, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
-        search_entry.insert(0, "Buscar...")  # Insertar texto de placeholder
+        search_entry.insert(0, "Buscar...")
         search_entry.bind("<FocusIn>", lambda event: utils.clear_placeholder(event, search_entry))  # Limpiar cuando el usuario hace clic
         search_entry.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry))  # Volver a mostrar si está vacío
         search_entry.place(x=6, y=7, width=301, height=27)
@@ -1038,6 +1396,11 @@ class ventana_inicio:
     def abrir_ventana_clientes(self):
         vent_clientes = tk.Toplevel(root)
         clientes(root, vent_clientes)
+        
+    def abrir_buscador(self):
+        buscar_doc = tk.Toplevel(root)
+        buscador(root, buscar_doc)
+
 
 if __name__ == "__main__":
     root = tk.Tk()
