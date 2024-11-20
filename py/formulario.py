@@ -1,18 +1,25 @@
 import tkinter as tk
+from tkinter import PhotoImage
 from tkinter import ttk, messagebox
 from tkinter import filedialog
 from tkcalendar import DateEntry
 import os
 import shutil
-from tkinter import PhotoImage
 import utils
+
+
+# Ruta base dinámica (directorio del archivo principal)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Ruta a la carpeta de iconos
+ICON_DIR = os.path.join(BASE_DIR, "icons")
 
 
 # NOTIFICACIONES - CONFIRMACIONES
 class alertas:
     def __init__(self, parent):
         self.parent = parent
-     
+    
     # CERRAR EL PROGRAMA --
     def cerrar_prog(self):
         salida=tk.Toplevel(self.parent)
@@ -27,10 +34,13 @@ class alertas:
         canvas_salida = tk.Canvas(salida, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_salida.pack()
         
-        # Cargar el icono
-        icono_alert_ex = tk.PhotoImage(file="SPM---python/icons/question.png")
-        canvas_salida.create_image(30, 17, anchor="nw", image=icono_alert_ex)
-        canvas_salida.image = icono_alert_ex
+        icono_path = os.path.join(ICON_DIR, "question.png")
+        try:
+            icono_alert_ex = tk.PhotoImage(file=icono_path)
+            canvas_salida.create_image(30, 17, anchor="nw", image=icono_alert_ex)
+            canvas_salida.image = icono_alert_ex
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
 
         utils.create_rounded_rectangle(canvas_salida, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -38,7 +48,7 @@ class alertas:
         
         btn_si = tk.Button(salida, text="Si", width=9, height=1, font=("Raleway", 9), command=self.parent.destroy)
         btn_si.place(x=73, y=73)
-
+                
         btn_no = tk.Button(salida, text="No", width=9, height=1, font=("Raleway", 9), command=salida.destroy)
         btn_no.place(x=158, y=73)
 
@@ -428,7 +438,7 @@ class generator_cot:
         input_gpersona = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
         input_gpersona.place(x=375, y=43, width=190, height=20)
         
-        canvas_coti.create_text(580, 20, text="Área", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas_coti.create_text(580, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         cbo_area = ttk.Combobox(gen_cot, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
         cbo_area.place(x=580, y=38, width=150, height=31)
         cbo_area.current(0)
@@ -678,7 +688,7 @@ class clientes:
         
         canvas_cliente.create_text(20, 336, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
-        canvas_cliente.create_text(20, 390, text="Por fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas_cliente.create_text(20, 390, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_date = ttk.Combobox(vent_clientes, values=["Todos los registros", "Última semana", "Últimas 2 semanas", "Último mes", "Últimos 3 meses", "Últimos 6 meses", "Último año"], state="readonly", font=("Raleway", 10))
         cbo_date.place(x=20, y=408, width=250, height=30)
@@ -695,7 +705,7 @@ class clientes:
         search_icon_cliente = tk.PhotoImage(file="SPM---python/icons/search.png")
         search_icon_id_cliente = search_canvas_cliente.create_image(162, 8, anchor="nw", image=search_icon_cliente)
         search_canvas_cliente.image = search_icon_cliente
-                
+        
         search_canvas_cliente.tag_bind(search_icon_id_cliente, "<Button-1>", lambda e: self.alerta.no_datos())
                 
         search_entry_cliente = tk.Entry(search_canvas_cliente, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
@@ -749,7 +759,7 @@ class clientes:
         self.vent_clientes.withdraw()
         
         reg_cliente = tk.Toplevel(self.vent_clientes)
-        reg_cliente.title("Registro de Cliente")
+        reg_cliente.title("Registro de Clientes")
         reg_cliente.geometry("710x502")
         reg_cliente.resizable(False, False)
         reg_cliente.configure(bg="#373737")
@@ -858,7 +868,7 @@ class clientes:
         t_area.place(x=360, y=128, width=341, height=119)
         
         t_area.heading("id_a", text="ID")
-        t_area.heading("area", text="Área de trabajo")
+        t_area.heading("area", text="Área de Trabajo")
         t_area.column("id_a", anchor="center", width=35, stretch=False)
         t_area.column("area", anchor="center", width=290, stretch=False)
         
@@ -1093,7 +1103,7 @@ class clientes:
         t_det_area.place(x=360, y=128, width=341, height=119)
         
         t_det_area.heading("id_da", text="ID")
-        t_det_area.heading("darea", text="Área de trabajo")
+        t_det_area.heading("darea", text="Área de Trabajo")
         t_det_area.column("id_da", anchor="center", width=35, stretch=False)
         t_det_area.column("darea", anchor="center", width=290, stretch=False)
         
@@ -1137,7 +1147,298 @@ class clientes:
         scrollbar_t_ddirex.place(x=687, y=374, height=119)   
 
 
+class cotizaciones:
+    def __init__(self, root, vent_coti):
+        
+        self.root = root
+        self.vent_coti = vent_coti
+        self.root.withdraw()
+        
+        self.vent_coti = vent_coti
+        self.vent_coti.title(" de Cotizaciones")
+        self.vent_coti.geometry("1300x608")
+        self.vent_coti.resizable(False, False)
+        self.vent_coti.configure(bg="#373737")
+        utils.centrar_ventana(self.vent_coti)
+        
+        self.alerta = alertas(vent_coti)
+        
+        self.vent_coti.protocol("WM_DELETE_PROTOCOL", lambda: None)
+        
+        canvas_cotizacion = tk.Canvas(vent_coti, width=1300, height=608, bg="#373737", highlightthickness=0)
+        canvas_cotizacion.pack()
+        
+        utils.create_rounded_rectangle(canvas_cotizacion, 10, 10, 300, 410, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_cotizacion, 10, 420, 300, 598, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_cotizacion, 310, 80, 1290, 558, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_cotizacion.create_text(403, 20, text="REGISTRO DE COTIZACIONES", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_cotizacion.create_text(20, 22, text="Opciones", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_cotizacion.create_text(20, 432, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        
+        btn_reg_coti = tk.Button(vent_coti, text="Registrar Cotización", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_cotizacion)
+        btn_reg_coti.place(x=22, y=80)
+        
+        btn_seg_cot = tk.Button(vent_coti, text="Seguimiento / Detalles", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.seguimiento_cotizacion)
+        btn_seg_cot.place(x=22, y=125)
+        
+        btn_menu_cot = tk.Button(vent_coti, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_menu_cot.place(x=22, y=170)
+        
+        btn_sig_cot = tk.Button(vent_coti, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_sig_cot.place(x=1190, y=568)
+        
+        btn_atras_cot = tk.Button(vent_coti, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_atras_cot.place(x=1080, y=568)
+        
+        canvas_cotizacion.create_text(20, 486, text="Por Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        cbo_estado = ttk.Combobox(vent_coti, values=["Todos los registros", "Aprobado", "Pendiente", "No Aprobado"], state="readonly", font=("Raleway", 10))
+        cbo_estado.place(x=20, y=504, width=250, height=30)
+        cbo_estado.current(0)
+        
+        canvas_cotizacion.create_text(20, 540, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        cbo_date_cot = ttk.Combobox(vent_coti, values=["Todos los registros", "Última semana", "Últimas 2 semanas", "Último mes", "Últimos 3 meses", "Últimos 6 meses", "Último año"], state="readonly", font=("Raleway", 10))
+        cbo_date_cot.place(x=20, y=558, width=250, height=30)
+        cbo_date_cot.current(0)
+        
+        cbo_page_cot = ttk.Combobox(vent_coti, values=["1", "2"], state="readonly", font=("Arial", 10))
+        cbo_page_cot.place(x=310, y=568, width=70, height=30)
+        cbo_page_cot.current(0)
 
+        search_canvas_cot = tk.Canvas(vent_coti, width=350, height=40, bg="#373737", highlightthickness=0)
+        search_canvas_cot.place(x=940, y=20)
+        
+        utils.create_rounded_rectangle(search_canvas_cot, 0, 0, 350, 40, radius=10, fill="white", outline="gray")
+        search_canvas_cot.create_line(315, 7, 315, 34, fill="gray", width=2)
+        
+        search_icon_cot = tk.PhotoImage(file="SPM---python/icons/search.png")
+        search_icon_id_cot = search_canvas_cot.create_image(321, 8, anchor="nw", image=search_icon_cot)
+        search_canvas_cot.image = search_icon_cot
+        
+        search_canvas_cot.tag_bind(search_icon_id_cot, "<Button-1>", lambda e: self.alerta.no_datos())
+        
+        search_entry_cot = tk.Entry(search_canvas_cot, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
+        search_entry_cot.insert(0, "Buscar...")
+        search_entry_cot.bind("<FocusIn>", lambda event: utils.clear_placeholder(event, search_entry_cot))
+        search_entry_cot.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry_cot))
+        search_entry_cot.place(x=6, y=7, width=301, height=27)
+
+        t_cotizacion = ttk.Treeview(vent_coti, columns=("id_c", "cliente_c", "servicio_c", "estado_c", "fecha_c"), show="headings", style="Custom.Treeview")
+        t_cotizacion.place(x=310, y=80, width=981, height=479)
+        
+        t_cotizacion.heading("id_c", text="ID")
+        t_cotizacion.heading("cliente_c", text="Cliente / Empresa")
+        t_cotizacion.heading("servicio_c", text="Servicio")
+        t_cotizacion.heading("estado_c", text="Estado")
+        t_cotizacion.heading("fecha_c", text="Fecha")
+        
+        t_cotizacion.column("id_c", anchor="center", width=50, stretch=False)
+        t_cotizacion.column("cliente_c", anchor="center", width=280, stretch=False)
+        t_cotizacion.column("servicio_c", anchor="center", width=427, stretch=False)
+        t_cotizacion.column("estado_c", anchor="center", width=120, stretch=False)
+        t_cotizacion.column("fecha_c", anchor="center", width=100, stretch=False)
+        
+        datos_t_cotizacion = [
+            ("1", "Empresa A", "Servicio de Mantenimiento", "Pendiente", "2023-11-01"),
+            ("2", "Empresa B", "Desarrollo de Software", "Aceptado", "2023-10-15"),
+            ("3", "Empresa C", "Consultoría en TI", "Rechazado", "2023-09-20"),
+            ("4", "Empresa D", "Instalación de Redes", "Pendiente", "2023-08-25"),
+            ("5", "Empresa E", "Auditoría de Sistemas", "Aceptado", "2023-07-18"),
+            ("6", "Empresa F", "Migración de Datos", "Pendiente", "2023-06-22"),
+            ("7", "Empresa G", "Optimización de Procesos", "Aceptado", "2023-05-30"),
+            ("8", "Empresa H", "Soporte Técnico", "Rechazado", "2023-04-12"),
+            ("9", "Empresa I", "Desarrollo Web", "Pendiente", "2023-03-28"),
+            ("10", "Empresa J", "Evaluación de Seguridad", "Aceptado", "2023-02-11"),
+            ("11", "Empresa K", "Diseño Gráfico", "Pendiente", "2023-01-15"),
+            ("12", "Empresa L", "Análisis de Datos", "Aceptado", "2022-12-05"),
+            ("13", "Empresa M", "Capacitación de Personal", "Rechazado", "2022-11-22"),
+            ("14", "Empresa N", "Optimización de Redes", "Pendiente", "2022-10-13"),
+            ("15", "Empresa O", "Desarrollo de App Móvil", "Aceptado", "2022-09-07"),
+            ("16", "Empresa P", "Soporte en Ciberseguridad", "Pendiente", "2022-08-20"),
+            ("17", "Empresa Q", "Automatización de Procesos", "Aceptado", "2022-07-11"),
+            ("18", "Empresa R", "Asesoría en Transformación Digital", "Rechazado", "2022-06-02"),
+            ("19", "Empresa S", "Administración de Sistemas", "Pendiente", "2022-05-19"),
+            ("20", "Empresa T", "Desarrollo de Contenido", "Aceptado", "2022-04-25"),
+        ]
+        
+        ejemplo_cotzacion = datos_t_cotizacion[:15]
+        
+        for cotizacion in ejemplo_cotzacion:
+            t_cotizacion.insert("", "end", values=cotizacion)
+        
+        
+    def registrar_cotizacion(self):
+        
+        self.vent_coti.withdraw()
+        
+        reg_coti = tk.Toplevel(self.vent_coti)
+        reg_coti.title("Registro de Cotización")
+        reg_coti.geometry("590x380")
+        reg_coti.resizable(False, False)
+        reg_coti.configure(bg="#373737")
+        utils.centrar_ventana(reg_coti)
+        
+        reg_coti.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_reg_coti = tk.Canvas(reg_coti, width=590, height=380, bg="#373737", highlightthickness=0)
+        canvas_reg_coti.pack()
+        
+        utils.create_rounded_rectangle(canvas_reg_coti, 10, 10, 580, 252, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_reg_coti, 10, 262, 580, 330, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_reg_coti.create_text(20, 20, text="Nro de Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        reg_cot = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
+        reg_cot.place(x=25, y=43, width=170, height=20)
+        
+        canvas_reg_coti.create_text(210, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 210, 38, 410, 68, radius=10, fill="white", outline="#959595")
+        reg_cli_cot = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
+        reg_cli_cot.place(x=215, y=43, width=190, height=20)
+        
+        canvas_reg_coti.create_text(420, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_area_cot = ttk.Combobox(reg_coti, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        cbo_area_cot.place(x=420, y=38, width=150, height=31)
+        cbo_area_cot.current(0)
+        
+        canvas_reg_coti.create_text(20, 78, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_per_cot = ttk.Combobox(reg_coti, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        cbo_per_cot.place(x=20, y=96, width=200, height=31)
+        cbo_per_cot.current(0)
+        
+        canvas_reg_coti.create_text(230, 78, text="Título del Servicio", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 230, 96, 570, 126, radius=10, fill="white", outline="#959595")
+        reg_serv = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
+        reg_serv.place(x=235, y=101, width=330, height=20)
+        
+        canvas_reg_coti.create_text(20, 136, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 20, 154, 200, 184, radius=10, fill="white", outline="#959595")
+        reg_tiempo = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
+        reg_tiempo.place(x=25, y=159, width=170, height=20)
+        
+        canvas_reg_coti.create_text(210, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 210, 154, 410, 184, radius=10, fill="white", outline="#959595")
+        reg_pago = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
+        reg_pago.place(x=215, y=159, width=170, height=20)
+        
+        canvas_reg_coti.create_text(420, 136, text="Costo Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 420, 154, 570, 184, radius=10, fill="white", outline="#959595")
+        reg_costo = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
+        reg_costo.place(x=425, y=159, width=140, height=20)
+        
+        canvas_reg_coti.create_text(20, 193, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 20, 211, 170, 241, radius=10, fill="white", outline="#959595")
+        reg_fecha = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
+        reg_fecha.place(x=25, y=216, width=140, height=20)
+        
+        canvas_reg_coti.create_text(180, 194, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_reg_est = ttk.Combobox(reg_coti, values=["Escoja una Opción", "Aprobado", "Pendiente", "No Aprobado"], state="readonly", font=("Raleway", 10))
+        cbo_reg_est.place(x=180, y=212, width=150, height=31)
+        cbo_reg_est.current(0)
+        
+        canvas_reg_coti.create_text(20, 272, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        btn_ad_cot = tk.Button(reg_coti, text="Agregar Cotización", command=lambda: utils.adjuntar_archivo(label_coti, "cotizacion"))
+        btn_ad_cot.place(x=20, y=290, width=140, height=30)
+        
+        label_coti = tk.Label(reg_coti, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
+        label_coti.place(x=170, y=290, width=310, height=30)
+        
+        btn_ver_cot = tk.Button(reg_coti, text="Ver doc.")
+        btn_ver_cot.place(x=490, y=290, width=80, height=30)
+        
+        btn_canc_cot = tk.Button(reg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_canc_cot.place(x=190, y=340)
+        
+        btn_reg_cot = tk.Button(reg_coti, text="Registrar", width=13, height=1, font=("Raleway", 9))
+        btn_reg_cot.place(x=300, y=340)
+        
+    def seguimiento_cotizacion(self):
+        
+        self.vent_coti.withdraw()
+        
+        seg_coti = tk.Toplevel(self.vent_coti)
+        seg_coti.title("Seguimiento de Cotización")
+        seg_coti.geometry("590x380")
+        seg_coti.resizable(False, False)
+        seg_coti.configure(bg="#373737")
+        utils.centrar_ventana(seg_coti)
+        seg_coti.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_det_cot = tk.Canvas(seg_coti, width=590, height=380, bg="#373737", highlightthickness=0)
+        canvas_det_cot.pack()
+        
+        utils.create_rounded_rectangle(canvas_det_cot, 10, 10, 580, 252, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_det_cot, 10, 262, 580, 330, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_det_cot.create_text(20, 20, text="Nro de Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        det_cot = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
+        det_cot.place(x=25, y=43, width=170, height=20)
+        
+        canvas_det_cot.create_text(210, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 210, 38, 410, 68, radius=10, fill="white", outline="#959595")
+        det_cli_cot = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
+        det_cli_cot.place(x=215, y=43, width=190, height=20)
+        
+        canvas_det_cot.create_text(420, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_dar_cot = ttk.Combobox(seg_coti, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        cbo_dar_cot.place(x=420, y=38, width=150, height=31)
+        cbo_dar_cot.current(0)
+        
+        canvas_det_cot.create_text(20, 78, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_dper_cot = ttk.Combobox(seg_coti, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        cbo_dper_cot.place(x=20, y=96, width=200, height=31)
+        cbo_dper_cot.current(0)
+        
+        canvas_det_cot.create_text(230, 78, text="Título del Servicio", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 230, 96, 570, 126, radius=10, fill="white", outline="#959595")
+        det_serv = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
+        det_serv.place(x=235, y=101, width=330, height=20)
+        
+        canvas_det_cot.create_text(20, 136, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 20, 154, 200, 184, radius=10, fill="white", outline="#959595")
+        det_tiempo = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
+        det_tiempo.place(x=25, y=159, width=170, height=20)
+        
+        canvas_det_cot.create_text(210, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 210, 154, 410, 184, radius=10, fill="white", outline="#959595")
+        det_pago = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
+        det_pago.place(x=215, y=159, width=170, height=20)
+        
+        canvas_det_cot.create_text(420, 136, text="Costo Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 420, 154, 570, 184, radius=10, fill="white", outline="#959595")
+        det_costo = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
+        det_costo.place(x=425, y=159, width=140, height=20)
+        
+        canvas_det_cot.create_text(20, 193, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 20, 211, 170, 241, radius=10, fill="white", outline="#959595")
+        det_fecha = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
+        det_fecha.place(x=25, y=216, width=140, height=20)
+        
+        canvas_det_cot.create_text(180, 194, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_det_est = ttk.Combobox(seg_coti, values=["Escoja una Opción", "Aprobado", "Pendiente", "No Aprobado"], state="readonly", font=("Raleway", 10))
+        cbo_det_est.place(x=180, y=212, width=150, height=31)
+        cbo_det_est.current(0)
+        
+        canvas_det_cot.create_text(20, 272, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        btn_det_cot = tk.Button(seg_coti, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(label_seg_coti, "cotizacion"))
+        btn_det_cot.place(x=20, y=290, width=140, height=30)
+        
+        label_seg_coti = tk.Label(seg_coti, text="Documento de Cotización", font=("Raleway", 9), bg="#373737", fg="white")
+        label_seg_coti.place(x=170, y=290, width=310, height=30)
+        
+        btn_ver_det_cot = tk.Button(seg_coti, text="Ver doc.")
+        btn_ver_det_cot.place(x=490, y=290, width=80, height=30)
+        
+        btn_canc_dcot = tk.Button(seg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_canc_dcot.place(x=190, y=340)
+        
+        btn_reg_dcot = tk.Button(seg_coti, text="Guardar", width=13, height=1, font=("Raleway", 9))
+        btn_reg_dcot.place(x=300, y=340)
 
 
 class buscador:
@@ -1261,7 +1562,7 @@ class ventana_inicio:
         btn_reg_cli = tk.Button(root, text="Ver Registro de Clientes", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_ventana_clientes)
         btn_reg_cli.place(x=22, y=125)
 
-        btn_reg_cot = tk.Button(root, text="Ver Registro de Cotización", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_reg_cot = tk.Button(root, text="Ver Registro de Cotización", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_reg_cotizacion)
         btn_reg_cot.place(x=22, y=170)
 
         btn_reg_oc = tk.Button(root, text="Ver Registro de Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1400,6 +1701,10 @@ class ventana_inicio:
     def abrir_buscador(self):
         buscar_doc = tk.Toplevel(root)
         buscador(root, buscar_doc)
+        
+    def abrir_reg_cotizacion(self):
+        vent_coti = tk.Toplevel(root)
+        cotizaciones(root, vent_coti)
 
 
 if __name__ == "__main__":

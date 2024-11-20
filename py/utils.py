@@ -5,7 +5,6 @@ from tkcalendar import DateEntry
 import os
 import shutil
 from tkinter import PhotoImage
-import formulario
 
 def placeholder_search(event, entry):
     if entry.get() == "":
@@ -16,6 +15,53 @@ def clear_placeholder(event, entry):
     if entry.get() == "Buscar...":
         entry.delete(0, tk.END)
         entry.config(fg='black')
+
+
+
+# Función para crear las carpetas si no existen
+def crear_carpetas_adjuntar():
+    # Carpeta principal
+    carpeta_principal = "documentos_adjuntar"
+    
+    # Subcarpetas para cada tipo de documento
+    carpetas_sub = ["cotizacion", "orden_compra", "guia_remision", "acta_conformidad", "informe_tecnico", "doc_planos", "doc_factura"]
+    
+    # Crear la carpeta principal si no existe
+    if not os.path.exists(carpeta_principal):
+        os.makedirs(carpeta_principal)
+    
+    # Crear las subcarpetas si no existen
+    for carpeta in carpetas_sub:
+        ruta_carpeta = os.path.join(carpeta_principal, carpeta)
+        if not os.path.exists(ruta_carpeta):
+            os.makedirs(ruta_carpeta)
+
+# Crear las carpetas al inicio
+crear_carpetas_adjuntar()
+
+def ajustar_texto(texto, max_length=45):
+    #Ajusta el texto para que no exceda la longitud máxima y agrega '...' al final si es necesario.
+    if len(texto) > max_length:
+        return texto[:max_length - 3] + '...'
+    return texto
+
+def adjuntar_archivo(label, tipo_doc):
+    archivo = filedialog.askopenfilename(title="Seleccionar archivo")
+    if archivo:
+        nombre_archivo = os.path.basename(archivo)
+        texto_ajustado = ajustar_texto(nombre_archivo)
+        label.config(text=texto_ajustado)
+
+        # Determinar la subcarpeta según el tipo de documento
+        subcarpeta = tipo_doc
+        carpeta_destino = os.path.join("documentos_adjuntar", subcarpeta)
+
+        # Copiar el archivo seleccionado a la carpeta correspondiente
+        destino = os.path.join(carpeta_destino, nombre_archivo)
+        shutil.copy(archivo, destino)  # Copia el archivo al destino
+        return destino  # Devuelve la nueva ruta del archivo copiado
+    return None
+
 
 
 def fade_color(start_color, end_color, steps, step_duration, button, is_background=True):
