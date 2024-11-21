@@ -1211,7 +1211,7 @@ class cotizaciones:
         self.root.withdraw()
         
         self.vent_coti = vent_coti
-        self.vent_coti.title(" de Cotizaciones")
+        self.vent_coti.title("Registro de de Cotizaciones")
         self.vent_coti.geometry("1300x608")
         self.vent_coti.resizable(False, False)
         self.vent_coti.configure(bg="#373737")
@@ -1294,14 +1294,14 @@ class cotizaciones:
         t_cotizacion.heading("estado_c", text="Estado")
         t_cotizacion.heading("fecha_c", text="Fecha")
         
-        t_cotizacion.column("id_c", anchor="center", width=50, stretch=False)
+        t_cotizacion.column("id_c", anchor="center", width=100, stretch=False)
         t_cotizacion.column("cliente_c", anchor="center", width=280, stretch=False)
-        t_cotizacion.column("servicio_c", anchor="center", width=427, stretch=False)
-        t_cotizacion.column("estado_c", anchor="center", width=120, stretch=False)
+        t_cotizacion.column("servicio_c", anchor="center", width=387, stretch=False)
+        t_cotizacion.column("estado_c", anchor="center", width=110, stretch=False)
         t_cotizacion.column("fecha_c", anchor="center", width=100, stretch=False)
         
         datos_t_cotizacion = [
-            ("1", "Empresa A", "Servicio de Mantenimiento", "Pendiente", "2023-11-01"),
+            ("001/1000", "Empresa A", "Servicio de Mantenimiento", "Pendiente", "2023-11-01"),
             ("2", "Empresa B", "Desarrollo de Software", "Aceptado", "2023-10-15"),
             ("3", "Empresa C", "Consultoría en TI", "Rechazado", "2023-09-20"),
             ("4", "Empresa D", "Instalación de Redes", "Pendiente", "2023-08-25"),
@@ -1327,7 +1327,6 @@ class cotizaciones:
         
         for cotizacion in ejemplo_cotzacion:
             t_cotizacion.insert("", "end", values=cotizacion)
-        
         
     def registrar_cotizacion(self):
         
@@ -1389,9 +1388,8 @@ class cotizaciones:
         reg_costo.place(x=425, y=159, width=140, height=20)
         
         canvas_reg_coti.create_text(20, 193, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_reg_coti, 20, 211, 170, 241, radius=10, fill="white", outline="#959595")
-        reg_fecha = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
-        reg_fecha.place(x=25, y=216, width=140, height=20)
+        date_coti = DateEntry(reg_coti, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        date_coti.place(x=20, y=211, width=150, height=30)
         
         canvas_reg_coti.create_text(180, 194, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         cbo_reg_est = ttk.Combobox(reg_coti, values=["Escoja una Opción", "Aprobado", "Pendiente", "No Aprobado"], state="readonly", font=("Raleway", 10))
@@ -1400,7 +1398,7 @@ class cotizaciones:
         
         canvas_reg_coti.create_text(20, 272, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_ad_cot = tk.Button(reg_coti, text="Agregar Cotización", command=lambda: utils.adjuntar_archivo(label_coti, "cotizacion"))
+        btn_ad_cot = tk.Button(reg_coti, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_coti, "cotizacion"))
         btn_ad_cot.place(x=20, y=290, width=140, height=30)
         
         label_coti = tk.Label(reg_coti, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
@@ -1474,9 +1472,8 @@ class cotizaciones:
         det_costo.place(x=425, y=159, width=140, height=20)
         
         canvas_det_cot.create_text(20, 193, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_det_cot, 20, 211, 170, 241, radius=10, fill="white", outline="#959595")
-        det_fecha = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
-        det_fecha.place(x=25, y=216, width=140, height=20)
+        date_seg_coti = DateEntry(seg_coti, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        date_seg_coti.place(x=20, y=211, width=150, height=30)
         
         canvas_det_cot.create_text(180, 194, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         cbo_det_est = ttk.Combobox(seg_coti, values=["Escoja una Opción", "Aprobado", "Pendiente", "No Aprobado"], state="readonly", font=("Raleway", 10))
@@ -1488,7 +1485,7 @@ class cotizaciones:
         btn_det_cot = tk.Button(seg_coti, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(label_seg_coti, "cotizacion"))
         btn_det_cot.place(x=20, y=290, width=140, height=30)
         
-        label_seg_coti = tk.Label(seg_coti, text="Documento de Cotización", font=("Raleway", 9), bg="#373737", fg="white")
+        label_seg_coti = tk.Label(seg_coti, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         label_seg_coti.place(x=170, y=290, width=310, height=30)
         
         btn_ver_det_cot = tk.Button(seg_coti, text="Ver doc.")
@@ -1499,6 +1496,214 @@ class cotizaciones:
         
         btn_reg_dcot = tk.Button(seg_coti, text="Guardar", width=13, height=1, font=("Raleway", 9))
         btn_reg_dcot.place(x=300, y=340)
+
+
+class orden_compra:
+    def __init__ (self, root, vent_oc):
+        
+        self.root = root
+        self.vent_oc = vent_oc
+        self.root.withdraw()
+        
+        self.vent_oc = vent_oc
+        self.vent_oc.title("Registro de Orden de Compra")
+        self.vent_oc.geometry("1300x608")
+        self.vent_oc.resizable(False, False)
+        self.vent_oc.configure(bg="#373737")
+        utils.centrar_ventana(self.vent_oc)
+        
+        self.alerta = alertas(vent_oc)
+        
+        self.vent_oc.protocol("WM_DELETE_PROTOCOL", lambda: None)
+        
+        canvas_oc = tk.Canvas(vent_oc, width=1300, height=608, bg="#373737", highlightthickness=0)
+        canvas_oc.pack()
+        
+        utils.create_rounded_rectangle(canvas_oc, 10, 10, 300, 410, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_oc, 10, 420, 300, 598, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_oc, 310, 80, 1290, 558, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_oc.create_text(400, 20, text="REGISTRO DE ORDEN DE COMPRA", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_oc.create_text(20, 22, text="Opciones", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_oc.create_text(20, 432, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        
+        btn_reg_oc = tk.Button(vent_oc, text="Registrar Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_orden_compra)
+        btn_reg_oc.place(x=22, y=80)
+        
+        btn_seg_oc = tk.Button(vent_oc, text="Seguimiento / Detalles", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_seg_oc.place(x=22, y=125)
+        
+        btn_menu_oc = tk.Button(vent_oc, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_menu_oc.place(x=22, y=170)
+        
+        btn_sig_oc = tk.Button(vent_oc, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_sig_oc.place(x=1190, y=568)
+        
+        btn_atras_oc = tk.Button(vent_oc, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_atras_oc.place(x=1080, y=568)
+        
+        canvas_oc.create_text(20, 486, text="Por Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        cbo_estado_oc = ttk.Combobox(vent_oc, values=["Todos los registros", "Trabajo No Iniciado", "En Proceso", "Completado Parcialmente", "Finalizado"], state="readonly", font=("Raleway", 10))
+        cbo_estado_oc.place(x=20, y=504, width=250, height=30)
+        cbo_estado_oc.current(0)
+        
+        canvas_oc.create_text(20, 540, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        cbo_date_oc = ttk.Combobox(vent_oc, values=["Todos los registros", "Última semana", "Últimas 2 semanas", "Último mes", "Últimos 3 meses", "Últimos 6 meses", "Último año"], state="readonly", font=("Raleway", 10))
+        cbo_date_oc.place(x=20, y=558, width=250, height=30)
+        cbo_date_oc.current(0)
+        
+        cbo_page_oc = ttk.Combobox(vent_oc, values=["1", "2"], state="readonly", font=("Arial", 10))
+        cbo_page_oc.place(x=310, y=568, width=70, height=30)
+        cbo_page_oc.current(0)
+        
+        search_canvas_oc = tk.Canvas(vent_oc, width=350, height=40, bg="#373737", highlightthickness=0)
+        search_canvas_oc.place(x=940, y=20)
+        
+        utils.create_rounded_rectangle(search_canvas_oc, 0, 0, 350, 40, radius=10, fill="white", outline="gray")
+        search_canvas_oc.create_line(315, 7, 315, 34, fill="gray", width=2)
+        
+        search_icon_path = os.path.join(ICON_DIR, "search.png")
+        try:
+            search_icon_oc = tk.PhotoImage(file=search_icon_path)
+            search_icon_id_oc = search_canvas_oc.create_image(321, 8, anchor="nw", image=search_icon_oc)
+            search_canvas_oc.image = search_icon_oc
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
+
+        search_canvas_oc.tag_bind(search_icon_id_oc, "<Button-1>", lambda e: self.alerta.no_datos())
+        
+        search_entry_oc = tk.Entry(search_canvas_oc, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
+        search_entry_oc.insert(0, "Buscar...")
+        search_entry_oc.bind("<FocusIn>", lambda event: utils.clear_placeholder(event, search_entry_oc))
+        search_entry_oc.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry_oc))
+        search_entry_oc.place(x=6, y=7, width=301, height=27)
+        
+        t_orden = ttk.Treeview(vent_oc, columns=("id_oc", "cliente_oc", "servicio_oc", "estado_oc", "fecha_oc"), show="headings", style="Custom.Treeview")
+        t_orden.place(x=310, y=80, width=981, height=479)
+        
+        t_orden.heading("id_oc", text="ID")
+        t_orden.heading("cliente_oc", text="Cliente / Empresa")
+        t_orden.heading("servicio_oc", text="Servicio")
+        t_orden.heading("estado_oc", text="Estado")
+        t_orden.heading("fecha_oc", text="Fecha")
+        
+        t_orden.column("id_oc", anchor="center", width=100, stretch=False)
+        t_orden.column("cliente_oc", anchor="center", width=280, stretch=False)
+        t_orden.column("servicio_oc", anchor="center", width=387, stretch=False)
+        t_orden.column("estado_oc", anchor="center", width=110, stretch=False)
+        t_orden.column("fecha_oc", anchor="center", width=100, stretch=False)
+        
+        datos_t_orden = [
+            ("1", "Empresa A", "Servicio de Mantenimiento", "Trabajo No Iniciado", "2023-11-01"),
+            ("2", "Empresa B", "Desarrollo de Software", "En Proceso", "2023-10-15"),
+            ("3", "Empresa C", "Consultoría en TI", "Completado Parcialmente", "2023-09-20"),
+            ("4", "Empresa D", "Instalación de Redes", "Finalizado", "2023-08-25"),
+            ("5", "Empresa E", "Auditoría de Sistemas", "Trabajo No Iniciado", "2023-07-18"),
+            ("6", "Empresa F", "Migración de Datos", "En Proceso", "2023-06-22"),
+            ("7", "Empresa G", "Optimización de Procesos", "Completado", "2023-05-30"),
+            ("8", "Empresa H", "Soporte Técnico", "Trabajo No Iniciado", "2023-04-12"),
+            ("9", "Empresa I", "Desarrollo Web", "En Proceso", "2023-03-28"),
+            ("10", "Empresa J", "Evaluación de Seguridad", "Pendiente", "2023-02-11"),
+            ("11", "Empresa K", "Diseño Gráfico", "Completado", "2023-01-15"),
+            ("12", "Empresa L", "Análisis de Datos", "Finalizado", "2022-12-05"),
+            ("13", "Empresa M", "Capacitación de Personal", "Trabajo No Iniciado", "2022-11-22"),
+            ("14", "Empresa N", "Optimización de Redes", "En Proceso", "2022-10-13"),
+            ("15", "Empresa O", "Desarrollo de App Móvil", "Completado", "2022-09-07"),
+            ("16", "Empresa P", "Soporte en Ciberseguridad", "Pendiente", "2022-08-20"),
+            ("17", "Empresa Q", "Automatización de Procesos", "Trabajo No Iniciado", "2022-07-11"),
+            ("18", "Empresa R", "Asesoría en Transformación Digital", "En Proceso", "2022-06-02"),
+            ("19", "Empresa S", "Administración de Sistemas", "Completado", "2022-05-19"),
+            ("20", "Empresa T", "Desarrollo de Contenido", "Finalizado", "2022-04-25"),
+        ]
+        
+        muestra_t_orden = datos_t_orden[:15]
+        
+        for orden in muestra_t_orden:
+            t_orden.insert("", "end", values=orden)
+            
+    def registrar_orden_compra(self):
+        
+        self.vent_oc.withdraw()
+        
+        reg_orden = tk.Toplevel(self.vent_oc)
+        reg_orden.title("Registro de Orden de Compra")
+        reg_orden.geometry("620x380")
+        reg_orden.resizable(False, False)
+        reg_orden.configure(bg="#373737")
+        utils.centrar_ventana(reg_orden)
+        reg_orden.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_reg_orden = tk.Canvas(reg_orden, width=620, height=380, bg="#373737", highlightthickness=0)
+        canvas_reg_orden.pack()
+        
+        utils.create_rounded_rectangle(canvas_reg_orden, 10, 10, 610, 194, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_reg_orden, 10, 204, 610, 330, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_reg_orden.create_text(20, 20, text="Nro Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_orden, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        reg_cot_or = tk.Entry(reg_orden, font=("Arial", 11), bd=0)
+        reg_cot_or.place(x=25, y=43, width=170, height=20)
+        
+        canvas_reg_orden.create_text(210, 20, text="Nro de Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_orden, 210, 38, 390, 68, radius=10, fill="white", outline="#959595")
+        reg_nr_orden = tk.Entry(reg_orden, font=("Arial", 11), bd=0)
+        reg_nr_orden.place(x=215, y=43, width=170, height=20)
+        
+        canvas_reg_orden.create_text(400, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_orden, 400, 38, 600, 68, radius=10, fill="white", outline="#959595")
+        reg_cli_or = tk.Entry(reg_orden, font=("Arial", 11), bd=0)
+        reg_cli_or.place(x=405, y=43, width=190, height=20)
+        
+        canvas_reg_orden.create_text(20, 78, text="Título del Servicio", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_orden, 20, 96, 230, 126, radius=10, fill="white", outline="#959595")
+        reg_or_serv = tk.Entry(reg_orden, font=("Arial", 11), bd=0)
+        reg_or_serv.place(x=25, y=101, width=200, height=20)
+        
+        canvas_reg_orden.create_text(240, 78, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_orden, 240, 96, 420, 126, radius=10, fill="white", outline="#959595")
+        reg_or_tiempo = tk.Entry(reg_orden, font=("Arial", 11), bd=0)
+        reg_or_tiempo.place(x=245, y=101, width=170, height=20)
+        
+        canvas_reg_orden.create_text(430, 78, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        date_orden = DateEntry(reg_orden, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        date_orden.place(x=430, y=96, width=170, height=30)
+        
+        canvas_reg_orden.create_text(20, 136, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_est_or = ttk.Combobox(reg_orden, values=["Escoja una Opción", "Trabajo No Iniciado", "En Proceso", "Completado Parcialmente", "Finalizado"], state="readonly", font=("Raleway", 10))
+        cbo_est_or.place(x=20, y=154, width=210, height=31)
+        cbo_est_or.current(0)
+        
+        canvas_reg_orden.create_text(20, 214, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+
+        btn_ad_or_cot = tk.Button(reg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(label_or_coti, "cotizacion"))
+        btn_ad_or_cot.place(x=20, y=232, width=140, height=30)
+        
+        label_or_coti = tk.Label(reg_orden, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
+        label_or_coti.place(x=170, y=232, width=340, height=30)
+        
+        btn_ver_or_cot = tk.Button(reg_orden, text="Ver doc.")
+        btn_ver_or_cot.place(x=520, y=232, width=80, height=30)
+        
+        canvas_reg_orden.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        btn_ad_orden = tk.Button(reg_orden, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_orden, "orden_compra"))
+        btn_ad_orden.place(x=20, y=290, width=140, height=30)
+        
+        label_orden = tk.Label(reg_orden, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
+        label_orden.place(x=170, y=290, width=340, height=30)
+        
+        btn_ver_orden = tk.Button(reg_orden, text="Ver doc.")
+        btn_ver_orden.place(x=520, y=290, width=80, height=30)
+        
+        btn_canc_or = tk.Button(reg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_canc_or.place(x=205, y=340)
+        
+        btn_reg_or = tk.Button(reg_orden, text="Registrar", width=13, height=1, font=("Raleway", 9))
+        btn_reg_or.place(x=315, y=340)
+        
+    
 
 
 class buscador:
@@ -1629,7 +1834,7 @@ class ventana_inicio:
         btn_reg_cot = tk.Button(root, text="Ver Registro de Cotización", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_reg_cotizacion)
         btn_reg_cot.place(x=22, y=170)
 
-        btn_reg_oc = tk.Button(root, text="Ver Registro de Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_reg_oc = tk.Button(root, text="Ver Registro de Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_orden_compra)
         btn_reg_oc.place(x=22, y=215)
 
         btn_reg_fact = tk.Button(root, text="Registrar Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1773,6 +1978,10 @@ class ventana_inicio:
     def abrir_reg_cotizacion(self):
         vent_coti = tk.Toplevel(root)
         cotizaciones(root, vent_coti)
+        
+    def abrir_orden_compra(self):
+        vent_oc = tk.Toplevel(root)
+        orden_compra(root, vent_oc)
 
 
 if __name__ == "__main__":
