@@ -17,7 +17,6 @@ def clear_placeholder(event, entry):
         entry.config(fg='black')
 
 
-
 # Función para crear las carpetas si no existen
 def crear_carpetas_adjuntar():
     # Carpeta principal
@@ -61,7 +60,6 @@ def adjuntar_archivo(label, tipo_doc):
         shutil.copy(archivo, destino)  # Copia el archivo al destino
         return destino  # Devuelve la nueva ruta del archivo copiado
     return None
-
 
 
 def fade_color(start_color, end_color, steps, step_duration, button, is_background=True):

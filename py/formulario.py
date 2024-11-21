@@ -1530,7 +1530,7 @@ class orden_compra:
         btn_reg_oc = tk.Button(vent_oc, text="Registrar Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_orden_compra)
         btn_reg_oc.place(x=22, y=80)
         
-        btn_seg_oc = tk.Button(vent_oc, text="Seguimiento / Detalles", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_seg_oc = tk.Button(vent_oc, text="Seguimiento / Detalles", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.seguimiento_orden_compra)
         btn_seg_oc.place(x=22, y=125)
         
         btn_menu_oc = tk.Button(vent_oc, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1703,8 +1703,123 @@ class orden_compra:
         btn_reg_or = tk.Button(reg_orden, text="Registrar", width=13, height=1, font=("Raleway", 9))
         btn_reg_or.place(x=315, y=340)
         
-    
-
+    def seguimiento_orden_compra(self):
+        
+        self.vent_oc.withdraw()
+        
+        seg_orden = tk.Toplevel(self.vent_oc)
+        seg_orden.title("Seguimiento de Orden de Compra")
+        seg_orden.geometry("620x566")
+        seg_orden.resizable(False, False)
+        seg_orden.configure(bg="#373737")
+        utils.centrar_ventana(seg_orden)
+        seg_orden.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_det_orden = tk.Canvas(seg_orden, width=620, height=566, bg="#373737", highlightthickness=0)
+        canvas_det_orden.pack()
+        
+        utils.create_rounded_rectangle(canvas_det_orden, 10, 10, 610, 194, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_det_orden, 10, 204, 610, 388, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_det_orden, 10, 398, 610, 516, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_det_orden.create_text(20, 20, text="Nro Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_orden, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        det_cot_or = tk.Entry(seg_orden, font=("Arial", 11), bd=0)
+        det_cot_or.place(x=25, y=43, width=170, height=20)
+        
+        canvas_det_orden.create_text(210, 20, text="Nro de Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_orden, 210, 38, 390, 68, radius=10, fill="white", outline="#959595")
+        det_nr_orden = tk.Entry(seg_orden, font=("Arial", 11), bd=0)
+        det_nr_orden.place(x=215, y=43, width=170, height=20)
+        
+        canvas_det_orden.create_text(400, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_orden, 400, 38, 600, 68, radius=10, fill="white", outline="#959595")
+        det_cli_or = tk.Entry(seg_orden, font=("Arial", 11), bd=0)
+        det_cli_or.place(x=405, y=43, width=190, height=20)
+        
+        canvas_det_orden.create_text(20, 78, text="Título del Servicio", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_orden, 20, 96, 230, 126, radius=10, fill="white", outline="#959595")
+        det_or_serv = tk.Entry(seg_orden, font=("Arial", 11), bd=0)
+        det_or_serv.place(x=25, y=101, width=200, height=20)
+        
+        canvas_det_orden.create_text(240, 78, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_orden, 240, 96, 420, 126, radius=10, fill="white", outline="#959595")
+        det_or_tiempo = tk.Entry(seg_orden, font=("Arial", 11), bd=0)
+        det_or_tiempo.place(x=245, y=101, width=170, height=20)
+        
+        canvas_det_orden.create_text(430, 78, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        date_det_orden = DateEntry(seg_orden, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        date_det_orden.place(x=430, y=96, width=170, height=30)
+        
+        canvas_det_orden.create_text(20, 136, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_det_or = ttk.Combobox(seg_orden, values=["Escoja una Opción", "Trabajo No Iniciado", "En Proceso", "Completado Parcialmente", "Finalizado"], state="readonly", font=("Raleway", 10))
+        cbo_det_or.place(x=20, y=154, width=210, height=31)
+        cbo_det_or.current(0)
+        
+        canvas_det_orden.create_text(20, 214, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        btn_det_or_cot = tk.Button(seg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(lbl_det_cot, "cotizacion"))
+        btn_det_or_cot.place(x=20, y=232, width=140, height=30)
+        
+        lbl_det_cot = tk.Label(seg_orden, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_det_cot.place(x=170, y=232, width=340, height=30)
+        
+        btn_ver_cotzz = tk.Button(seg_orden, text="Ver doc.")
+        btn_ver_cotzz.place(x=520, y=232, width=80, height=30)
+        
+        canvas_det_orden.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        btn_det_orden = tk.Button(seg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(lbl_det_or, "orden_compra"))
+        btn_det_orden.place(x=20, y=290, width=140, height=30)
+        
+        lbl_det_or = tk.Label(seg_orden, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_det_or.place(x=170, y=290, width=340, height=30)
+        
+        btn_ver_det_or = tk.Button(seg_orden, text="Ver doc.")
+        btn_ver_det_or.place(x=520, y=290, width=80, height=30)
+        
+        canvas_det_orden.create_text(20, 330, text="Guía de Remisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        
+        btn_det_gr = tk.Button(seg_orden, text="Adjuntar")
+        btn_det_gr.place(x=20, y=348, width=140, height=30)
+        
+        btn_elm_gr = tk.Button(seg_orden, text="Eliminar")
+        btn_elm_gr.place(x=170, y=348, width=140, height=30)
+        
+        btn_ver_gr = tk.Button(seg_orden, text="Ver doc.")
+        btn_ver_gr.place(x=320, y=348, width=80, height=30)
+        
+        btn_atras_det = tk.Button(seg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_atras_det.place(x=205, y=526)
+        
+        btn_save_det = tk.Button(seg_orden, text="Guardar", width=13, height=1, font=("Raleway", 9))
+        btn_save_det.place(x=315, y=526)
+        
+        t_guia_rem = ttk.Treeview(seg_orden, columns=("id_gr", "documento"), show="headings", style="Custom.Treeview")
+        t_guia_rem.place(x=10, y=398, width=601, height=119)
+        
+        t_guia_rem.heading("id_gr", text="ID")
+        t_guia_rem.heading("documento", text="Documento")
+        t_guia_rem.column("id_gr", anchor="center", width=55, stretch=False)
+        t_guia_rem.column("documento", anchor="center", width=530, stretch=False)
+        
+        datos_guia_rem = [
+            ("1", "Guía de Despacho A"),
+            ("2", "Guía de Despacho B"),
+            ("3", "Guía de Despacho C"),
+            ("4", "Guía de Despacho D"),
+            ("5", "Guía de Despacho E"),
+        ]
+        
+        for dato_orden in datos_guia_rem:
+            t_guia_rem.insert("", "end", values=dato_orden)
+          
+        scrollbar_orden = ttk.Scrollbar(seg_orden, orient="vertical", command=t_guia_rem.yview)
+        t_guia_rem.configure(yscrollcommand=scrollbar_orden.set)
+        scrollbar_orden.place(x=597, y=398, height=119)
+        
+        
+        
 
 class buscador:
     def __init__(self, root, buscar_doc):
