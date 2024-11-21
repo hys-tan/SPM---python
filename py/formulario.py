@@ -67,9 +67,13 @@ class alertas:
         canvas_sec_fila.pack()
         
         # Cargar el icono
-        icono_alert_sec = tk.PhotoImage(file="SPM---python/icons/alert.png")
-        canvas_sec_fila.create_image(30, 17, anchor="nw", image=icono_alert_sec)
-        canvas_sec_fila.image = icono_alert_sec
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icono_alert_sec = tk.PhotoImage(file=icono_path)
+            canvas_sec_fila.create_image(30, 17, anchor="nw", image=icono_alert_sec)
+            canvas_sec_fila.image = icono_alert_sec
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
 
         utils.create_rounded_rectangle(canvas_sec_fila, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -93,9 +97,13 @@ class alertas:
         canvas_no_file.pack()
         
         # Cargar el icono
-        icono_alert_nf = tk.PhotoImage(file="SPM---python/icons/delete.png")
-        canvas_no_file.create_image(30, 17, anchor="nw", image=icono_alert_nf)
-        canvas_no_file.image = icono_alert_nf
+        icono_path = os.path.join(ICON_DIR, "delete.png")
+        try:
+            icono_alert_nf = tk.PhotoImage(file=icono_path)
+            canvas_no_file.create_image(30, 17, anchor="nw", image=icono_alert_nf)
+            canvas_no_file.image = icono_alert_nf
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
 
         utils.create_rounded_rectangle(canvas_no_file, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -118,9 +126,13 @@ class alertas:
         canvas_ques_mat = tk.Canvas(q_material, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_ques_mat.pack()
 
-        icon_quest_mat = tk.PhotoImage(file="SPM---python/icons/alert.png")
-        canvas_ques_mat.create_image(30, 17, anchor="nw", image=icon_quest_mat)
-        canvas_ques_mat.image = icon_quest_mat
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_quest_mat = tk.PhotoImage(file=icono_path)
+            canvas_ques_mat.create_image(30, 17, anchor="nw", image=icon_quest_mat)
+            canvas_ques_mat.image = icon_quest_mat
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
 
         utils.create_rounded_rectangle(canvas_ques_mat, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -147,9 +159,13 @@ class alertas:
         canvas_mat_delete = tk.Canvas(mat_delete, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_mat_delete.pack()
         
-        icon_confirm_del = tk.PhotoImage(file="SPM---python/icons/confirm.png")
-        canvas_mat_delete.create_image(30, 17, anchor="nw", image=icon_confirm_del)
-        canvas_mat_delete.image = icon_confirm_del
+        icono_path = os.path.join(ICON_DIR, "confirm.png")
+        try:
+            icon_confirm_del = tk.PhotoImage(file=icono_path)
+            canvas_mat_delete.create_image(30, 17, anchor="nw", image=icon_confirm_del)
+            canvas_mat_delete.image = icon_confirm_del
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(canvas_mat_delete, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -172,9 +188,13 @@ class alertas:
         can_gen_coti = tk.Canvas(gener_coti, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         can_gen_coti.pack()
         
-        icon_gener_coti = tk.PhotoImage(file="SPM---python/icons/question.png")
-        can_gen_coti.create_image(30, 17, anchor="nw", image=icon_gener_coti)
-        can_gen_coti.image = icon_gener_coti
+        icono_path = os.path.join(ICON_DIR, "question.png")
+        try:
+            icon_gener_coti = tk.PhotoImage(file=icono_path)
+            can_gen_coti.create_image(30, 17, anchor="nw", image=icon_gener_coti)
+            can_gen_coti.image = icon_gener_coti
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(can_gen_coti, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -200,9 +220,13 @@ class alertas:
         can_cancel_coti = tk.Canvas(cancel_coti, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         can_cancel_coti.pack()
         
-        icon_cancel_coti = tk.PhotoImage(file="SPM---python/icons/alert.png")
-        can_cancel_coti.create_image(30, 17, anchor="nw", image=icon_cancel_coti)
-        can_cancel_coti.image = icon_cancel_coti
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_cancel_coti = tk.PhotoImage(file=icono_path)
+            can_cancel_coti.create_image(30, 17, anchor="nw", image=icon_cancel_coti)
+            can_cancel_coti.image = icon_cancel_coti
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(can_cancel_coti, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -228,9 +252,13 @@ class alertas:
         canvas_camb_confirm = tk.Canvas(cambios_confirm, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_camb_confirm.pack()
         
-        icon_confirm_cambio = tk.PhotoImage(file="SPM---python/icons/confirm.png")
-        canvas_camb_confirm.create_image(30, 17, anchor="nw", image=icon_confirm_cambio)
-        canvas_camb_confirm.image = icon_confirm_cambio
+        icono_path = os.path.join(ICON_DIR, "confirm.png")
+        try:
+            icon_confirm_cambio = tk.PhotoImage(file=icono_path)
+            canvas_camb_confirm.create_image(30, 17, anchor="nw", image=icon_confirm_cambio)
+            canvas_camb_confirm.image = icon_confirm_cambio
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(canvas_camb_confirm, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -253,9 +281,13 @@ class alertas:
         canvas_coti_confirm = tk.Canvas(coti_confirm, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_coti_confirm.pack()
         
-        icon_confirm_coti = tk.PhotoImage(file="SPM---python/icons/confirm.png")
-        canvas_coti_confirm.create_image(30, 17, anchor="nw", image=icon_confirm_coti)
-        canvas_coti_confirm.image = icon_confirm_coti
+        icono_path = os.path.join(ICON_DIR, "confirm.png")
+        try:
+            icon_confirm_coti = tk.PhotoImage(file=icono_path)
+            canvas_coti_confirm.create_image(30, 17, anchor="nw", image=icon_confirm_coti)
+            canvas_coti_confirm.image = icon_confirm_coti
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(canvas_coti_confirm, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -278,9 +310,13 @@ class alertas:
         canvas_quest_datos = tk.Canvas(quest_datos, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_quest_datos.pack()
         
-        icon_quest_datos = tk.PhotoImage(file="SPM---python/icons/alert.png")
-        canvas_quest_datos.create_image(30, 17, anchor="nw", image=icon_quest_datos)
-        canvas_quest_datos.image = icon_quest_datos
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_quest_datos = tk.PhotoImage(file=icono_path)
+            canvas_quest_datos.create_image(30, 17, anchor="nw", image=icon_quest_datos)
+            canvas_quest_datos.image = icon_quest_datos
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(canvas_quest_datos, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -304,9 +340,13 @@ class alertas:
         canvas_reg_confirm = tk.Canvas(reg_confirm, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_reg_confirm.pack()
         
-        icon_reg_confirm = tk.PhotoImage(file="SPM---python/icons/confirm.png")
-        canvas_reg_confirm.create_image(30, 17, anchor="nw", image=icon_reg_confirm)
-        canvas_reg_confirm.image = icon_reg_confirm
+        icono_path = os.path.join(ICON_DIR, "confirm.png")
+        try:
+            icon_reg_confirm = tk.PhotoImage(file=icono_path)
+            canvas_reg_confirm.create_image(30, 17, anchor="nw", image=icon_reg_confirm)
+            canvas_reg_confirm.image = icon_reg_confirm
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(canvas_reg_confirm, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -329,9 +369,13 @@ class alertas:
         can_cancel_reg = tk.Canvas(cancel_reg, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         can_cancel_reg.pack()
         
-        icon_cancel_reg = tk.PhotoImage(file="SPM---python/icons/alert.png")
-        can_cancel_reg.create_image(30, 17, anchor="nw", image=icon_cancel_reg)
-        can_cancel_reg.image = icon_cancel_reg
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_cancel_reg = tk.PhotoImage(file=icono_path)
+            can_cancel_reg.create_image(30, 17, anchor="nw", image=icon_cancel_reg)
+            can_cancel_reg.image = icon_cancel_reg
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(can_cancel_reg, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -357,9 +401,13 @@ class alertas:
         can_uns_ch = tk.Canvas(unsaved_changes, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         can_uns_ch.pack()
         
-        icon_uns_ch = tk.PhotoImage(file="SPM---python/icons/alert.png")
-        can_uns_ch.create_image(30, 17, anchor="nw", image=icon_uns_ch)
-        can_uns_ch.image = icon_uns_ch
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_uns_ch = tk.PhotoImage(file=icono_path)
+            can_uns_ch.create_image(30, 17, anchor="nw", image=icon_uns_ch)
+            can_uns_ch.image = icon_uns_ch
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(can_uns_ch, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -386,9 +434,13 @@ class alertas:
         canvas_reg_updated = tk.Canvas(reg_updated, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_reg_updated.pack()
         
-        icon_reg_updated = tk.PhotoImage(file="SPM---python/icons/confirm.png")
-        canvas_reg_updated.create_image(30, 17, anchor="nw", image=icon_reg_updated)
-        canvas_reg_updated.image = icon_reg_updated
+        icono_path = os.path.join(ICON_DIR, "confirm.png")
+        try:
+            icon_reg_updated = tk.PhotoImage(file=icono_path)
+            canvas_reg_updated.create_image(30, 17, anchor="nw", image=icon_reg_updated)
+            canvas_reg_updated.image = icon_reg_updated
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
         utils.create_rounded_rectangle(canvas_reg_updated, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
@@ -701,10 +753,14 @@ class clientes:
                 
         utils.create_rounded_rectangle(search_canvas_cliente, 0, 0, 191, 40, radius=10, fill="white", outline="gray")
         search_canvas_cliente.create_line(156, 7, 156, 34, fill="gray", width=2)
-                
-        search_icon_cliente = tk.PhotoImage(file="SPM---python/icons/search.png")
-        search_icon_id_cliente = search_canvas_cliente.create_image(162, 8, anchor="nw", image=search_icon_cliente)
-        search_canvas_cliente.image = search_icon_cliente
+        
+        search_icon_path = os.path.join(ICON_DIR, "search.png")
+        try:
+            search_icon_cliente = tk.PhotoImage(file=search_icon_path)
+            search_icon_id_cliente = search_canvas_cliente.create_image(162, 8, anchor="nw", image=search_icon_cliente)
+            search_canvas_cliente.image = search_icon_cliente
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
         
         search_canvas_cliente.tag_bind(search_icon_id_cliente, "<Button-1>", lambda e: self.alerta.no_datos())
                 
@@ -1172,7 +1228,7 @@ class cotizaciones:
         utils.create_rounded_rectangle(canvas_cotizacion, 10, 420, 300, 598, radius=10, fill="#959595", outline="#959595")
         #utils.create_rounded_rectangle(canvas_cotizacion, 310, 80, 1290, 558, radius=10, fill="#959595", outline="#959595")
         
-        canvas_cotizacion.create_text(403, 20, text="REGISTRO DE COTIZACIONES", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_cotizacion.create_text(435, 20, text="REGISTRO DE COTIZACIONES", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         canvas_cotizacion.create_text(20, 22, text="Opciones", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         canvas_cotizacion.create_text(20, 432, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
@@ -1213,10 +1269,14 @@ class cotizaciones:
         utils.create_rounded_rectangle(search_canvas_cot, 0, 0, 350, 40, radius=10, fill="white", outline="gray")
         search_canvas_cot.create_line(315, 7, 315, 34, fill="gray", width=2)
         
-        search_icon_cot = tk.PhotoImage(file="SPM---python/icons/search.png")
-        search_icon_id_cot = search_canvas_cot.create_image(321, 8, anchor="nw", image=search_icon_cot)
-        search_canvas_cot.image = search_icon_cot
-        
+        search_icon_path = os.path.join(ICON_DIR, "search.png")
+        try:
+            search_icon_cot = tk.PhotoImage(file=search_icon_path)
+            search_icon_id_cot = search_canvas_cot.create_image(321, 8, anchor="nw", image=search_icon_cot)
+            search_canvas_cot.image = search_icon_cot
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
+
         search_canvas_cot.tag_bind(search_icon_id_cot, "<Button-1>", lambda e: self.alerta.no_datos())
         
         search_entry_cot = tk.Entry(search_canvas_cot, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
@@ -1472,10 +1532,14 @@ class buscador:
         utils.create_rounded_rectangle(search_canvas_buscador, 0, 0, 400, 40, radius=10, fill="white", outline="#959595")
         search_canvas_buscador.create_line(365, 7, 365, 34, fill="gray", width=2)
         
-        search_icon_buscador = tk.PhotoImage(file="SPM---python/icons/search.png")
-        search_icon_id_buscador = search_canvas_buscador.create_image(371, 8, anchor="nw", image=search_icon_buscador)
-        search_canvas_buscador.image = search_icon_buscador
-        
+        search_icon_path = os.path.join(ICON_DIR, "search.png")
+        try:
+            search_icon_buscador = tk.PhotoImage(file=search_icon_path)
+            search_icon_id_buscador = search_canvas_buscador.create_image(371, 8, anchor="nw", image=search_icon_buscador)
+            search_canvas_buscador.image = search_icon_buscador
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
+
         search_canvas_buscador.tag_bind(search_icon_id_buscador, "<Button-1>", lambda e: self.alerta.no_datos())
         search_entry_buscador = tk.Entry(search_canvas_buscador, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
         search_entry_buscador.insert(0, "Buscar...")
@@ -1620,10 +1684,14 @@ class ventana_inicio:
         utils.create_rounded_rectangle(search_canvas, 0, 0, 350, 40, radius=10, fill="white", outline="gray")
         search_canvas.create_line(315, 7, 315, 34, fill="gray", width=2)
         
-        search_icon = tk.PhotoImage(file="SPM---python/icons/search.png")
-        search_icon_id = search_canvas.create_image(321, 8, anchor="nw", image=search_icon)
-        search_canvas.image = search_icon
-        
+        search_icon_path = os.path.join(ICON_DIR, "search.png")  # Ruta dinámica
+        try:
+            search_icon = tk.PhotoImage(file=search_icon_path)
+            search_icon_id = search_canvas.create_image(321, 8, anchor="nw", image=search_icon)
+            search_canvas.image = search_icon
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
+
         search_canvas.tag_bind(search_icon_id, "<Button-1>", lambda e: self.alerta.no_datos())
         
         search_entry = tk.Entry(search_canvas, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')

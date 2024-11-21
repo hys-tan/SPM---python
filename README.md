@@ -1,6 +1,6 @@
 <h1 align="center"> Python project / Proyecto de Python </h1>
 
-<h3>ENG</h3>
+<h3 align="center">ENG</h3>
 
 This project aims to organize and manage documents in tables, and will also allow you to add 'clients' through a form. The data will be stored locally. Feel free to collaborate or help us.
 
@@ -12,18 +12,18 @@ git clone https://github.com/hys-tan/SPM---python.git
 
 <h4>2. Create a Virtual Environment</h4>
 
-Windows
+Windows >>>
 python -m venv trabajo
 
-macOS/Linux
+macOS/Linux >>>
 python3 -m venv trabajo
 
 <h4>3. Activate the Virtual Environment</h4>
 
-Windows
+Windows >>>
 trabajo\Scripts\activate
 
-macOS/Linux
+macOS/Linux >>>
 source trabajo/bin/activate
 
 <h4>4. Install the Required Packages</h4>
@@ -34,7 +34,7 @@ pip install -r requirements.txt
 
 python py/nombre_del_script.py
 
-<h3>ESP</h3>
+<h3 align="center">ESP</h3>
 
 Este proyecto pretende organizar y gestionar documentos en tablas, y también permitirá añadir 'clientes' a través de un formulario. Los datos se almacenarán localmente. Siéntete libre de colaborar o ayudarnos.
 
@@ -46,18 +46,18 @@ git clone https://github.com/hys-tan/SPM---python.git
 
 <h4>2. Crear el entorno virtual</h4>
 
-Windows
+Windows >>>
 python -m venv trabajo
 
-macOS/Linux
+macOS/Linux >>>
 python3 -m venv trabajo
 
 <h4>3. Activar el entorno virtual</h4>
 
-windows
+windows >>>
 trabajo\Scripts\activate
 
-macOS/Linux
+macOS/Linux >>>
 source trabajo/bin/activate
 
 <h4>4. Instala las dependencias</h4>
