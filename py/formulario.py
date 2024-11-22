@@ -448,6 +448,96 @@ class alertas:
         
         btn_reg_upd = tk.Button(reg_updated, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_updated.destroy)
         btn_reg_upd.place(x=115, y=73)
+    
+    # CODIGO YA UTILIZADO
+    def codigo_utilizado(self):
+        code_used=tk.Toplevel(self.parent)
+        code_used.title("")
+        code_used.geometry("300x110")
+        code_used.resizable(False, False)
+        code_used.configure(bg="#FFFFFF")
+        code_used.grab_set()
+        utils.centrar_ventana(code_used)
+        code_used.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_code_used = tk.Canvas(code_used, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_code_used.pack()
+        
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_code_used = tk.PhotoImage(file=icono_path)
+            canvas_code_used.create_image(30, 17, anchor="nw", image=icon_code_used)
+            canvas_code_used.image = icon_code_used
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
+        
+        utils.create_rounded_rectangle(canvas_code_used, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        canvas_code_used.create_text(80, 19, text="Este código ya ha sido registrado", anchor="nw", font=("Arial", 10), fill="Black")
+        canvas_code_used.create_text(115, 33, text="Por favor, utilice otro", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_code_ok = tk.Button(code_used, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=code_used.destroy)
+        btn_code_ok.place(x=115, y=73)
+        
+    # CLIENTE REPETIDO
+    def cliente_repetido(self):
+        cli_rep=tk.Toplevel(self.parent)
+        cli_rep.title("")
+        cli_rep.geometry("300x110")
+        cli_rep.resizable(False, False)
+        cli_rep.configure(bg="#FFFFFF")
+        cli_rep.grab_set()
+        utils.centrar_ventana(cli_rep)
+        cli_rep.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_cli_rep = tk.Canvas(cli_rep, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_cli_rep.pack()
+        
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_cli_rep = tk.PhotoImage(file=icono_path)
+            canvas_cli_rep.create_image(30, 17, anchor="nw", image=icon_cli_rep)
+            canvas_cli_rep.image = icon_cli_rep
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
+        
+        utils.create_rounded_rectangle(canvas_cli_rep, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        canvas_cli_rep.create_text(100, 19, text="Este cliente ya existe", anchor="nw", font=("Arial", 10), fill="Black")
+        canvas_cli_rep.create_text(95, 33, text="Intente con otro nombre", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_cli_ok = tk.Button(cli_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=cli_rep.destroy)
+        btn_cli_ok.place(x=115, y=73)
+        
+    # COTIZACION CON CODIGO IGUAL
+    def cotizacion_codigo_igual(self):
+        cot_cdg_rep=tk.Toplevel(self.parent)
+        cot_cdg_rep.title("")
+        cot_cdg_rep.geometry("300x110")
+        cot_cdg_rep.resizable(False, False)
+        cot_cdg_rep.configure(bg="#FFFFFF")
+        cot_cdg_rep.grab_set()
+        utils.centrar_ventana(cot_cdg_rep)
+        cot_cdg_rep.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_cdg_rep = tk.Canvas(cot_cdg_rep, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_cdg_rep.pack()
+        
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_cdg_rep = tk.PhotoImage(file=icono_path)
+            canvas_cdg_rep.create_image(30, 17, anchor="nw", image=icon_cdg_rep)
+            canvas_cdg_rep.image = icon_cdg_rep
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
+        
+        utils.create_rounded_rectangle(canvas_cdg_rep, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        canvas_cdg_rep.create_text(80, 19, text="Cotización ya generada con", anchor="nw", font=("Arial", 10), fill="Black")
+        canvas_cdg_rep.create_text(120, 33, text="este código", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_cdgr_ok = tk.Button(cot_cdg_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=cot_cdg_rep.destroy)
+        btn_cdgr_ok.place(x=115, y=73)
         
 
 class generator_cot:
@@ -1238,8 +1328,11 @@ class cotizaciones:
         btn_seg_cot = tk.Button(vent_coti, text="Seguimiento / Detalles", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.seguimiento_cotizacion)
         btn_seg_cot.place(x=22, y=125)
         
+        btn_op_cot = tk.Button(vent_coti, text="Abrir Carpeta", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_op_cot.place(x=22, y=170)
+        
         btn_menu_cot = tk.Button(vent_coti, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_menu_cot.place(x=22, y=170)
+        btn_menu_cot.place(x=22, y=215)
         
         btn_sig_cot = tk.Button(vent_coti, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_sig_cot.place(x=1190, y=568)
@@ -1404,7 +1497,7 @@ class cotizaciones:
         label_coti = tk.Label(reg_coti, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         label_coti.place(x=170, y=290, width=310, height=30)
         
-        btn_ver_cot = tk.Button(reg_coti, text="Ver doc.")
+        btn_ver_cot = tk.Button(reg_coti, text="Abrir")
         btn_ver_cot.place(x=490, y=290, width=80, height=30)
         
         btn_canc_cot = tk.Button(reg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9))
@@ -1488,7 +1581,7 @@ class cotizaciones:
         label_seg_coti = tk.Label(seg_coti, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         label_seg_coti.place(x=170, y=290, width=310, height=30)
         
-        btn_ver_det_cot = tk.Button(seg_coti, text="Ver doc.")
+        btn_ver_det_cot = tk.Button(seg_coti, text="Abrir")
         btn_ver_det_cot.place(x=490, y=290, width=80, height=30)
         
         btn_canc_dcot = tk.Button(seg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9))
@@ -1533,8 +1626,11 @@ class orden_compra:
         btn_seg_oc = tk.Button(vent_oc, text="Seguimiento / Detalles", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.seguimiento_orden_compra)
         btn_seg_oc.place(x=22, y=125)
         
+        btn_op_oc = tk.Button(vent_oc, text="Abrir Carpeta", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_op_oc.place(x=22, y=170)
+        
         btn_menu_oc = tk.Button(vent_oc, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_menu_oc.place(x=22, y=170)
+        btn_menu_oc.place(x=22, y=215)
         
         btn_sig_oc = tk.Button(vent_oc, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_sig_oc.place(x=1190, y=568)
@@ -1628,7 +1724,7 @@ class orden_compra:
         self.vent_oc.withdraw()
         
         reg_orden = tk.Toplevel(self.vent_oc)
-        reg_orden.title("Registro de Orden de Compra")
+        reg_orden.title("Registrar Orden de Compra")
         reg_orden.geometry("620x380")
         reg_orden.resizable(False, False)
         reg_orden.configure(bg="#373737")
@@ -1683,7 +1779,7 @@ class orden_compra:
         label_or_coti = tk.Label(reg_orden, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         label_or_coti.place(x=170, y=232, width=340, height=30)
         
-        btn_ver_or_cot = tk.Button(reg_orden, text="Ver doc.")
+        btn_ver_or_cot = tk.Button(reg_orden, text="Abrir")
         btn_ver_or_cot.place(x=520, y=232, width=80, height=30)
         
         canvas_reg_orden.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
@@ -1694,7 +1790,7 @@ class orden_compra:
         label_orden = tk.Label(reg_orden, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
         label_orden.place(x=170, y=290, width=340, height=30)
         
-        btn_ver_orden = tk.Button(reg_orden, text="Ver doc.")
+        btn_ver_orden = tk.Button(reg_orden, text="Abrir")
         btn_ver_orden.place(x=520, y=290, width=80, height=30)
         
         btn_canc_or = tk.Button(reg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9))
@@ -1709,13 +1805,13 @@ class orden_compra:
         
         seg_orden = tk.Toplevel(self.vent_oc)
         seg_orden.title("Seguimiento de Orden de Compra")
-        seg_orden.geometry("620x566")
+        seg_orden.geometry("620x438")
         seg_orden.resizable(False, False)
         seg_orden.configure(bg="#373737")
         utils.centrar_ventana(seg_orden)
         seg_orden.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_det_orden = tk.Canvas(seg_orden, width=620, height=566, bg="#373737", highlightthickness=0)
+        canvas_det_orden = tk.Canvas(seg_orden, width=620, height=438, bg="#373737", highlightthickness=0)
         canvas_det_orden.pack()
         
         utils.create_rounded_rectangle(canvas_det_orden, 10, 10, 610, 194, radius=10, fill="#959595", outline="#959595")
@@ -1764,7 +1860,7 @@ class orden_compra:
         lbl_det_cot = tk.Label(seg_orden, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_det_cot.place(x=170, y=232, width=340, height=30)
         
-        btn_ver_cotzz = tk.Button(seg_orden, text="Ver doc.")
+        btn_ver_cotzz = tk.Button(seg_orden, text="Abrir")
         btn_ver_cotzz.place(x=520, y=232, width=80, height=30)
         
         canvas_det_orden.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
@@ -1775,33 +1871,58 @@ class orden_compra:
         lbl_det_or = tk.Label(seg_orden, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_det_or.place(x=170, y=290, width=340, height=30)
         
-        btn_ver_det_or = tk.Button(seg_orden, text="Ver doc.")
+        btn_ver_det_or = tk.Button(seg_orden, text="Abrir")
         btn_ver_det_or.place(x=520, y=290, width=80, height=30)
         
         canvas_det_orden.create_text(20, 330, text="Guía de Remisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_det_gr = tk.Button(seg_orden, text="Adjuntar")
+        btn_det_gr = tk.Button(seg_orden, text="Adjuntar", command=lambda: utils.adjuntar_archivo(lbl_det_gr, "guia_remision"))
         btn_det_gr.place(x=20, y=348, width=140, height=30)
+
+        lbl_det_gr = tk.Label(seg_orden, text="Guía de Remisión", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_det_gr.place(x=170, y=348, width=340, height=30)
         
-        btn_elm_gr = tk.Button(seg_orden, text="Eliminar")
-        btn_elm_gr.place(x=170, y=348, width=140, height=30)
-        
-        btn_ver_gr = tk.Button(seg_orden, text="Ver doc.")
-        btn_ver_gr.place(x=320, y=348, width=80, height=30)
+        btn_ver_gr = tk.Button(seg_orden, text="Abrir", command=self.abrir_guias_rem)
+        btn_ver_gr.place(x=520, y=348, width=80, height=30)
         
         btn_atras_det = tk.Button(seg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9))
-        btn_atras_det.place(x=205, y=526)
+        btn_atras_det.place(x=205, y=398)
         
         btn_save_det = tk.Button(seg_orden, text="Guardar", width=13, height=1, font=("Raleway", 9))
-        btn_save_det.place(x=315, y=526)
+        btn_save_det.place(x=315, y=398)
         
-        t_guia_rem = ttk.Treeview(seg_orden, columns=("id_gr", "documento"), show="headings", style="Custom.Treeview")
-        t_guia_rem.place(x=10, y=398, width=601, height=119)
+    def abrir_guias_rem(self):
+        vent_guia_rem = tk.Toplevel(self.vent_oc)
+        vent_guia_rem.title("")
+        vent_guia_rem.geometry("490x256")
+        vent_guia_rem.resizable(False, False)
+        vent_guia_rem.configure(bg="#373737")
+        vent_guia_rem.grab_set()
+        utils.centrar_ventana(vent_guia_rem)
+        vent_guia_rem.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_det_gr = tk.Canvas(vent_guia_rem, width=490, height=256, bg="#373737", highlightthickness=0)
+        canvas_det_gr.pack()
+        
+        utils.create_rounded_rectangle(canvas_det_gr, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_det_gr.create_text(20, 20, text="Guía de Remisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_elm_gr = tk.Button(vent_guia_rem, text="Eliminar Documento")
+        btn_elm_gr.place(x=20, y=38, width=140, height=30)
+        
+        btn_op_gr = tk.Button(vent_guia_rem, text="Abrir")
+        btn_op_gr.place(x=170, y=38, width=80, height=30)
+        
+        btn_menu_det = tk.Button(vent_guia_rem, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_guia_rem.destroy)
+        btn_menu_det.place(x=195, y=216)
+        
+        t_guia_rem = ttk.Treeview(vent_guia_rem, columns=("id_gr", "documento"), show="headings", style="Custom.Treeview")
+        t_guia_rem.place(x=10, y=88, width=471, height=119)
         
         t_guia_rem.heading("id_gr", text="ID")
         t_guia_rem.heading("documento", text="Documento")
         t_guia_rem.column("id_gr", anchor="center", width=55, stretch=False)
-        t_guia_rem.column("documento", anchor="center", width=530, stretch=False)
+        t_guia_rem.column("documento", anchor="center", width=399, stretch=False)
         
         datos_guia_rem = [
             ("1", "Guía de Despacho A"),
@@ -1814,12 +1935,10 @@ class orden_compra:
         for dato_orden in datos_guia_rem:
             t_guia_rem.insert("", "end", values=dato_orden)
           
-        scrollbar_orden = ttk.Scrollbar(seg_orden, orient="vertical", command=t_guia_rem.yview)
+        scrollbar_orden = ttk.Scrollbar(vent_guia_rem, orient="vertical", command=t_guia_rem.yview)
         t_guia_rem.configure(yscrollcommand=scrollbar_orden.set)
-        scrollbar_orden.place(x=597, y=398, height=119)
-        
-        
-        
+        scrollbar_orden.place(x=466, y=88, height=119)
+
 
 class buscador:
     def __init__(self, root, buscar_doc):
@@ -1961,7 +2080,7 @@ class ventana_inicio:
         btn_search = tk.Button(root, text="Buscar Documentos", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_buscador)
         btn_search.place(x=22, y=350)
 
-        btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=self.alerta.registro_actualizado, activebackground="#7F7F7F", activeforeground="white")
+        btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=self.alerta.cotizacion_codigo_igual, activebackground="#7F7F7F", activeforeground="white")
         btn_act.place(x=22, y=395)
 
         btn_exit = tk.Button(self.root, text="Salir", width=37, height=1, font=("Raleway", 9), command=self.alerta.cerrar_prog, activebackground="#7F7F7F", activeforeground="white")

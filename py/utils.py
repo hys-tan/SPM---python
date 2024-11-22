@@ -38,7 +38,7 @@ def crear_carpetas_adjuntar():
 # Crear las carpetas al inicio
 crear_carpetas_adjuntar()
 
-def ajustar_texto(texto, max_length=45):
+def ajustar_texto(texto, max_length=30):
     #Ajusta el texto para que no exceda la longitud máxima y agrega '...' al final si es necesario.
     if len(texto) > max_length:
         return texto[:max_length - 3] + '...'
