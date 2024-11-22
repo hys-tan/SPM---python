@@ -1940,6 +1940,28 @@ class orden_compra:
         scrollbar_orden.place(x=466, y=88, height=119)
 
 
+class registro_factura:
+    def __init__(self, root, reg_fact):
+        
+        self.root = root
+        self.reg_fact = reg_fact
+        self.reg_fact.withdraw()
+        
+        self.reg_fact = reg_fact
+        self.reg_fact.title("Registrar Factura")
+        self.reg_fact.geometry("620x496")
+        self.reg_fact.resizable(False, False)
+        self.reg_fact.configure(bg="#373737")
+        utils.centrar_ventana(self.reg_fact)
+        self.reg_fact.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_fact = tk.Canvas(reg_fact, width=620, height=496, bg="#373737", highlightthickness=0)
+        canvas_fact.pack()
+        
+        utils.create_rounded_rectangle(canvas_fact, 10, 10, 610, 194, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_fact, 10, 204, 610, 446, radius=10, fill="#959595", outline="#959595")
+        
+
 class buscador:
     def __init__(self, root, buscar_doc):
         
@@ -2071,7 +2093,7 @@ class ventana_inicio:
         btn_reg_oc = tk.Button(root, text="Ver Registro de Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_orden_compra)
         btn_reg_oc.place(x=22, y=215)
 
-        btn_reg_fact = tk.Button(root, text="Registrar Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_reg_fact = tk.Button(root, text="Registrar Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_registrar_factura)
         btn_reg_fact.place(x=22, y=260)
 
         btn_seg_fact = tk.Button(root, text="Seguimiento de Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -2216,6 +2238,10 @@ class ventana_inicio:
     def abrir_orden_compra(self):
         vent_oc = tk.Toplevel(root)
         orden_compra(root, vent_oc)
+        
+    def abrir_registrar_factura(self):
+        reg_fact = tk.Toplevel(root)
+        registro_factura(root, reg_fact)
 
 
 if __name__ == "__main__":
