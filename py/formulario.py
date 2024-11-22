@@ -554,6 +554,8 @@ class generator_cot:
         self.gen_cot.configure(bg="#373737")
         utils.centrar_ventana(self.gen_cot)
         
+        self.alerta = alertas(gen_cot)
+        
         self.gen_cot.protocol("WM_DELETE_WINDOW", lambda: None)
         
         canvas_coti = tk.Canvas(gen_cot, width=750, height=714, bg="#373737", highlightthickness=0)
@@ -1940,7 +1942,7 @@ class orden_compra:
         scrollbar_orden.place(x=466, y=88, height=119)
 
 
-class registro_factura:
+class registrar_factura:
     def __init__(self, root, reg_fact):
         
         self.root = root
@@ -1953,6 +1955,7 @@ class registro_factura:
         self.reg_fact.resizable(False, False)
         self.reg_fact.configure(bg="#373737")
         utils.centrar_ventana(self.reg_fact)
+        self.alerta = alertas(reg_fact)
         self.reg_fact.protocol("WM_DELETE_WINDOW", lambda: None)
         
         canvas_fact = tk.Canvas(reg_fact, width=620, height=496, bg="#373737", highlightthickness=0)
@@ -1960,6 +1963,7 @@ class registro_factura:
         
         utils.create_rounded_rectangle(canvas_fact, 10, 10, 610, 194, radius=10, fill="#959595", outline="#959595")
         utils.create_rounded_rectangle(canvas_fact, 10, 204, 610, 446, radius=10, fill="#959595", outline="#959595")
+        
         
 
 class buscador:
@@ -2238,10 +2242,10 @@ class ventana_inicio:
     def abrir_orden_compra(self):
         vent_oc = tk.Toplevel(root)
         orden_compra(root, vent_oc)
-        
+    
     def abrir_registrar_factura(self):
-        reg_fact = tk.Toplevel(root)
-        registro_factura(root, reg_fact)
+        reg_fact = tk.Toplevel(self.root)
+        registrar_factura(self.root, reg_fact)
 
 
 if __name__ == "__main__":
