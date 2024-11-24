@@ -1775,30 +1775,30 @@ class orden_compra:
         
         canvas_reg_orden.create_text(20, 214, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
 
-        btn_ad_or_cot = tk.Button(reg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(label_or_coti, "cotizacion"))
+        btn_ad_or_cot = tk.Button(reg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(label_or_coti, "cotizacion"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ad_or_cot.place(x=20, y=232, width=140, height=30)
         
         label_or_coti = tk.Label(reg_orden, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         label_or_coti.place(x=170, y=232, width=340, height=30)
         
-        btn_ver_or_cot = tk.Button(reg_orden, text="Abrir")
+        btn_ver_or_cot = tk.Button(reg_orden, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ver_or_cot.place(x=520, y=232, width=80, height=30)
         
         canvas_reg_orden.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_ad_orden = tk.Button(reg_orden, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_orden, "orden_compra"))
+        btn_ad_orden = tk.Button(reg_orden, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_orden, "orden_compra"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ad_orden.place(x=20, y=290, width=140, height=30)
         
         label_orden = tk.Label(reg_orden, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
         label_orden.place(x=170, y=290, width=340, height=30)
         
-        btn_ver_orden = tk.Button(reg_orden, text="Abrir")
+        btn_ver_orden = tk.Button(reg_orden, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ver_orden.place(x=520, y=290, width=80, height=30)
         
-        btn_canc_or = tk.Button(reg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_canc_or = tk.Button(reg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_canc_or.place(x=205, y=340)
         
-        btn_reg_or = tk.Button(reg_orden, text="Registrar", width=13, height=1, font=("Raleway", 9))
+        btn_reg_or = tk.Button(reg_orden, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_reg_or.place(x=315, y=340)
         
     def seguimiento_orden_compra(self):
@@ -1856,41 +1856,41 @@ class orden_compra:
         
         canvas_det_orden.create_text(20, 214, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_det_or_cot = tk.Button(seg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(lbl_det_cot, "cotizacion"))
+        btn_det_or_cot = tk.Button(seg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(lbl_det_cot, "cotizacion"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_or_cot.place(x=20, y=232, width=140, height=30)
         
         lbl_det_cot = tk.Label(seg_orden, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_det_cot.place(x=170, y=232, width=340, height=30)
         
-        btn_ver_cotzz = tk.Button(seg_orden, text="Abrir")
+        btn_ver_cotzz = tk.Button(seg_orden, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ver_cotzz.place(x=520, y=232, width=80, height=30)
         
         canvas_det_orden.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_det_orden = tk.Button(seg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(lbl_det_or, "orden_compra"))
+        btn_det_orden = tk.Button(seg_orden, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(lbl_det_or, "orden_compra"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_orden.place(x=20, y=290, width=140, height=30)
         
         lbl_det_or = tk.Label(seg_orden, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_det_or.place(x=170, y=290, width=340, height=30)
         
-        btn_ver_det_or = tk.Button(seg_orden, text="Abrir")
+        btn_ver_det_or = tk.Button(seg_orden, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ver_det_or.place(x=520, y=290, width=80, height=30)
         
         canvas_det_orden.create_text(20, 330, text="Guía de Remisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_det_gr = tk.Button(seg_orden, text="Adjuntar", command=lambda: utils.adjuntar_archivo(lbl_det_gr, "guia_remision"))
+        btn_det_gr = tk.Button(seg_orden, text="Adjuntar", command=lambda: utils.adjuntar_archivo(lbl_det_gr, "guia_remision"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_gr.place(x=20, y=348, width=140, height=30)
 
         lbl_det_gr = tk.Label(seg_orden, text="Guía de Remisión", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_det_gr.place(x=170, y=348, width=340, height=30)
         
-        btn_ver_gr = tk.Button(seg_orden, text="Abrir", command=self.abrir_guias_rem)
+        btn_ver_gr = tk.Button(seg_orden, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_guias_rem)
         btn_ver_gr.place(x=520, y=348, width=80, height=30)
         
-        btn_atras_det = tk.Button(seg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_atras_det = tk.Button(seg_orden, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_atras_det.place(x=205, y=398)
         
-        btn_save_det = tk.Button(seg_orden, text="Guardar", width=13, height=1, font=("Raleway", 9))
+        btn_save_det = tk.Button(seg_orden, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_det.place(x=315, y=398)
         
     def abrir_guias_rem(self):
@@ -1909,10 +1909,10 @@ class orden_compra:
         utils.create_rounded_rectangle(canvas_det_gr, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
         
         canvas_det_gr.create_text(20, 20, text="Guía de Remisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_elm_gr = tk.Button(vent_guia_rem, text="Eliminar Documento")
+        btn_elm_gr = tk.Button(vent_guia_rem, text="Eliminar Documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_elm_gr.place(x=20, y=38, width=140, height=30)
         
-        btn_op_gr = tk.Button(vent_guia_rem, text="Abrir")
+        btn_op_gr = tk.Button(vent_guia_rem, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_op_gr.place(x=170, y=38, width=80, height=30)
         
         btn_menu_det = tk.Button(vent_guia_rem, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_guia_rem.destroy)
