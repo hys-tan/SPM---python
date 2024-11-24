@@ -110,7 +110,6 @@ def centrar_ventana(ventana):
     y = (ventana.winfo_screenheight() // 2) - (height // 2)
     ventana.geometry(f"{width}x{height}+{x}+{y}")
 
-
 def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius=10, **kwargs):
     points = [
         x1 + radius, y1,
