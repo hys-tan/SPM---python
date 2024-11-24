@@ -2255,7 +2255,7 @@ class registrar_factura:
         t_acta.configure(yscrollcommand=scrollbar_acta.set)
         scrollbar_acta.place(x=466, y=88, height=119)
 
-
+# -------
 class detalles_factura:
     def __init__(self, root, seg_fact):
         
@@ -2472,6 +2472,8 @@ class buscador:
         
         btn_menu_busq = tk.Button(buscar_doc, text="Atrás", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_menu_busq.place(x=500, y=624)
+        
+        utils.aplicar_hover_a_botones([btn_menu_busq])
 
 
 class ventana_inicio:
