@@ -1391,6 +1391,8 @@ class cotizaciones:
         btn_atras_cot = tk.Button(vent_coti, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_atras_cot.place(x=1080, y=568)
         
+        utils.aplicar_hover_a_botones([btn_reg_coti, btn_seg_cot, btn_op_cot, btn_menu_cot, btn_sig_cot, btn_atras_cot])
+        
         canvas_cotizacion.create_text(20, 486, text="Por Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_estado = ttk.Combobox(vent_coti, values=["Todos los registros", "Aprobado", "Pendiente", "No Aprobado"], state="readonly", font=("Raleway", 10))
@@ -1554,8 +1556,10 @@ class cotizaciones:
         btn_canc_cot = tk.Button(reg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_canc_cot.place(x=190, y=340)
         
-        btn_reg_cot = tk.Button(reg_coti, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_reg_cot.place(x=300, y=340)
+        btn_reg_cotiz = tk.Button(reg_coti, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_reg_cotiz.place(x=300, y=340)
+        
+        utils.aplicar_hover_a_botones([btn_ad_cot, btn_ver_cot, btn_canc_cot, btn_reg_cotiz])
         
     def seguimiento_cotizacion(self):
         
@@ -1640,6 +1644,8 @@ class cotizaciones:
         
         btn_reg_dcot = tk.Button(seg_coti, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_reg_dcot.place(x=300, y=340)
+        
+        utils.aplicar_hover_a_botones([btn_det_cot, btn_ver_det_cot, btn_canc_dcot, btn_reg_dcot])
 
 
 class orden_compra:
