@@ -1438,14 +1438,14 @@ class cotizaciones:
         t_cotizacion = ttk.Treeview(vent_coti, columns=("id_c", "cliente_c", "servicio_c", "estado_c", "fecha_c"), show="headings", style="Custom.Treeview")
         t_cotizacion.place(x=310, y=80, width=981, height=479)
         
-        t_cotizacion.heading("id_c", text="ID")
+        t_cotizacion.heading("id_c", text="Nro")
         t_cotizacion.heading("cliente_c", text="Cliente / Empresa")
         t_cotizacion.heading("servicio_c", text="Servicio")
         t_cotizacion.heading("estado_c", text="Estado")
         t_cotizacion.heading("fecha_c", text="Fecha")
         
         t_cotizacion.column("id_c", anchor="center", width=100, stretch=False)
-        t_cotizacion.column("cliente_c", anchor="center", width=280, stretch=False)
+        t_cotizacion.column("cliente_c", anchor="center", width=268, stretch=False)
         t_cotizacion.column("servicio_c", anchor="center", width=387, stretch=False)
         t_cotizacion.column("estado_c", anchor="center", width=110, stretch=False)
         t_cotizacion.column("fecha_c", anchor="center", width=100, stretch=False)
@@ -1473,10 +1473,14 @@ class cotizaciones:
             ("20", "Empresa T", "Desarrollo de Contenido", "Aceptado", "2022-04-25"),
         ]
         
-        ejemplo_cotzacion = datos_t_cotizacion[:15]
+        ejemplo_cotzacion = datos_t_cotizacion[:50]
         
         for cotizacion in ejemplo_cotzacion:
             t_cotizacion.insert("", "end", values=cotizacion)
+        
+        scrllbar_t_coti = ttk.Scrollbar(vent_coti, orient="vertical", command=t_cotizacion.yview)
+        t_cotizacion.configure(yscrollcommand=scrllbar_t_coti.set)
+        scrllbar_t_coti.place(x=1277, y=80, height=479)
         
     def registrar_cotizacion(self):
         
