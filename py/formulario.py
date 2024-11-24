@@ -1953,7 +1953,8 @@ class orden_compra:
         btn_save_det.place(x=315, y=398)
         
         utils.aplicar_hover_a_botones([btn_det_or_cot, btn_ver_cotzz, btn_det_orden, btn_ver_det_or, btn_det_gr, btn_ver_gr, btn_atras_det, btn_save_det])
-        
+    
+    # REUTILIZABLE
     def abrir_guias_rem(self):
         vent_guia_rem = tk.Toplevel(self.vent_oc)
         vent_guia_rem.title("")
@@ -2105,6 +2106,7 @@ class registrar_factura:
         
         utils.aplicar_hover_a_botones([btn_ad_it, btn_op_it, btn_ad_pl, btn_op_pl, btn_ad_ac, btn_op_ac, btn_ad_fact, btn_op_fact, btn_can_fact, btn_save_regfact])
 
+    # REUTILIZABLE
     def abrir_informe_tecnico(self):
         vent_informe = tk.Toplevel(self.reg_fact)
         vent_informe.title
@@ -2155,6 +2157,7 @@ class registrar_factura:
         t_informe.configure(yscrollcommand=scrollbar_informe.set)
         scrollbar_informe.place(x=466, y=88, height=119)
 
+    # REUTILIZABLE
     def abrir_planos(self):
         vent_planos = tk.Toplevel(self.reg_fact)
         vent_planos.title
@@ -2205,6 +2208,7 @@ class registrar_factura:
         t_planos.configure(yscrollcommand=scrollbar_planos.set)
         scrollbar_planos.place(x=466, y=88, height=119)
 
+    # REUTILIZABLE
     def abrir_acta_conformidad(self):
         vent_acta = tk.Toplevel(self.reg_fact)
         vent_acta.title
@@ -2230,7 +2234,7 @@ class registrar_factura:
         btn_menu_ac = tk.Button(vent_acta, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_acta.destroy)
         btn_menu_ac.place(x=195, y=216)
         
-        utils.aplicar_hover_a_botones([btn_elm_ac, btn_abrir_ac, btn_menu_ac])
+        utils.aplicar_hover_a_botones([btn_elm_ac, btn_abrir_ac, btn_menu_ac]) 
 
         t_acta = ttk.Treeview(vent_acta, columns=("id_ac", "doc_ac"), show="headings", style="Custom.Treeview")
         t_acta.place(x=10, y=88, width=471, height=119)
@@ -2404,13 +2408,20 @@ class buscador:
         canvas_buscar_doc = tk.Canvas(buscar_doc, width=1100, height=664, bg="#373737", highlightthickness=0)
         canvas_buscar_doc.pack()
         
-        utils.create_rounded_rectangle(canvas_buscar_doc, 10, 66, 1090, 126, radius=10, fill="#959595", outline="#959595")
-        utils.create_rounded_rectangle(canvas_buscar_doc, 10, 136, 1090, 614, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_buscar_doc, 10, 10, 300, 126, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_buscar_doc, 310, 66, 1090, 126, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_buscar_doc, 10, 136, 1090, 614, radius=10, fill="#959595", outline="#959595")
 
         canvas_buscar_doc.create_text(395, 15, text="BUSCAR DOCUMENTOS", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_buscar_doc.create_text(20, 20, text="Filtro", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        
+        canvas_buscar_doc.create_text(20, 68, text="Por Tipo de Documentos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_tipo_doc = ttk.Combobox(buscar_doc, values=["Todos los registros", "Cotización", "Orden de Compra", "Guía de Remisión", "Planos", "Acta de Conformidad", "Informe Técnico", "Factura"], state="readonly", font=("Arial", 10))
+        cbo_tipo_doc.place(x=20, y=86, width=270, height=30)
+        cbo_tipo_doc.current(0)
         
         search_canvas_buscador = tk.Canvas(buscar_doc, width=400, height=40, bg="#373737", highlightthickness=0)
-        search_canvas_buscador.place(x=350, y=76)
+        search_canvas_buscador.place(x=680, y=76)
         
         utils.create_rounded_rectangle(search_canvas_buscador, 0, 0, 400, 40, radius=10, fill="white", outline="#959595")
         search_canvas_buscador.create_line(365, 7, 365, 34, fill="gray", width=2)
@@ -2430,46 +2441,83 @@ class buscador:
         search_entry_buscador.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry_buscador))
         search_entry_buscador.place(x=6, y=7, width=351, height=27)
 
-        t_buscadoc = ttk.Treeview(buscar_doc, columns=("id_doc", "doc", "date_doc", "ruta"), show="headings", style="Custom.Treeview")
+        t_buscadoc = ttk.Treeview(buscar_doc, columns=("id_doc", "doc", "t_doc", "date_doc", "ruta"), show="headings", style="Custom.Treeview")
         t_buscadoc.place(x=10, y=136, width=1081, height=479)
         
         t_buscadoc.heading("id_doc", text="ID")
         t_buscadoc.heading("doc", text="Documento")
+        t_buscadoc.heading("t_doc", text="Tipo de Documento")
         t_buscadoc.heading("date_doc", text="Fecha")
         t_buscadoc.heading("ruta", text="Ruta")
         
-        t_buscadoc.column("id_doc", anchor="center", width=65, stretch=False)
-        t_buscadoc.column("doc", anchor="center", width=402, stretch=False)
+        t_buscadoc.column("id_doc", anchor="center", width=75, stretch=False)
+        t_buscadoc.column("doc", anchor="center", width=302, stretch=False)
+        t_buscadoc.column("t_doc", anchor="center", width=140, stretch=False)
         t_buscadoc.column("date_doc", anchor="center", width=100, stretch=False)
-        t_buscadoc.column("ruta", anchor="center", width=510, stretch=False)
+        t_buscadoc.column("ruta", anchor="center", width=448, stretch=False)
         
         datos_t_buscadoc = [
-            ("1", "Factura_001", "2023-11-01", "C:/Documentos/Facturas/Factura_001.pdf"),
-            ("2", "Contrato_2023", "2023-10-15", "C:/Documentos/Contratos/Contrato_2023.pdf"),
-            ("3", "Informe_TI", "2023-09-20", "D:/Proyectos/Informes/Informe_TI.docx"),
-            ("4", "Plan_Marketing", "2023-08-25", "E:/Marketing/Planes/Plan_Marketing.xlsx"),
-            ("5", "Guía_Despacho", "2023-07-18", "C:/Despachos/Guias/Guía_Despacho.pdf"),
-            ("6", "Acta_Reunión", "2023-06-22", "C:/Reuniones/Actas/Acta_Reunión.docx"),
-            ("7", "Propuesta_Cliente", "2023-05-30", "D:/Ventas/Propuestas/Propuesta_Cliente.pdf"),
-            ("8", "Manual_Usuario", "2023-04-12", "E:/Soporte/Manuales/Manual_Usuario.pdf"),
-            ("9", "Reporte_Anual", "2023-03-28", "C:/Reportes/Anuales/Reporte_Anual.pdf"),
-            ("10", "Evaluación_Técnica", "2023-02-11", "D:/Evaluaciones/Técnicas/Evaluación_Técnica.pdf"),
-            ("11", "Lista_Precios", "2023-01-15", "C:/Precios/Listas/Lista_Precios.xlsx"),
-            ("12", "Política_Calidad", "2022-12-05", "D:/Calidad/Políticas/Política_Calidad.pdf"),
-            ("13", "Memorandum_Interno", "2022-11-22", "C:/Memorandos/Memorandum_Interno.docx"),
-            ("14", "Certificado_Garantía", "2022-10-13", "E:/Garantías/Certificados/Certificado_Garantía.pdf"),
-            ("15", "Acta_Cierre", "2022-09-07", "C:/Proyectos/Cierre/Acta_Cierre.pdf"),
-            ("16", "Solicitud_Cliente", "2022-08-20", "D:/Clientes/Solicitudes/Solicitud_Cliente.docx"),
-            ("17", "Protocolo_Seguridad", "2022-07-11", "C:/Seguridad/Protocolos/Protocolo_Seguridad.pdf"),
-            ("18", "Guía_Operativa", "2022-06-02", "E:/Operaciones/Guías/Guía_Operativa.pdf"),
-            ("19", "Plan_Financiero", "2022-05-19", "C:/Finanzas/Planes/Plan_Financiero.xlsx"),
-            ("20", "Hoja_Cotización", "2022-04-25", "D:/Cotizaciones/Hojas/Hoja_Cotización.pdf"),
+            ("1", "Factura_001", "Factura", "2023-11-01", "C:/Documentos/Facturas/Factura_001.pdf"),
+            ("2", "Contrato_2023", "Contrato", "2023-10-15", "C:/Documentos/Contratos/Contrato_2023.pdf"),
+            ("3", "Informe_TI", "Informe Técnico", "2023-09-20", "D:/Proyectos/Informes/Informe_TI.docx"),
+            ("4", "Plan_Marketing", "Plan", "2023-08-25", "E:/Marketing/Planes/Plan_Marketing.xlsx"),
+            ("5", "Guía_Despacho", "Guía de Remisión", "2023-07-18", "C:/Despachos/Guias/Guía_Despacho.pdf"),
+            ("6", "Acta_Reunión", "Acta de Reunión", "2023-06-22", "C:/Reuniones/Actas/Acta_Reunión.docx"),
+            ("7", "Propuesta_Cliente", "Propuesta", "2023-05-30", "D:/Ventas/Propuestas/Propuesta_Cliente.pdf"),
+            ("8", "Manual_Usuario", "Manual", "2023-04-12", "E:/Soporte/Manuales/Manual_Usuario.pdf"),
+            ("9", "Reporte_Anual", "Reporte", "2023-03-28", "C:/Reportes/Anuales/Reporte_Anual.pdf"),
+            ("10", "Evaluación_Técnica", "Evaluación", "2023-02-11", "D:/Evaluaciones/Técnicas/Evaluación_Técnica.pdf"),
+            ("11", "Lista_Precios", "Lista de Precios", "2023-01-15", "C:/Precios/Listas/Lista_Precios.xlsx"),
+            ("12", "Política_Calidad", "Política", "2022-12-05", "D:/Calidad/Políticas/Política_Calidad.pdf"),
+            ("13", "Memorandum_Interno", "Memorandum", "2022-11-22", "C:/Memorandos/Memorandum_Interno.docx"),
+            ("14", "Certificado_Garantía", "Certificado", "2022-10-13", "E:/Garantías/Certificados/Certificado_Garantía.pdf"),
+            ("15", "Acta_Cierre", "Acta de Cierre", "2022-09-07", "C:/Proyectos/Cierre/Acta_Cierre.pdf"),
+            ("16", "Solicitud_Cliente", "Solicitud", "2022-08-20", "D:/Clientes/Solicitudes/Solicitud_Cliente.docx"),
+            ("17", "Protocolo_Seguridad", "Protocolo", "2022-07-11", "C:/Seguridad/Protocolos/Protocolo_Seguridad.pdf"),
+            ("18", "Guía_Operativa", "Guía", "2022-06-02", "E:/Operaciones/Guías/Guía_Operativa.pdf"),
+            ("19", "Plan_Financiero", "Plan", "2022-05-19", "C:/Finanzas/Planes/Plan_Financiero.xlsx"),
+            ("20", "Hoja_Cotización", "Cotización", "2022-04-25", "D:/Cotizaciones/Hojas/Hoja_Cotización.pdf"),
+            ("21", "Informe_Progreso", "Informe", "2022-03-15", "C:/Informes/Progreso/Informe_Progreso.docx"),
+            ("22", "Acta_Conformidad", "Acta de Conformidad", "2022-02-10", "C:/Actas/Conformidad/Acta_Conformidad.pdf"),
+            ("23", "Plan_Estrategico", "Plan", "2022-01-05", "D:/Estrategia/Planes/Plan_Estrategico.xlsx"),
+            ("24", "Certificado_Trabajo", "Certificado", "2021-12-20", "C:/Certificados/Trabajo/Certificado_Trabajo.pdf"),
+            ("25", "Informe_Financiero", "Informe", "2021-11-15", "D:/Finanzas/Informes/Informe_Financiero.docx"),
+            ("26", "Guía_Técnica", "Guía", "2021-10-10", "C:/Guías/Técnicas/Guía_Técnica.pdf"),
+            ("27", "Propuesta_Proyecto", "Propuesta", "2021-09-05", "D:/Proyectos/Propuestas/Propuesta_Proyecto.pdf"),
+            ("28", "Informe_Mensual", "Informe", "2021-08-01", "C:/Informes/Mensuales/Informe_Mensual.docx"),
+            ("29", "Acta_Solicitud", "Acta de Solicitud", "2021-07-15", "D:/Solicitudes/Actas/Acta_Solicitud.pdf"),
+            ("30", "Plan_Acción", "Plan", "2021-06-10", "C:/Planes/Acción/Plan_Acción.xlsx"),
+            ("31", "Certificado_Servicio", "Certificado", "2021-05-20", "D:/Servicios/Certificados/Certificado_Servicio.pdf"),
+            ("32", "Manual_Procedimientos", "Manual", "2021-04-25", "C:/Manuales/Procedimientos/Manual_Procedimientos.docx"),
+            ("33", "Informe_Técnico", "Informe Técnico", "2021-03-30", "D:/Informes/Técnicos/Informe_Técnico.pdf"),
+            ("34", "Guía_Implementación", "Guía", "2021-02-15", "C:/Guías/Implementación/Guía_Implementación.pdf"),
+            ("35", "Plan_Desarrollo", "Plan", "2021-01-10", "D:/Desarrollo/Planes/Plan_Desarrollo.xlsx"),
+            ("36", "Acta_Propuesta", "Acta de Propuesta", "2020-12-05", "C:/Propuestas/Actas/Acta_Propuesta.pdf"),
+            ("37", "Informe_Análisis", "Informe", "2020-11-20", "D:/Análisis/Informes/Informe_Análisis.docx"),
+            ("38", "Certificado_Conformidad", "Certificado", "2020-10-15", "C:/Certificados/Conformidad/Certificado_Conformidad.pdf"),
+            ("39", "Guía_Instalación", "Guía", "2020-09-10", "D:/Instalaciones/Guías/Guía_Instalación.pdf"),
+            ("40", "Plan_Mantenimiento", "Plan", "2020-08-05", "C:/Mantenimiento/Planes/Plan_Mantenimiento.xlsx"),
+            ("41", "Informe_Proyectos", "Informe", "2020-07-01", "D:/Proyectos/Informes/Informe_Proyectos.docx"),
+            ("42", "Acta_Compromiso", "Acta de Compromiso", "2020-06-25", "C:/Compromisos/Actas/Acta_Compromiso.pdf"),
+            ("43", "Propuesta_Colaboración", "Propuesta", "2020-05-20", "D:/Colaboraciones/Propuestas/Propuesta_Colaboración.pdf"),
+            ("44", "Certificado_Registro", "Certificado", "2020-04-15", "C:/Registros/Certificados/Certificado_Registro.pdf"),
+            ("45", "Informe_Evaluación", "Informe", "2020-03-10", "D:/Evaluaciones/Informes/Informe_Evaluación.docx"),
+            ("46", "Guía_Operativa", "Guía", "2020-02-05", "C:/Operaciones/Guías/Guía_Operativa.pdf"),
+            ("47", "Plan_Recursos", "Plan", "2020-01-01", "D:/Recursos/Planes/Plan_Recursos.xlsx"),
+            ("48", "Acta_Compromiso", "Acta de Compromiso", "2019-12-15", "C:/Compromisos/Actas/Acta_Compromiso.pdf"),
+            ("49", "Propuesta_Desarrollo", "Propuesta", "2019-11-10", "D:/Desarrollo/Propuestas/Propuesta_Desarrollo.pdf"),
+            ("50", "Certificado_Proyectos", "Certificado", "2019-10-05", "C:/Proyectos/Certificados/Certificado_Proyectos.pdf"),
+            ("51", "Informe_Final", "Informe", "2019-09-01", "D:/Informes/Finales/Informe_Final.docx"),
         ]
         
-        datos_mostrados = datos_t_buscadoc[:15]
+        datos_mostrados = datos_t_buscadoc[:100]
         
         for dato in datos_mostrados:
             t_buscadoc.insert("", "end", values=dato)
+        
+        scrllbar_t_busq = ttk.Scrollbar(buscar_doc, orient="vertical", command=t_buscadoc.yview)
+        t_buscadoc.configure(yscrollcommand=scrllbar_t_busq.set)
+        scrllbar_t_busq.place(x=1077, y=136, height=479)
         
         cbo_busq_page = ttk.Combobox(buscar_doc, values=["1", "2"], state="readonly", font=("Arial", 10))
         cbo_busq_page.place(x=10, y=624, width=70, height=30)
