@@ -2003,41 +2003,41 @@ class registrar_factura:
         cbo_est_fact.current(0)
 
         canvas_fact.create_text(20, 214, text="Informe Técnico", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ad_it = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_it, "informe_tecnico"))
+        btn_ad_it = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_it, "informe_tecnico"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ad_it.place(x=20, y=232, width=140, height=30)
         label_it = tk.Label(reg_fact, text="Informe Técnico", font=("Raleway", 9), bg="#373737", fg="white")
         label_it.place(x=170, y=232, width=340, height=30)
-        btn_op_it = tk.Button(reg_fact, text="Abrir", command=self.abrir_informe_tecnico)
+        btn_op_it = tk.Button(reg_fact, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_informe_tecnico)
         btn_op_it.place(x=520, y=232, width=80, height=30)
         
         canvas_fact.create_text(20, 272, text="Planos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ad_pl = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_pl, "doc_planos"))
+        btn_ad_pl = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_pl, "doc_planos"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ad_pl.place(x=20, y=290, width=140, height=30)
         label_pl = tk.Label(reg_fact, text="Planos", font=("Raleway", 9), bg="#373737", fg="white")
         label_pl.place(x=170, y=290, width=340, height=30)
-        btn_op_pl = tk.Button(reg_fact, text="Abrir", command=self.abrir_planos)
+        btn_op_pl = tk.Button(reg_fact, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_planos)
         btn_op_pl.place(x=520, y=290, width=80, height=30)
         
         canvas_fact.create_text(20, 330, text="Acta de Conformidad", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ad_ac = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_ac, "acta_conformidad"))
+        btn_ad_ac = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_ac, "acta_conformidad"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ad_ac.place(x=20, y=348, width=140, height=30)
         label_ac = tk.Label(reg_fact, text="Acta de Conformidad", font=("Raleway", 9), bg="#373737", fg="white")
         label_ac.place(x=170, y=348, width=340, height=30)
-        btn_op_ac = tk.Button(reg_fact, text="Abrir", command=self.abrir_acta_conformidad)
+        btn_op_ac = tk.Button(reg_fact, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_acta_conformidad)
         btn_op_ac.place(x=520, y=348, width=80, height=30)
         
         canvas_fact.create_text(20, 388, text="Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ad_fact = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_fact, "doc_factura"))
+        btn_ad_fact = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_fact, "doc_factura"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ad_fact.place(x=20, y=406, width=140, height=30)
         label_fact = tk.Label(reg_fact, text="Factura", font=("Raleway", 9), bg="#373737", fg="white")
         label_fact.place(x=170, y=406, width=340, height=30)
-        btn_op_fact = tk.Button(reg_fact, text="Abrir")
+        btn_op_fact = tk.Button(reg_fact, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_op_fact.place(x=520, y=406, width=80, height=30)
 
-        btn_can_fact = tk.Button(reg_fact, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_can_fact = tk.Button(reg_fact, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_can_fact.place(x=205, y=456)
         
-        btn_save_regfact = tk.Button(reg_fact, text="Registrar", width=13, height=1, font=("Raleway", 9))
+        btn_save_regfact = tk.Button(reg_fact, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_regfact.place(x=315, y=456)
 
     def abrir_informe_tecnico(self):
@@ -2056,10 +2056,10 @@ class registrar_factura:
         utils.create_rounded_rectangle(canvas_inf, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
 
         canvas_inf.create_text(20, 20, text="Informe Técnico", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_elm_if = tk.Button(vent_informe, text="Eliminar Documento")
+        btn_elm_if = tk.Button(vent_informe, text="Eliminar Documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_elm_if.place(x=20, y=38, width=140, height=30)
         
-        btn_abrir_if = tk.Button(vent_informe, text="Abrir")
+        btn_abrir_if = tk.Button(vent_informe, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_abrir_if.place(x=170, y=38, width=80, height=30)
         
         btn_menu_if = tk.Button(vent_informe, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_informe.destroy)
@@ -2104,10 +2104,10 @@ class registrar_factura:
         utils.create_rounded_rectangle(canvas_plan, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
 
         canvas_plan.create_text(20, 20, text="Planos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_elm_pl = tk.Button(vent_planos, text="Eliminar Documento")
+        btn_elm_pl = tk.Button(vent_planos, text="Eliminar Documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_elm_pl.place(x=20, y=38, width=140, height=30)
         
-        btn_abrir_pl = tk.Button(vent_planos, text="Abrir")
+        btn_abrir_pl = tk.Button(vent_planos, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_abrir_pl.place(x=170, y=38, width=80, height=30)
         
         btn_menu_pl = tk.Button(vent_planos, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_planos.destroy)
@@ -2152,10 +2152,10 @@ class registrar_factura:
         utils.create_rounded_rectangle(canvas_acta, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
 
         canvas_acta.create_text(20, 20, text="Acta de Conformidad", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_elm_ac = tk.Button(vent_acta, text="Eliminar Documento")
+        btn_elm_ac = tk.Button(vent_acta, text="Eliminar Documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_elm_ac.place(x=20, y=38, width=140, height=30)
         
-        btn_abrir_ac = tk.Button(vent_acta, text="Abrir")
+        btn_abrir_ac = tk.Button(vent_acta, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_abrir_ac.place(x=170, y=38, width=80, height=30)
         
         btn_menu_ac = tk.Button(vent_acta, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_acta.destroy)
