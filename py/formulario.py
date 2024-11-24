@@ -1746,14 +1746,14 @@ class orden_compra:
         t_orden = ttk.Treeview(vent_oc, columns=("id_oc", "cliente_oc", "servicio_oc", "estado_oc", "fecha_oc"), show="headings", style="Custom.Treeview")
         t_orden.place(x=310, y=80, width=981, height=479)
         
-        t_orden.heading("id_oc", text="ID")
+        t_orden.heading("id_oc", text="Nro")
         t_orden.heading("cliente_oc", text="Cliente / Empresa")
         t_orden.heading("servicio_oc", text="Servicio")
         t_orden.heading("estado_oc", text="Estado")
         t_orden.heading("fecha_oc", text="Fecha")
         
         t_orden.column("id_oc", anchor="center", width=100, stretch=False)
-        t_orden.column("cliente_oc", anchor="center", width=200, stretch=False)
+        t_orden.column("cliente_oc", anchor="center", width=188, stretch=False)
         t_orden.column("servicio_oc", anchor="center", width=387, stretch=False)
         t_orden.column("estado_oc", anchor="center", width=190, stretch=False)
         t_orden.column("fecha_oc", anchor="center", width=100, stretch=False)
@@ -1781,10 +1781,14 @@ class orden_compra:
             ("20", "Empresa T", "Desarrollo de Contenido", "Finalizado", "2022-04-25"),
         ]
         
-        muestra_t_orden = datos_t_orden[:15]
+        muestra_t_orden = datos_t_orden[:50]
         
         for orden in muestra_t_orden:
             t_orden.insert("", "end", values=orden)
+            
+        scrllbar_t_oc = ttk.Scrollbar(vent_oc, orient="vertical", command=t_orden.yview)
+        t_orden.configure(yscrollcommand=scrllbar_t_oc.set)
+        scrllbar_t_oc.place(x=1277, y=80, height=479)
             
     def registrar_orden_compra(self):
         
