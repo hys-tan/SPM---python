@@ -2255,7 +2255,7 @@ class registrar_factura:
         t_acta.configure(yscrollcommand=scrollbar_acta.set)
         scrollbar_acta.place(x=466, y=88, height=119)
 
-# -------
+
 class detalles_factura:
     def __init__(self, root, seg_fact):
         
@@ -2377,6 +2377,11 @@ class detalles_factura:
         
         btn_save_segf = tk.Button(seg_fact, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_segf.place(x=315, y=630)
+        
+        utils.aplicar_hover_a_botones([btn_ch_coti, btn_op_doc_cot, btn_ch_oc, btn_op_doc_oc, 
+                                       btn_ch_gr, btn_op_doc_gr, btn_ch_it, btn_op_doc_it, 
+                                       btn_ch_pl, btn_op_doc_pl, btn_ch_ac, btn_op_doc_ac, 
+                                       btn_add_fact, btn_op_doc_fac, btn_can_segf, btn_save_segf])
 
 
 class buscador:
@@ -2537,13 +2542,11 @@ class ventana_inicio:
         btn_atras.place(x=1180, y=660)
 
         # Vincular los eventos a cada botón
-        for btn in [btn_gen_cot, btn_reg_cli, btn_reg_cot, btn_reg_oc, btn_reg_fact, btn_seg_fact, btn_search, btn_act, btn_op_file_fact, btn_exit, btn_siguiente, btn_atras]:
-            btn.bind("<Enter>", lambda e, b=btn: utils.on_enter(b))
-            btn.bind("<Leave>", lambda e, b=btn: utils.on_leave(b))
+        utils.aplicar_hover_a_botones([btn_gen_cot, btn_reg_cli, btn_reg_cot, btn_reg_oc, btn_reg_fact, btn_seg_fact, btn_search, btn_act, btn_op_file_fact, btn_exit, btn_siguiente, btn_atras])
 
         canvas.create_text(20, 578, text="Filtro", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
 
-        canvas.create_text(20, 632, text="Por Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas.create_text(20, 632, text="Por Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_fact = ttk.Combobox(root, values=["Todos los registros", "Cancelado", "Pendiente", "Falta Pagar"], state="readonly", font=("Raleway", 10))
         cbo_fact.place(x=20, y=650, width=270, height=30)
