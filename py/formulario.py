@@ -1493,19 +1493,19 @@ class cotizaciones:
         
         canvas_reg_coti.create_text(20, 272, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_ad_cot = tk.Button(reg_coti, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_coti, "cotizacion"))
+        btn_ad_cot = tk.Button(reg_coti, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_coti, "cotizacion"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ad_cot.place(x=20, y=290, width=140, height=30)
         
         label_coti = tk.Label(reg_coti, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         label_coti.place(x=170, y=290, width=310, height=30)
         
-        btn_ver_cot = tk.Button(reg_coti, text="Abrir")
+        btn_ver_cot = tk.Button(reg_coti, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ver_cot.place(x=490, y=290, width=80, height=30)
         
-        btn_canc_cot = tk.Button(reg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_canc_cot = tk.Button(reg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_canc_cot.place(x=190, y=340)
         
-        btn_reg_cot = tk.Button(reg_coti, text="Registrar", width=13, height=1, font=("Raleway", 9))
+        btn_reg_cot = tk.Button(reg_coti, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_reg_cot.place(x=300, y=340)
         
     def seguimiento_cotizacion(self):
@@ -1577,19 +1577,19 @@ class cotizaciones:
         
         canvas_det_cot.create_text(20, 272, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        btn_det_cot = tk.Button(seg_coti, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(label_seg_coti, "cotizacion"))
+        btn_det_cot = tk.Button(seg_coti, text="Cambiar documento", command=lambda: utils.adjuntar_archivo(label_seg_coti, "cotizacion"), font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_cot.place(x=20, y=290, width=140, height=30)
         
         label_seg_coti = tk.Label(seg_coti, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
         label_seg_coti.place(x=170, y=290, width=310, height=30)
         
-        btn_ver_det_cot = tk.Button(seg_coti, text="Abrir")
+        btn_ver_det_cot = tk.Button(seg_coti, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ver_det_cot.place(x=490, y=290, width=80, height=30)
         
-        btn_canc_dcot = tk.Button(seg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_canc_dcot = tk.Button(seg_coti, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_canc_dcot.place(x=190, y=340)
         
-        btn_reg_dcot = tk.Button(seg_coti, text="Guardar", width=13, height=1, font=("Raleway", 9))
+        btn_reg_dcot = tk.Button(seg_coti, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_reg_dcot.place(x=300, y=340)
 
 
