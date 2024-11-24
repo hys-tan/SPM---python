@@ -2246,15 +2246,15 @@ class detalles_factura:
         cbo_est_seg_fact.current(0)
         
         canvas_seg_fax.create_text(20, 214, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ch_coti = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ch_coti = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: utils.adjuntar_archivo(lbl_ch_coti, "cotizacion"))
         btn_ch_coti.place(x=20, y=232, width=140, height=30)
-        lbl_ch_it = tk.Label(seg_fact, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
-        lbl_ch_it.place(x=170, y=232, width=340, height=30)
+        lbl_ch_coti = tk.Label(seg_fact, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_ch_coti.place(x=170, y=232, width=340, height=30)
         btn_op_doc_cot = tk.Button(seg_fact, text="Abrir", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_op_doc_cot.place(x=520, y=232, width=80, height=30)
         
         canvas_seg_fax.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ch_oc = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ch_oc = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: utils.adjuntar_archivo(lbl_ch_oc, "orden_compra"))
         btn_ch_oc.place(x=20, y=290, width=140, height=30)
         lbl_ch_oc = tk.Label(seg_fact, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_ch_oc.place(x=170, y=290, width=340, height=30)
@@ -2262,7 +2262,7 @@ class detalles_factura:
         btn_op_doc_oc.place(x=520, y=290, width=80, height=30)
         
         canvas_seg_fax.create_text(20, 330, text="Guía de Remisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ch_gr = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ch_gr = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: utils.adjuntar_archivo(lbl_ch_gr, "guia_remision"))
         btn_ch_gr.place(x=20, y=348, width=140, height=30)
         lbl_ch_gr = tk.Label(seg_fact, text="Guía de Remisión", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_ch_gr.place(x=170, y=348, width=340, height=30)
@@ -2270,7 +2270,7 @@ class detalles_factura:
         btn_op_doc_gr.place(x=520, y=348, width=80, height=30)
         
         canvas_seg_fax.create_text(20, 388, text="Informe Técnico", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ch_it = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ch_it = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: utils.adjuntar_archivo(lbl_ch_it, "informe_tecnico"))
         btn_ch_it.place(x=20, y=406, width=140, height=30)
         lbl_ch_it = tk.Label(seg_fact, text="Informe Técnico", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_ch_it.place(x=170, y=406, width=340, height=30)
@@ -2278,7 +2278,7 @@ class detalles_factura:
         btn_op_doc_it.place(x=520, y=406, width=80, height=30)
         
         canvas_seg_fax.create_text(20, 446, text="Planos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ch_pl = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ch_pl = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: utils.adjuntar_archivo(lbl_ch_pl, "doc_planos"))
         btn_ch_pl.place(x=20, y=464, width=140, height=30)
         lbl_ch_pl = tk.Label(seg_fact, text="Planos", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_ch_pl.place(x=170, y=464, width=340, height=30)
@@ -2286,7 +2286,7 @@ class detalles_factura:
         btn_op_doc_pl.place(x=520, y=464, width=80, height=30)
         
         canvas_seg_fax.create_text(20, 504, text="Acta de Conformidad", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_ch_ac = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ch_ac = tk.Button(seg_fact, text="Cambiar documento", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: utils.adjuntar_archivo(lbl_ch_ac, "acta_conformidad"))
         btn_ch_ac.place(x=20, y=522, width=140, height=30)
         lbl_ch_ac = tk.Label(seg_fact, text="Acta de Conformidad", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_ch_ac.place(x=170, y=522, width=340, height=30)
@@ -2294,7 +2294,7 @@ class detalles_factura:
         btn_op_doc_ac.place(x=520, y=522, width=80, height=30)
         
         canvas_seg_fax.create_text(20, 562, text="Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        btn_add_fact = tk.Button(seg_fact, text="Adjuntar", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_add_fact = tk.Button(seg_fact, text="Adjuntar", font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: utils.adjuntar_archivo(lbl_add_fact, "doc_factura"))
         btn_add_fact.place(x=20, y=580, width=140, height=30)
         lbl_add_fact = tk.Label(seg_fact, text="Factura", font=("Raleway", 9), bg="#373737", fg="white")
         lbl_add_fact.place(x=170, y=580, width=340, height=30)

@@ -23,7 +23,8 @@ def crear_carpetas_adjuntar():
     carpeta_principal = "documentos_adjuntar"
     
     # Subcarpetas para cada tipo de documento
-    carpetas_sub = ["cotizacion", "orden_compra", "guia_remision", "acta_conformidad", "informe_tecnico", "doc_planos", "doc_factura"]
+    carpetas_sub = ["cotizacion", "orden_compra", "guia_remision", 
+                    "acta_conformidad", "informe_tecnico", "doc_planos", "doc_factura"]
     
     # Crear la carpeta principal si no existe
     if not os.path.exists(carpeta_principal):
