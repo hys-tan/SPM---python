@@ -2102,6 +2102,8 @@ class registrar_factura:
         
         btn_save_regfact = tk.Button(reg_fact, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_regfact.place(x=315, y=456)
+        
+        utils.aplicar_hover_a_botones([btn_ad_it, btn_op_it, btn_ad_pl, btn_op_pl, btn_ad_ac, btn_op_ac, btn_ad_fact, btn_op_fact, btn_can_fact, btn_save_regfact])
 
     def abrir_informe_tecnico(self):
         vent_informe = tk.Toplevel(self.reg_fact)
@@ -2127,6 +2129,8 @@ class registrar_factura:
         
         btn_menu_if = tk.Button(vent_informe, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_informe.destroy)
         btn_menu_if.place(x=195, y=216)
+        
+        utils.aplicar_hover_a_botones([btn_elm_if, btn_abrir_if, btn_menu_if])
 
         t_informe = ttk.Treeview(vent_informe, columns=("id_it", "doc_if"), show="headings", style="Custom.Treeview")
         t_informe.place(x=10, y=88, width=471, height=119)
@@ -2175,6 +2179,8 @@ class registrar_factura:
         
         btn_menu_pl = tk.Button(vent_planos, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_planos.destroy)
         btn_menu_pl.place(x=195, y=216)
+        
+        utils.aplicar_hover_a_botones([btn_elm_pl, btn_abrir_pl, btn_menu_pl])
 
         t_planos = ttk.Treeview(vent_planos, columns=("id_pl", "doc_pl"), show="headings", style="Custom.Treeview")
         t_planos.place(x=10, y=88, width=471, height=119)
@@ -2223,6 +2229,8 @@ class registrar_factura:
         
         btn_menu_ac = tk.Button(vent_acta, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_acta.destroy)
         btn_menu_ac.place(x=195, y=216)
+        
+        utils.aplicar_hover_a_botones([btn_elm_ac, btn_abrir_ac, btn_menu_ac])
 
         t_acta = ttk.Treeview(vent_acta, columns=("id_ac", "doc_ac"), show="headings", style="Custom.Treeview")
         t_acta.place(x=10, y=88, width=471, height=119)
