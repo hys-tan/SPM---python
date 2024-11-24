@@ -835,7 +835,7 @@ class clientes:
         canvas_cliente.create_text(20, 390, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_date = ttk.Combobox(vent_clientes, values=["Todos los registros", "Última semana", "Últimas 2 semanas", "Último mes", "Últimos 3 meses", "Últimos 6 meses", "Último año"], state="readonly", font=("Raleway", 10))
-        cbo_date.place(x=20, y=408, width=250, height=30)
+        cbo_date.place(x=20, y=408, width=270, height=30)
         cbo_date.current(0)
         
         canvas_cliente.create_text(385, 22, text="REGISTRO DE CLIENTES", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
@@ -1311,7 +1311,7 @@ class cotizaciones:
         
         self.alerta = alertas(vent_coti)
         
-        self.vent_coti.protocol("WM_DELETE_PROTOCOL", lambda: None)
+        self.vent_coti.protocol("WM_DELETE_WINDOW", lambda: None)
         
         canvas_cotizacion = tk.Canvas(vent_coti, width=1300, height=608, bg="#373737", highlightthickness=0)
         canvas_cotizacion.pack()
@@ -1345,13 +1345,13 @@ class cotizaciones:
         canvas_cotizacion.create_text(20, 486, text="Por Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_estado = ttk.Combobox(vent_coti, values=["Todos los registros", "Aprobado", "Pendiente", "No Aprobado"], state="readonly", font=("Raleway", 10))
-        cbo_estado.place(x=20, y=504, width=250, height=30)
+        cbo_estado.place(x=20, y=504, width=270, height=30)
         cbo_estado.current(0)
         
         canvas_cotizacion.create_text(20, 540, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_date_cot = ttk.Combobox(vent_coti, values=["Todos los registros", "Última semana", "Últimas 2 semanas", "Último mes", "Últimos 3 meses", "Últimos 6 meses", "Último año"], state="readonly", font=("Raleway", 10))
-        cbo_date_cot.place(x=20, y=558, width=250, height=30)
+        cbo_date_cot.place(x=20, y=558, width=270, height=30)
         cbo_date_cot.current(0)
         
         cbo_page_cot = ttk.Combobox(vent_coti, values=["1", "2"], state="readonly", font=("Arial", 10))
@@ -1609,7 +1609,7 @@ class orden_compra:
         
         self.alerta = alertas(vent_oc)
         
-        self.vent_oc.protocol("WM_DELETE_PROTOCOL", lambda: None)
+        self.vent_oc.protocol("WM_DELETE_WINDOW", lambda: None)
         
         canvas_oc = tk.Canvas(vent_oc, width=1300, height=608, bg="#373737", highlightthickness=0)
         canvas_oc.pack()
@@ -1643,13 +1643,13 @@ class orden_compra:
         canvas_oc.create_text(20, 486, text="Por Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_estado_oc = ttk.Combobox(vent_oc, values=["Todos los registros", "Trabajo No Iniciado", "En Proceso", "Completado Parcialmente", "Finalizado"], state="readonly", font=("Raleway", 10))
-        cbo_estado_oc.place(x=20, y=504, width=250, height=30)
+        cbo_estado_oc.place(x=20, y=504, width=270, height=30)
         cbo_estado_oc.current(0)
         
         canvas_oc.create_text(20, 540, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_date_oc = ttk.Combobox(vent_oc, values=["Todos los registros", "Última semana", "Últimas 2 semanas", "Último mes", "Últimos 3 meses", "Últimos 6 meses", "Último año"], state="readonly", font=("Raleway", 10))
-        cbo_date_oc.place(x=20, y=558, width=250, height=30)
+        cbo_date_oc.place(x=20, y=558, width=270, height=30)
         cbo_date_oc.current(0)
         
         cbo_page_oc = ttk.Combobox(vent_oc, values=["1", "2"], state="readonly", font=("Arial", 10))
@@ -1688,9 +1688,9 @@ class orden_compra:
         t_orden.heading("fecha_oc", text="Fecha")
         
         t_orden.column("id_oc", anchor="center", width=100, stretch=False)
-        t_orden.column("cliente_oc", anchor="center", width=280, stretch=False)
+        t_orden.column("cliente_oc", anchor="center", width=200, stretch=False)
         t_orden.column("servicio_oc", anchor="center", width=387, stretch=False)
-        t_orden.column("estado_oc", anchor="center", width=110, stretch=False)
+        t_orden.column("estado_oc", anchor="center", width=190, stretch=False)
         t_orden.column("fecha_oc", anchor="center", width=100, stretch=False)
         
         datos_t_orden = [
@@ -1947,7 +1947,7 @@ class registrar_factura:
         
         self.root = root
         self.reg_fact = reg_fact
-        self.reg_fact.withdraw()
+        self.root.withdraw()
         
         self.reg_fact = reg_fact
         self.reg_fact.title("Registrar Factura")
@@ -1963,8 +1963,350 @@ class registrar_factura:
         
         utils.create_rounded_rectangle(canvas_fact, 10, 10, 610, 194, radius=10, fill="#959595", outline="#959595")
         utils.create_rounded_rectangle(canvas_fact, 10, 204, 610, 446, radius=10, fill="#959595", outline="#959595")
+
+        canvas_fact.create_text(20, 20, text="Nro de Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_fact, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        reg_fax_oc = tk.Entry(reg_fact, font=("Arial", 11), bd=0)
+        reg_fax_oc.place(x=25, y=43, width=170, height=20)
         
+        canvas_fact.create_text(210, 20, text="Nro de Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_fact, 210, 38, 390, 68, radius=10, fill="white", outline="#959595")
+        reg_fax = tk.Entry(reg_fact, font=("Arial", 11), bd=0)
+        reg_fax.place(x=215, y=43, width=170, height=20)
+
+        canvas_fact.create_text(400, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_fact, 400, 38, 600, 68, radius=10, fill="white", outline="#959595")
+        reg_fax_cli = tk.Entry(reg_fact, font=("Arial", 11), bd=0)
+        reg_fax_cli.place(x=405, y=43, width=190, height=20)
+
+        canvas_fact.create_text(20, 78, text="Servicio", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_fact, 20, 96, 420, 126, radius=10, fill="white", outline="#959595")
+        reg_fax_serv = tk.Entry(reg_fact, font=("Arial", 11), bd=0)
+        reg_fax_serv.place(x=25, y=101, width=390, height=20)
+
+        canvas_fact.create_text(430, 78, text="Fecha de Emisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        fecha_em_reg_fact = DateEntry(reg_fact, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        fecha_em_reg_fact.place(x=430, y=96, width=170, height=30)
         
+        canvas_fact.create_text(20, 136, text="Fecha de Vencimiento", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        fecha_ven_reg_fact = DateEntry(reg_fact, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        fecha_ven_reg_fact.place(x=20, y=154, width=170, height=30)
+
+        canvas_fact.create_text(200, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_fp_fact = ttk.Combobox(reg_fact, values=["Escoja una Opción", "30 días", "60 días", "90 días", "180 días", "Al Contado"], state="readonly", font=("Raleway", 10))
+        cbo_fp_fact.place(x=200, y=154, width=135, height=31)
+        cbo_fp_fact.current(0)
+        
+        canvas_fact.create_text(345, 136, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_est_fact = ttk.Combobox(reg_fact, values=["Escoja una Opción", "Cancelado", "Pendiente", "Falta Pagar"], state="readonly", font=("Raleway", 10))
+        cbo_est_fact.place(x=345, y=154, width=135, height=31)
+        cbo_est_fact.current(0)
+
+        canvas_fact.create_text(20, 214, text="Informe Técnico", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ad_it = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_it, "informe_tecnico"))
+        btn_ad_it.place(x=20, y=232, width=140, height=30)
+        label_it = tk.Label(reg_fact, text="Informe Técnico", font=("Raleway", 9), bg="#373737", fg="white")
+        label_it.place(x=170, y=232, width=340, height=30)
+        btn_op_it = tk.Button(reg_fact, text="Abrir", command=self.abrir_informe_tecnico)
+        btn_op_it.place(x=520, y=232, width=80, height=30)
+        
+        canvas_fact.create_text(20, 272, text="Planos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ad_pl = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_pl, "doc_planos"))
+        btn_ad_pl.place(x=20, y=290, width=140, height=30)
+        label_pl = tk.Label(reg_fact, text="Planos", font=("Raleway", 9), bg="#373737", fg="white")
+        label_pl.place(x=170, y=290, width=340, height=30)
+        btn_op_pl = tk.Button(reg_fact, text="Abrir", command=self.abrir_planos)
+        btn_op_pl.place(x=520, y=290, width=80, height=30)
+        
+        canvas_fact.create_text(20, 330, text="Acta de Conformidad", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ad_ac = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_ac, "acta_conformidad"))
+        btn_ad_ac.place(x=20, y=348, width=140, height=30)
+        label_ac = tk.Label(reg_fact, text="Acta de Conformidad", font=("Raleway", 9), bg="#373737", fg="white")
+        label_ac.place(x=170, y=348, width=340, height=30)
+        btn_op_ac = tk.Button(reg_fact, text="Abrir", command=self.abrir_acta_conformidad)
+        btn_op_ac.place(x=520, y=348, width=80, height=30)
+        
+        canvas_fact.create_text(20, 388, text="Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ad_fact = tk.Button(reg_fact, text="Adjuntar", command=lambda: utils.adjuntar_archivo(label_fact, "doc_factura"))
+        btn_ad_fact.place(x=20, y=406, width=140, height=30)
+        label_fact = tk.Label(reg_fact, text="Factura", font=("Raleway", 9), bg="#373737", fg="white")
+        label_fact.place(x=170, y=406, width=340, height=30)
+        btn_op_fact = tk.Button(reg_fact, text="Abrir")
+        btn_op_fact.place(x=520, y=406, width=80, height=30)
+
+        btn_can_fact = tk.Button(reg_fact, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_can_fact.place(x=205, y=456)
+        
+        btn_save_regfact = tk.Button(reg_fact, text="Registrar", width=13, height=1, font=("Raleway", 9))
+        btn_save_regfact.place(x=315, y=456)
+
+    def abrir_informe_tecnico(self):
+        vent_informe = tk.Toplevel(self.reg_fact)
+        vent_informe.title
+        vent_informe.geometry("490x256")
+        vent_informe.resizable(False, False)
+        vent_informe.configure(bg="#373737")
+        vent_informe.grab_set()
+        utils.centrar_ventana(vent_informe)
+        vent_informe.protocol("WM_DELETE_WINDOW", lambda: None)
+
+        canvas_inf = tk.Canvas(vent_informe, width=490, height=256, bg="#373737", highlightthickness=0)
+        canvas_inf.pack()
+
+        utils.create_rounded_rectangle(canvas_inf, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
+
+        canvas_inf.create_text(20, 20, text="Informe Técnico", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_elm_if = tk.Button(vent_informe, text="Eliminar Documento")
+        btn_elm_if.place(x=20, y=38, width=140, height=30)
+        
+        btn_abrir_if = tk.Button(vent_informe, text="Abrir")
+        btn_abrir_if.place(x=170, y=38, width=80, height=30)
+        
+        btn_menu_if = tk.Button(vent_informe, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_informe.destroy)
+        btn_menu_if.place(x=195, y=216)
+
+        t_informe = ttk.Treeview(vent_informe, columns=("id_it", "doc_if"), show="headings", style="Custom.Treeview")
+        t_informe.place(x=10, y=88, width=471, height=119)
+
+        t_informe.heading("id_it", text="ID")
+        t_informe.heading("doc_if", text="Documento")
+        t_informe.column("id_it", anchor="center", width=55, stretch=False)
+        t_informe.column("doc_if", anchor="center", width=399, stretch=False)
+
+        datos_informe = [
+            ("1", "Informe Técnico A"),
+            ("2", "Informe Técnico B"),
+            ("3", "Informe Técnico C"),
+            ("4", "Informe Técnico D"),
+            ("5", "Informe Técnico E"),
+        ]
+
+        for dato_orden_if in datos_informe:
+            t_informe.insert("", "end", values=dato_orden_if)
+
+        scrollbar_informe = ttk.Scrollbar(vent_informe, orient="vertical", command=t_informe.yview)
+        t_informe.configure(yscrollcommand=scrollbar_informe.set)
+        scrollbar_informe.place(x=466, y=88, height=119)
+
+    def abrir_planos(self):
+        vent_planos = tk.Toplevel(self.reg_fact)
+        vent_planos.title
+        vent_planos.geometry("490x256")
+        vent_planos.resizable(False, False)
+        vent_planos.configure(bg="#373737")
+        vent_planos.grab_set()
+        utils.centrar_ventana(vent_planos)
+        vent_planos.protocol("WM_DELETE_WINDOW", lambda: None)
+
+        canvas_plan = tk.Canvas(vent_planos, width=490, height=256, bg="#373737", highlightthickness=0)
+        canvas_plan.pack()
+
+        utils.create_rounded_rectangle(canvas_plan, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
+
+        canvas_plan.create_text(20, 20, text="Planos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_elm_pl = tk.Button(vent_planos, text="Eliminar Documento")
+        btn_elm_pl.place(x=20, y=38, width=140, height=30)
+        
+        btn_abrir_pl = tk.Button(vent_planos, text="Abrir")
+        btn_abrir_pl.place(x=170, y=38, width=80, height=30)
+        
+        btn_menu_pl = tk.Button(vent_planos, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_planos.destroy)
+        btn_menu_pl.place(x=195, y=216)
+
+        t_planos = ttk.Treeview(vent_planos, columns=("id_pl", "doc_pl"), show="headings", style="Custom.Treeview")
+        t_planos.place(x=10, y=88, width=471, height=119)
+
+        t_planos.heading("id_pl", text="ID")
+        t_planos.heading("doc_pl", text="Documento")
+        t_planos.column("id_pl", anchor="center", width=55, stretch=False)
+        t_planos.column("doc_pl", anchor="center", width=399, stretch=False)
+
+        datos_planos = [
+            ("1", "Planos A"),
+            ("2", "Planos B"),
+            ("3", "Planos C"),
+            ("4", "Planos D"),
+            ("5", "Planos E"),
+        ]
+
+        for dato_orden_pl in datos_planos:
+            t_planos.insert("", "end", values=dato_orden_pl)
+
+        scrollbar_planos = ttk.Scrollbar(vent_planos, orient="vertical", command=t_planos.yview)
+        t_planos.configure(yscrollcommand=scrollbar_planos.set)
+        scrollbar_planos.place(x=466, y=88, height=119)
+
+    def abrir_acta_conformidad(self):
+        vent_acta = tk.Toplevel(self.reg_fact)
+        vent_acta.title
+        vent_acta.geometry("490x256")
+        vent_acta.resizable(False, False)
+        vent_acta.configure(bg="#373737")
+        vent_acta.grab_set()
+        utils.centrar_ventana(vent_acta)
+        vent_acta.protocol("WM_DELETE_WINDOW", lambda: None)
+
+        canvas_acta = tk.Canvas(vent_acta, width=490, height=256, bg="#373737", highlightthickness=0)
+        canvas_acta.pack()
+
+        utils.create_rounded_rectangle(canvas_acta, 10, 10, 480, 78, radius=10, fill="#959595", outline="#959595")
+
+        canvas_acta.create_text(20, 20, text="Acta de Conformidad", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_elm_ac = tk.Button(vent_acta, text="Eliminar Documento")
+        btn_elm_ac.place(x=20, y=38, width=140, height=30)
+        
+        btn_abrir_ac = tk.Button(vent_acta, text="Abrir")
+        btn_abrir_ac.place(x=170, y=38, width=80, height=30)
+        
+        btn_menu_ac = tk.Button(vent_acta, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_acta.destroy)
+        btn_menu_ac.place(x=195, y=216)
+
+        t_acta = ttk.Treeview(vent_acta, columns=("id_ac", "doc_ac"), show="headings", style="Custom.Treeview")
+        t_acta.place(x=10, y=88, width=471, height=119)
+
+        t_acta.heading("id_ac", text="ID")
+        t_acta.heading("doc_ac", text="Documento")
+        t_acta.column("id_ac", anchor="center", width=55, stretch=False)
+        t_acta.column("doc_ac", anchor="center", width=399, stretch=False)
+
+        datos_acta = [
+            ("1", "Acta de Conformidad A"),
+            ("2", "Acta de Conformidad B"),
+            ("3", "Acta de Conformidad C"),
+            ("4", "Acta de Conformidad D"),
+            ("5", "Acta de Conformidad E"),
+        ]
+
+        for dato_orden_ac in datos_acta:
+            t_acta.insert("", "end", values=dato_orden_ac)
+
+        scrollbar_acta = ttk.Scrollbar(vent_acta, orient="vertical", command=t_acta.yview)
+        t_acta.configure(yscrollcommand=scrollbar_acta.set)
+        scrollbar_acta.place(x=466, y=88, height=119)
+
+
+class detalles_factura:
+    def __init__(self, root, seg_fact):
+        
+        self.root = root
+        self.seg_fact = seg_fact
+        self.root.withdraw()
+        
+        self.seg_fact = seg_fact
+        self.seg_fact.title("Seguimiento de Facturas")
+        self.seg_fact.geometry("620x670")
+        self.seg_fact.resizable(False, False)
+        self.seg_fact.configure(bg="#373737")
+        utils.centrar_ventana(self.seg_fact)
+        self.alerta = alertas(seg_fact)
+        self.seg_fact.protocol("WM_DELETE_WINDOW", lambda: None)
+    
+        canvas_seg_fax = tk.Canvas(seg_fact, width=620, height=670, bg="#373737", highlightthickness=0)
+        canvas_seg_fax.pack()
+        
+        utils.create_rounded_rectangle(canvas_seg_fax, 10, 10, 610, 194, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_seg_fax, 10, 204, 610, 620, radius=10, fill="#959595", outline="#959595")
+        
+        canvas_seg_fax.create_text(20, 20, text="Nro de Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_seg_fax, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        seg_fax_oc = tk.Entry(seg_fact, font=("Arial", 11), bd=0)
+        seg_fax_oc.place(x=25, y=43, width=170, height=20)
+        
+        canvas_seg_fax.create_text(210, 20, text="Nro de Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_seg_fax, 210, 38, 390, 68, radius=10, fill="white", outline="#959595")
+        seg_fax = tk.Entry(seg_fact, font=("Arial", 11), bd=0)
+        seg_fax.place(x=215, y=43, width=170, height=20)
+        
+        canvas_seg_fax.create_text(400, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_seg_fax, 400, 38, 600, 68, radius=10, fill="white", outline="#959595")
+        seg_fax_cli = tk.Entry(seg_fact, font=("Arial", 11), bd=0)
+        seg_fax_cli.place(x=405, y=43, width=190, height=20)
+        
+        canvas_seg_fax.create_text(20, 78, text="Servicio", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_seg_fax, 20, 96, 420, 126, radius=10, fill="white", outline="#959595")
+        seg_fax_serv = tk.Entry(seg_fact, font=("Arial", 11), bd=0)
+        seg_fax_serv.place(x=25, y=101, width=390, height=20)
+        
+        canvas_seg_fax.create_text(430, 78, text="Fecha de Emisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        fecha_em_det_fact = DateEntry(seg_fact, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        fecha_em_det_fact.place(x=430, y=96, width=170, height=30)
+        
+        canvas_seg_fax.create_text(20, 136, text="Fecha de Vencimiento", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        fecha_ven_det_fact = DateEntry(seg_fact, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
+        fecha_ven_det_fact.place(x=20, y=154, width=170, height=30)
+        
+        canvas_seg_fax.create_text(200, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_fp_seg_fact = ttk.Combobox(seg_fact, values=["Escoja una Opción", "30 días", "60 días", "90 días", "180 días", "Al Contado"], state="readonly", font=("Raleway", 10))
+        cbo_fp_seg_fact.place(x=200, y=154, width=135, height=31)
+        cbo_fp_seg_fact.current(0)
+        
+        canvas_seg_fax.create_text(345, 136, text="Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        cbo_est_seg_fact = ttk.Combobox(seg_fact, values=["Escoja una Opción", "Cancelado", "Pendiente", "Falta Pagar"], state="readonly", font=("Raleway", 10))
+        cbo_est_seg_fact.place(x=345, y=154, width=135, height=31)
+        cbo_est_seg_fact.current(0)
+        
+        canvas_seg_fax.create_text(20, 214, text="Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ch_coti = tk.Button(seg_fact, text="Cambiar documento")
+        btn_ch_coti.place(x=20, y=232, width=140, height=30)
+        lbl_ch_it = tk.Label(seg_fact, text="Cotización", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_ch_it.place(x=170, y=232, width=340, height=30)
+        btn_op_doc_cot = tk.Button(seg_fact, text="Abrir")
+        btn_op_doc_cot.place(x=520, y=232, width=80, height=30)
+        
+        canvas_seg_fax.create_text(20, 272, text="Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ch_oc = tk.Button(seg_fact, text="Cambiar documento")
+        btn_ch_oc.place(x=20, y=290, width=140, height=30)
+        lbl_ch_oc = tk.Label(seg_fact, text="Orden de Compra", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_ch_oc.place(x=170, y=290, width=340, height=30)
+        btn_op_doc_oc = tk.Button(seg_fact, text="Abrir")
+        btn_op_doc_oc.place(x=520, y=290, width=80, height=30)
+        
+        canvas_seg_fax.create_text(20, 330, text="Guía de Remisión", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ch_gr = tk.Button(seg_fact, text="Cambiar documento")
+        btn_ch_gr.place(x=20, y=348, width=140, height=30)
+        lbl_ch_gr = tk.Label(seg_fact, text="Guía de Remisión", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_ch_gr.place(x=170, y=348, width=340, height=30)
+        btn_op_doc_gr = tk.Button(seg_fact, text="Abrir")
+        btn_op_doc_gr.place(x=520, y=348, width=80, height=30)
+        
+        canvas_seg_fax.create_text(20, 388, text="Informe Técnico", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ch_it = tk.Button(seg_fact, text="Cambiar documento")
+        btn_ch_it.place(x=20, y=406, width=140, height=30)
+        lbl_ch_it = tk.Label(seg_fact, text="Informe Técnico", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_ch_it.place(x=170, y=406, width=340, height=30)
+        btn_op_doc_it = tk.Button(seg_fact, text="Abrir")
+        btn_op_doc_it.place(x=520, y=406, width=80, height=30)
+        
+        canvas_seg_fax.create_text(20, 446, text="Planos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ch_pl = tk.Button(seg_fact, text="Cambiar documento")
+        btn_ch_pl.place(x=20, y=464, width=140, height=30)
+        lbl_ch_pl = tk.Label(seg_fact, text="Planos", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_ch_pl.place(x=170, y=464, width=340, height=30)
+        btn_op_doc_pl = tk.Button(seg_fact, text="Abrir")
+        btn_op_doc_pl.place(x=520, y=464, width=80, height=30)
+        
+        canvas_seg_fax.create_text(20, 504, text="Acta de Conformidad", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_ch_ac = tk.Button(seg_fact, text="Cambiar documento")
+        btn_ch_ac.place(x=20, y=522, width=140, height=30)
+        lbl_ch_ac = tk.Label(seg_fact, text="Acta de Conformidad", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_ch_ac.place(x=170, y=522, width=340, height=30)
+        btn_op_doc_ac = tk.Button(seg_fact, text="Abrir")
+        btn_op_doc_ac.place(x=520, y=522, width=80, height=30)
+        
+        canvas_seg_fax.create_text(20, 562, text="Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        btn_add_fact = tk.Button(seg_fact, text="Adjuntar")
+        btn_add_fact.place(x=20, y=580, width=140, height=30)
+        lbl_add_fact = tk.Label(seg_fact, text="Factura", font=("Raleway", 9), bg="#373737", fg="white")
+        lbl_add_fact.place(x=170, y=580, width=340, height=30)
+        btn_op_doc_fac = tk.Button(seg_fact, text="Abrir")
+        btn_op_doc_fac.place(x=520, y=580, width=80, height=30)
+        
+        btn_can_segf = tk.Button(seg_fact, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_can_segf.place(x=205, y=630)
+        
+        btn_save_segf = tk.Button(seg_fact, text="Guardar", width=13, height=1, font=("Raleway", 9))
+        btn_save_segf.place(x=315, y=630)
+
 
 class buscador:
     def __init__(self, root, buscar_doc):
@@ -2078,8 +2420,8 @@ class ventana_inicio:
         canvas = tk.Canvas(root, width=1400, height=700, bg="#373737", highlightthickness=0)
         canvas.pack()
 
-        utils.create_rounded_rectangle(canvas, 10, 10, 300, 480, radius=10, fill="#959595", outline="#959595")
-        utils.create_rounded_rectangle(canvas, 10, 490, 300, 688, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas, 10, 10, 300, 558, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas, 10, 568, 300, 690, radius=10, fill="#959595", outline="#959595")
         #utils.create_rounded_rectangle(canvas, 310, 80, 1390, 650, radius=10, fill="#959595", outline="#959595")
 
         canvas.create_text(20, 22, text="Opciones", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
@@ -2100,7 +2442,7 @@ class ventana_inicio:
         btn_reg_fact = tk.Button(root, text="Registrar Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_registrar_factura)
         btn_reg_fact.place(x=22, y=260)
 
-        btn_seg_fact = tk.Button(root, text="Seguimiento de Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_seg_fact = tk.Button(root, text="Seguimiento de Factura", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_detalles_factura)
         btn_seg_fact.place(x=22, y=305)
 
         btn_search = tk.Button(root, text="Buscar Documentos", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_buscador)
@@ -2108,9 +2450,12 @@ class ventana_inicio:
 
         btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=self.alerta.cotizacion_codigo_igual, activebackground="#7F7F7F", activeforeground="white")
         btn_act.place(x=22, y=395)
+        
+        btn_op_file_fact = tk.Button(self.root, text="Abrir Carpeta", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_op_file_fact.place(x=22, y=440)
 
         btn_exit = tk.Button(self.root, text="Salir", width=37, height=1, font=("Raleway", 9), command=self.alerta.cerrar_prog, activebackground="#7F7F7F", activeforeground="white")
-        btn_exit.place(x=22, y=440)
+        btn_exit.place(x=22, y=485)
         
         btn_siguiente = tk.Button(root, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_siguiente.place(x=1290, y=660)
@@ -2119,22 +2464,16 @@ class ventana_inicio:
         btn_atras.place(x=1180, y=660)
 
         # Vincular los eventos a cada botón
-        for btn in [btn_gen_cot, btn_reg_cli, btn_reg_cot, btn_reg_oc, btn_reg_fact, btn_seg_fact, btn_search, btn_act, btn_exit, btn_siguiente, btn_atras]:
+        for btn in [btn_gen_cot, btn_reg_cli, btn_reg_cot, btn_reg_oc, btn_reg_fact, btn_seg_fact, btn_search, btn_act, btn_op_file_fact, btn_exit, btn_siguiente, btn_atras]:
             btn.bind("<Enter>", lambda e, b=btn: utils.on_enter(b))
             btn.bind("<Leave>", lambda e, b=btn: utils.on_leave(b))
 
-        canvas.create_text(20, 502, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas.create_text(20, 578, text="Filtro", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
 
-        canvas.create_text(20, 560, text="Por Orden de Compra", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas.create_text(20, 632, text="Por Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
-        cbo_oc = ttk.Combobox(root, values=["Todos los registros", "Trabajo No Iniciado", "En Proceso", "Completado Parcialmente", "Finalizado"], state="readonly", font=("Raleway", 10))
-        cbo_oc.place(x=20, y=578, width=250, height=30)
-        cbo_oc.current(0)
-
-        canvas.create_text(20, 614, text="Por Factura", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        
-        cbo_fact = ttk.Combobox(root, values=["Todos los registros", "Cancelado", "Pendiente", "No Cancelado"], state="readonly", font=("Raleway", 10))
-        cbo_fact.place(x=20, y=632, width=250, height=30)
+        cbo_fact = ttk.Combobox(root, values=["Todos los registros", "Cancelado", "Pendiente", "Falta Pagar"], state="readonly", font=("Raleway", 10))
+        cbo_fact.place(x=20, y=650, width=270, height=30)
         cbo_fact.current(0)
         
         cbo_page = ttk.Combobox(root, values=["1", "2"], state="readonly", font=("Arial", 10))
@@ -2171,53 +2510,48 @@ class ventana_inicio:
         style.configure("Custom.Treeview.Heading", background="lightblue", foreground="black", font=("Arial", 9))
         style.configure("Custom.Treeview", background="white", foreground="black", rowheight=30)
 
-        tree = ttk.Treeview(root, columns=("oc", "estado_oc", "cliente", "descripcion", "fac", "estado_fac", "fecha_fac"), show="headings", style="Custom.Treeview")
+        tree = ttk.Treeview(root, columns=("oc", "fact", "cliente", "descripcion", "estado_fac", "fecha_em", "fecha_ven"), show="headings", style="Custom.Treeview")
         tree.place(x=310, y=80, width=1081, height=569)
 
         tree.heading("oc", text="Orden de Compra")
-        tree.heading("estado_oc", text="Estado")
+        tree.heading("fact", text="Factura")
         tree.heading("cliente", text="Cliente / Empresa")
         tree.heading("descripcion", text="Descripción / Servicio")
-        tree.heading("fac", text="Factura")
         tree.heading("estado_fac", text="Estado")
-        tree.heading("fecha_fac", text="Fecha Factura")
+        tree.heading("fecha_em", text="Fecha de Em.")
+        tree.heading("fecha_ven", text="Fecha de Venc.")
 
-        tree.column("oc", anchor="center", width=120, stretch=False)
-        tree.column("estado_oc", anchor="center", width=148, stretch=False)
-        tree.column("cliente", anchor="center", width=200, stretch=False)
-        tree.column("descripcion", anchor="center", width=284, stretch=False)
-        tree.column("fac", anchor="center", width=100, stretch=False)
-        tree.column("estado_fac", anchor="center", width=115, stretch=False)
-        tree.column("fecha_fac", anchor="center", width=110, stretch=False)
+        tree.column("oc", anchor="center", width=115, stretch=False)
+        tree.column("fact", anchor="center", width=110, stretch=False)
+        tree.column("cliente", anchor="center", width=180, stretch=False)
+        tree.column("descripcion", anchor="center", width=352, stretch=False)
+        tree.column("estado_fac", anchor="center", width=90, stretch=False)
+        tree.column("fecha_em", anchor="center", width=115, stretch=False)
+        tree.column("fecha_ven", anchor="center", width=115, stretch=False)
 
         ejemplos = [
-            ("OC001", "Trabajo No Iniciado", "Empresa A", "Servicio de mantenimiento", "FAC001", "Cancelado", "2023-10-01"),
-            ("OC002", "En Proceso", "Empresa B", "Desarrollo de software", "FAC002", "Pendiente", "2023-09-15"),
-            ("OC003", "Completado Parcialmente", "Empresa C", "Consultoría en TI", "FAC003", "No Cancelado", "2023-08-30"),
-            ("OC004", "Finalizado", "Empresa D", "Instalación de redes", "FAC004", "No Pagado", "2023-07-20"),
-            ("OC005", "Completado", "Empresa E", "Auditoría de sistemas", "FAC005", "Pagado", "2023-06-18"),
-            ("OC006", "En Proceso", "Empresa F", "Migración de datos", "FAC006", "Pendiente", "2023-05-22"),
-            ("OC007", "Pendiente", "Empresa G", "Optimización de procesos", "FAC007", "No Pagado", "2023-04-10"),
-            ("OC008", "Completado", "Empresa H", "Soporte técnico", "FAC008", "Pagado", "2023-03-15"),
-            ("OC009", "En Proceso", "Empresa I", "Desarrollo web", "FAC009", "Pendiente", "2023-02-25"),
-            ("OC010", "Pendiente", "Empresa J", "Evaluación de seguridad", "FAC010", "No Pagado", "2023-01-30"),
-            ("OC011", "Completado", "Empresa K", "Diseño gráfico", "FAC011", "Pagado", "2023-11-02"),
-            ("OC012", "En Proceso", "Empresa L", "Análisis de datos", "FAC012", "Pendiente", "2023-10-18"),
-            ("OC013", "Pendiente", "Empresa M", "Capacitación de personal", "FAC013", "No Pagado", "2023-09-05"),
-            ("OC014", "Completado", "Empresa N", "Optimización de redes", "FAC014", "Pagado", "2023-08-12"),
-            ("OC015", "Pendiente", "Empresa O", "Desarrollo de app móvil", "FAC015", "No Pagado", "2023-07-28"),
-            ("OC016", "Completado", "Empresa P", "Soporte en ciberseguridad", "FAC016", "Pagado", "2023-07-14"),
-            ("OC017", "En Proceso", "Empresa Q", "Automatización de procesos", "FAC017", "Pendiente", "2023-06-20"),
-            ("OC018", "Pendiente", "Empresa R", "Asesoría en transformación digital", "FAC018", "No Pagado", "2023-06-05"),
-            ("OC019", "Completado", "Empresa S", "Administración de sistemas", "FAC019", "Pagado", "2023-05-23"),
-            ("OC020", "Pendiente", "Empresa T", "Desarrollo de contenido", "FAC020", "No Pagado", "2023-04-18"),
-            ("OC021", "En Proceso", "Empresa U", "Consultoría en recursos humanos", "FAC021", "Pendiente", "2023-03-15"),
-            ("OC022", "Completado", "Empresa V", "Servicios de marketing digital", "FAC022", "Pagado", "2023-02-25"),
-            ("OC023", "Pendiente", "Empresa W", "Servicios de traducción", "FAC023", "No Pagado", "2023-02-10"),
-            ("OC024", "Completado", "Empresa X", "Evaluación financiera", "FAC024", "Pagado", "2023-01-31"),
-            ("OC025", "Pendiente", "Empresa Y", "Investigación de mercado", "FAC025", "No Pagado", "2023-01-20"),
+            ("OC001", "FAC001", "Empresa A", "Servicio de Mantenimiento", "Pendiente", "2023-11-01", "2023-12-01"),
+            ("OC002", "FAC002", "Empresa B", "Desarrollo de Software", "Aprobado", "2023-10-15", "2023-11-15"),
+            ("OC003", "FAC003", "Empresa C", "Consultoría en TI", "Cancelado", "2023-09-20", "2023-10-20"),
+            ("OC004", "FAC004", "Empresa D", "Instalación de Redes", "Falta Pagar", "2023-08-25", "2023-09-25"),
+            ("OC005", "FAC005", "Empresa E", "Auditoría de Sistemas", "Pendiente", "2023-07-18", "2023-08-18"),
+            ("OC006", "FAC006", "Empresa F", "Migración de Datos", "Aprobado", "2023-06-22", "2023-07-22"),
+            ("OC007", "FAC007", "Empresa G", "Optimización de Procesos", "Pendiente", "2023-05-30", "2023-06-30"),
+            ("OC008", "FAC008", "Empresa H", "Soporte Técnico", "Cancelado", "2023-04-12", "2023-05-12"),
+            ("OC009", "FAC009", "Empresa I", "Desarrollo Web", "Falta Pagar", "2023-03-28", "2023-04-28"),
+            ("OC010", "FAC010", "Empresa J", "Evaluación de Seguridad", "Aprobado", "2023-02-11", "2023-03-11"),
+            ("OC011", "FAC011", "Empresa K", "Diseño Gráfico", "Pendiente", "2023-01-15", "2023-02-15"),
+            ("OC012", "FAC012", "Empresa L", "Análisis de Datos", "Cancelado", "2022-12-05", "2023-01-05"),
+            ("OC013", "FAC013", "Empresa M", "Capacitación de Personal", "Falta Pagar", "2022-11-22", "2022-12-22"),
+            ("OC014", "FAC014", "Empresa N", "Optimización de Redes", "Pendiente", "2022-10-13", "2022-11-13"),
+            ("OC015", "FAC015", "Empresa O", "Desarrollo de App Móvil", "Aprobado", "2022-09-07", "2022-10-07"),
+            ("OC016", "FAC016", "Empresa P", "Soporte en Ciberseguridad", "Pendiente", "2022-08-20", "2022-09-20"),
+            ("OC017", "FAC017", "Empresa Q", "Automatización de Procesos", "Cancelado", "2022-07-11", "2022-08-11"),
+            ("OC018", "FAC018", "Empresa R", "Asesoría en Transformación Digital", "Falta Pagar", "2022-06-02", "2022-07-02"),
+            ("OC019", "FAC019", "Empresa S", "Administración de Sistemas", "Pendiente", "2022-05-19", "2022-06-19"),
+            ("OC020", "FAC020", "Empresa T", "Desarrollo de Contenido", "Aprobado", "2022-04-25", "2022-05-25"),
         ]
-
+        
         ejemplos_mostrados = ejemplos[:18]
         
         for dato in ejemplos_mostrados:
@@ -2244,8 +2578,12 @@ class ventana_inicio:
         orden_compra(root, vent_oc)
     
     def abrir_registrar_factura(self):
-        reg_fact = tk.Toplevel(self.root)
-        registrar_factura(self.root, reg_fact)
+        reg_fact = tk.Toplevel(root)
+        registrar_factura(root, reg_fact)
+        
+    def abrir_detalles_factura(self):
+        seg_fact = tk.Toplevel(root)
+        detalles_factura(root, seg_fact)
 
 
 if __name__ == "__main__":
