@@ -46,10 +46,10 @@ class alertas:
         
         canvas_salida.create_text(79, 26, text="¿Está seguro de que desea salir?", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_si = tk.Button(salida, text="Si", width=9, height=1, font=("Raleway", 9), command=self.parent.destroy)
+        btn_si = tk.Button(salida, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.parent.destroy)
         btn_si.place(x=73, y=73)
                 
-        btn_no = tk.Button(salida, text="No", width=9, height=1, font=("Raleway", 9), command=salida.destroy)
+        btn_no = tk.Button(salida, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=salida.destroy)
         btn_no.place(x=158, y=73)
 
     # SELECCIONE UNA FILA
@@ -79,7 +79,7 @@ class alertas:
         
         canvas_sec_fila.create_text(79, 26, text="Por favor, seleccione una fila", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_sec_ok = tk.Button(sec_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=sec_fila.destroy)
+        btn_sec_ok = tk.Button(sec_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=sec_fila.destroy)
         btn_sec_ok.place(x=115, y=73)
 
     # DATO NO ENCONTRADO
@@ -109,7 +109,7 @@ class alertas:
         
         canvas_no_file.create_text(94, 26, text="Datos no encontrados", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_nf_ok = tk.Button(no_file, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=no_file.destroy)
+        btn_nf_ok = tk.Button(no_file, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=no_file.destroy)
         btn_nf_ok.place(x=115, y=73)
 
     # PREGUNTA ELIMINAR FILA
@@ -139,10 +139,10 @@ class alertas:
         canvas_ques_mat.create_text(79, 19, text="¿Estás seguro de que deseas", anchor="nw", font=("Arial", 10), fill="Black")
         canvas_ques_mat.create_text(115, 33, text="eliminar esta fila?", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_qm_si = tk.Button(q_material, text="Si", width=9, height=1, font=("Raleway", 9))
+        btn_qm_si = tk.Button(q_material, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_qm_si.place(x=73, y=73)
 
-        btn_qm_no = tk.Button(q_material, text="No", width=9, height=1, font=("Raleway", 9), command=q_material.destroy)
+        btn_qm_no = tk.Button(q_material, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=q_material.destroy)
         btn_qm_no.place(x=158, y=73)
 
     # FILA ELIMINADA
@@ -171,7 +171,7 @@ class alertas:
         
         canvas_mat_delete.create_text(85, 26, text="Fila eliminada exitosamente", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_md_ok = tk.Button(mat_delete, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=mat_delete.destroy)
+        btn_md_ok = tk.Button(mat_delete, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=mat_delete.destroy)
         btn_md_ok.place(x=115, y=73)
     
     # GENERAR COTIZACION
@@ -200,10 +200,10 @@ class alertas:
         
         can_gen_coti.create_text(79, 26, text="¿Desea generar la cotización?", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_gc_si = tk.Button(gener_coti, text="Si", width=9, height=1, font=("Raleway", 9))
+        btn_gc_si = tk.Button(gener_coti, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_gc_si.place(x=73, y=73)
 
-        btn_gc_no = tk.Button(gener_coti, text="No", width=9, height=1, font=("Raleway", 9), command=gener_coti.destroy)
+        btn_gc_no = tk.Button(gener_coti, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=gener_coti.destroy)
         btn_gc_no.place(x=158, y=73)
     
     # CANCELAR COTIZACION
@@ -232,10 +232,10 @@ class alertas:
         
         can_cancel_coti.create_text(79, 26, text="¿Desea cancelar la cotización?", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_cc_si = tk.Button(cancel_coti, text="Si", width=9, height=1, font=("Raleway", 9))
+        btn_cc_si = tk.Button(cancel_coti, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_cc_si.place(x=73, y=73)
 
-        btn_cc_no = tk.Button(cancel_coti, text="No", width=9, height=1, font=("Raleway", 9), command=cancel_coti.destroy)
+        btn_cc_no = tk.Button(cancel_coti, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cancel_coti.destroy)
         btn_cc_no.place(x=158, y=73)
     
     # CAMBIOS REALIZADOS
@@ -264,7 +264,7 @@ class alertas:
         
         canvas_camb_confirm.create_text(80, 26, text="Cambios realizados con éxtio", anchor="nw", font=("Arial", 10), fill="Black")
 
-        btn_cr_ok = tk.Button(cambios_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=cambios_confirm.destroy)
+        btn_cr_ok = tk.Button(cambios_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cambios_confirm.destroy)
         btn_cr_ok.place(x=115, y=73)
 
     # CONFIRMACION DE CONTIZACION GENERADA
@@ -293,7 +293,7 @@ class alertas:
         
         canvas_coti_confirm.create_text(93, 26, text="Cotización generada", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_coti_gen = tk.Button(coti_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=coti_confirm.destroy)
+        btn_coti_gen = tk.Button(coti_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=coti_confirm.destroy)
         btn_coti_gen.place(x=115, y=73)
 
     # COMPLETE LOS DATOS
@@ -323,7 +323,7 @@ class alertas:
         canvas_quest_datos.create_text(84, 19, text="Por favor, complete todos", anchor="nw", font=("Arial", 10), fill="Black")
         canvas_quest_datos.create_text(125, 33, text="los datos", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_qd_ok = tk.Button(quest_datos, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=quest_datos.destroy)
+        btn_qd_ok = tk.Button(quest_datos, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=quest_datos.destroy)
         btn_qd_ok.place(x=115, y=73)
         
     # REGISTRO CORRECTO
@@ -352,7 +352,7 @@ class alertas:
         
         canvas_reg_confirm.create_text(103, 26, text="¡Registro exitoso!", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_reg_conf = tk.Button(reg_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_confirm.destroy)
+        btn_reg_conf = tk.Button(reg_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=reg_confirm.destroy)
         btn_reg_conf.place(x=115, y=73)
         
     # CANCELAR REGISTRO
@@ -381,10 +381,10 @@ class alertas:
         
         can_cancel_reg.create_text(76, 26, text="¿Desea cancelar el registro?", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_cc_si = tk.Button(cancel_reg, text="Si", width=9, height=1, font=("Raleway", 9))
+        btn_cc_si = tk.Button(cancel_reg, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_cc_si.place(x=73, y=73)
 
-        btn_cc_no = tk.Button(cancel_reg, text="No", width=9, height=1, font=("Raleway", 9), command=cancel_reg.destroy)
+        btn_cc_no = tk.Button(cancel_reg, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cancel_reg.destroy)
         btn_cc_no.place(x=158, y=73)
         
     # CAMBIOS SIN GUARDAR
@@ -414,10 +414,10 @@ class alertas:
         can_uns_ch.create_text(79, 19, text="Tiene cambios sin guardar,", anchor="nw", font=("Arial", 10), fill="Black")
         can_uns_ch.create_text(102, 33, text="¿Desea cancelar?", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_uns_si = tk.Button(unsaved_changes, text="Si", width=9, height=1, font=("Raleway", 9))
+        btn_uns_si = tk.Button(unsaved_changes, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_uns_si.place(x=73, y=73)
 
-        btn_uns_no = tk.Button(unsaved_changes, text="No", width=9, height=1, font=("Raleway", 9), command=unsaved_changes.destroy)
+        btn_uns_no = tk.Button(unsaved_changes, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=unsaved_changes.destroy)
         btn_uns_no.place(x=158, y=73)
         
     # REGISTRO ACTUALIZADO
@@ -446,7 +446,7 @@ class alertas:
         
         canvas_reg_updated.create_text(92, 26, text="¡Registro actualizado!", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_reg_upd = tk.Button(reg_updated, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=reg_updated.destroy)
+        btn_reg_upd = tk.Button(reg_updated, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=reg_updated.destroy)
         btn_reg_upd.place(x=115, y=73)
     
     # CODIGO YA UTILIZADO
@@ -476,7 +476,7 @@ class alertas:
         canvas_code_used.create_text(80, 19, text="Este código ya ha sido registrado", anchor="nw", font=("Arial", 10), fill="Black")
         canvas_code_used.create_text(115, 33, text="Por favor, utilice otro", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_code_ok = tk.Button(code_used, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=code_used.destroy)
+        btn_code_ok = tk.Button(code_used, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=code_used.destroy)
         btn_code_ok.place(x=115, y=73)
         
     # CLIENTE REPETIDO
@@ -506,7 +506,7 @@ class alertas:
         canvas_cli_rep.create_text(100, 19, text="Este cliente ya existe", anchor="nw", font=("Arial", 10), fill="Black")
         canvas_cli_rep.create_text(95, 33, text="Intente con otro nombre", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_cli_ok = tk.Button(cli_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=cli_rep.destroy)
+        btn_cli_ok = tk.Button(cli_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cli_rep.destroy)
         btn_cli_ok.place(x=115, y=73)
         
     # COTIZACION CON CODIGO IGUAL
@@ -536,9 +536,9 @@ class alertas:
         canvas_cdg_rep.create_text(80, 19, text="Cotización ya generada con", anchor="nw", font=("Arial", 10), fill="Black")
         canvas_cdg_rep.create_text(120, 33, text="este código", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_cdgr_ok = tk.Button(cot_cdg_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), command=cot_cdg_rep.destroy)
+        btn_cdgr_ok = tk.Button(cot_cdg_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cot_cdg_rep.destroy)
         btn_cdgr_ok.place(x=115, y=73)
-        
+
 
 class generator_cot:
     def __init__(self, root, gen_cot):
