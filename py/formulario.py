@@ -685,19 +685,19 @@ class generator_cot:
         input_gtotal.place(x=625, y=629, width=100, height=20)
         
         
-        btn_ag = tk.Button(gen_cot, text="Agregar", width=13, height=1, font=("Raleway", 9))
+        btn_ag = tk.Button(gen_cot, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ag.place(x=10, y=398)
         
-        btn_ed = tk.Button(gen_cot, text="Editar", width=13, height=1, font=("Raleway", 9), command=self.editar_material)
+        btn_ed = tk.Button(gen_cot, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.editar_material)
         btn_ed.place(x=120, y=398)
         
-        btn_del = tk.Button(gen_cot, text="Eliminar", width=13, height=1, font=("Raleway", 9))
+        btn_del = tk.Button(gen_cot, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_del.place(x=230, y=398)
             
-        btn_canc = tk.Button(gen_cot, text="Cancelar", width=13, height=1, font=("Raleway", 9))
+        btn_canc = tk.Button(gen_cot, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_canc.place(x=10, y=674)
 
-        btn_gen = tk.Button(gen_cot, text="Generar", width=13, height=1, font=("Raleway", 9))
+        btn_gen = tk.Button(gen_cot, text="Generar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_gen.place(x=120, y=674)
         
         
@@ -781,10 +781,10 @@ class generator_cot:
         inpt_ed_total = tk.Entry(ed_material, font=("Arial", 11), bd=0)
         inpt_ed_total.place(x=345, y=101, width=120, height=20)
         
-        btn_ed_canc = tk.Button(ed_material, text="Cancelar", width=15, height=1, font=("Raleway", 9), command=ed_material.destroy)
+        btn_ed_canc = tk.Button(ed_material, text="Cancelar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_material.destroy)
         btn_ed_canc.place(x=10, y=146)
 
-        btn_ed_save = tk.Button(ed_material, text="Guardar", width=15, height=1, font=("Raleway", 9))
+        btn_ed_save = tk.Button(ed_material, text="Guardar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ed_save.place(x=134, y=146)
 
 
