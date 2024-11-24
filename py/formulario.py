@@ -852,8 +852,8 @@ class clientes:
         
         canvas_cliente.create_text(20, 22, text="Opciones", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
-        btn_reg_cli = tk.Button(vent_clientes, text="Registrar Cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_cliente)
-        btn_reg_cli.place(x=22, y=80)
+        btn_reg_cliente = tk.Button(vent_clientes, text="Registrar Cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_cliente)
+        btn_reg_cliente.place(x=22, y=80)
         
         btn_ed_cli = tk.Button(vent_clientes, text="Editar cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.detalle_cliente)
         btn_ed_cli.place(x=22, y=125)
@@ -866,6 +866,8 @@ class clientes:
         
         btn_atras_cli = tk.Button(vent_clientes, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_atras_cli.place(x=758, y=418)
+        
+        utils.aplicar_hover_a_botones([btn_reg_cliente, btn_ed_cli, btn_menu, btn_sig_cli, btn_atras_cli])
         
         canvas_cliente.create_text(20, 336, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
@@ -1018,12 +1020,13 @@ class clientes:
         btn_del_direx.place(x=590, y=324)
         
         
-        btn_canc = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_canc.place(x=75, y=462)
+        btn_canc_reg = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_canc_reg.place(x=75, y=462)
 
         btn_gen = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_gen.place(x=185, y=462)
         
+        utils.aplicar_hover_a_botones([btn_ag_persona, btn_ed_persona, btn_del_persona, btn_ag_trabajo, btn_ed_trabajo, btn_del_trabajo, btn_ag_direx, btn_ed_direx, btn_del_direx, btn_canc_reg])
         
         t_persona = ttk.Treeview(reg_cliente, columns=("id_p", "persona"), show="headings", style="Custom.Treeview")
         t_persona.place(x=10, y=264, width=341, height=149)
@@ -1122,6 +1125,8 @@ class clientes:
         btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_pers.place(x=120, y=88)
         
+        utils.aplicar_hover_a_botones([btn_canc_pers, btn_save_pers])
+        
     def edit_area_trabajo(self):
         ed_ar_trabajo = tk.Toplevel(self.vent_clientes)
         ed_ar_trabajo.title("Editar Área de Trabajo")
@@ -1148,6 +1153,8 @@ class clientes:
         btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_ar_trab.place(x=120, y=88)
         
+        utils.aplicar_hover_a_botones([btn_canc_ar_trab, btn_save_ar_trab])
+        
     def edit_direx(self):
         ed_direccion = tk.Toplevel(self.vent_clientes)
         ed_direccion.title("Editar Dirección")
@@ -1173,6 +1180,8 @@ class clientes:
 
         btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_direx.place(x=120, y=88)
+        
+        utils.aplicar_hover_a_botones([btn_canc_direx, btn_save_direx])
 
     def detalle_cliente(self):
         
@@ -1259,6 +1268,9 @@ class clientes:
         btn_det_save = tk.Button(det_cliente, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_save.place(x=185, y=462)
         
+        utils.aplicar_hover_a_botones([btn_det_ag_persona, btn_det_ed_persona, btn_det_del_persona, btn_det_ag_trabajo, 
+                                       btn_det_ed_trabajo, btn_det_del_trabajo, btn_det_ag_direx, btn_det_ed_direx, 
+                                       btn_det_del_direx, btn_det_canc, btn_det_save])
         
         t_det_persona = ttk.Treeview(det_cliente, columns=("id_dp", "dpersona"), show="headings", style="Custom.Treeview")
         t_det_persona.place(x=10, y=264, width=341, height=149)
@@ -2436,8 +2448,8 @@ class buscador:
         cbo_busq_page.place(x=10, y=624, width=70, height=30)
         cbo_busq_page.current(0)
         
-        btn_menu = tk.Button(buscar_doc, text="Atrás", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_menu.place(x=500, y=624)
+        btn_menu_busq = tk.Button(buscar_doc, text="Atrás", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_menu_busq.place(x=500, y=624)
 
 
 class ventana_inicio:
