@@ -1677,8 +1677,8 @@ class orden_compra:
         canvas_oc.create_text(20, 22, text="Opciones", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         canvas_oc.create_text(20, 432, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
-        btn_reg_oc = tk.Button(vent_oc, text="Registrar Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_orden_compra)
-        btn_reg_oc.place(x=22, y=80)
+        btn_reg_ocompra = tk.Button(vent_oc, text="Registrar Orden de Compra", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.registrar_orden_compra)
+        btn_reg_ocompra.place(x=22, y=80)
         
         btn_seg_oc = tk.Button(vent_oc, text="Seguimiento / Detalles", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.seguimiento_orden_compra)
         btn_seg_oc.place(x=22, y=125)
@@ -1694,6 +1694,8 @@ class orden_compra:
         
         btn_atras_oc = tk.Button(vent_oc, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_atras_oc.place(x=1080, y=568)
+        
+        utils.aplicar_hover_a_botones([btn_reg_ocompra, btn_seg_oc, btn_op_oc, btn_menu_oc, btn_sig_oc, btn_atras_oc])
         
         canvas_oc.create_text(20, 486, text="Por Estado", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
@@ -1856,6 +1858,8 @@ class orden_compra:
         btn_reg_or = tk.Button(reg_orden, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_reg_or.place(x=315, y=340)
         
+        utils.aplicar_hover_a_botones([btn_ad_or_cot, btn_ver_or_cot, btn_ad_orden, btn_ver_orden, btn_canc_or, btn_reg_or])
+        
     def seguimiento_orden_compra(self):
         
         self.vent_oc.withdraw()
@@ -1948,6 +1952,8 @@ class orden_compra:
         btn_save_det = tk.Button(seg_orden, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_save_det.place(x=315, y=398)
         
+        utils.aplicar_hover_a_botones([btn_det_or_cot, btn_ver_cotzz, btn_det_orden, btn_ver_det_or, btn_det_gr, btn_ver_gr, btn_atras_det, btn_save_det])
+        
     def abrir_guias_rem(self):
         vent_guia_rem = tk.Toplevel(self.vent_oc)
         vent_guia_rem.title("")
@@ -1972,6 +1978,8 @@ class orden_compra:
         
         btn_menu_det = tk.Button(vent_guia_rem, text="Cerrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=vent_guia_rem.destroy)
         btn_menu_det.place(x=195, y=216)
+        
+        utils.aplicar_hover_a_botones([btn_elm_gr, btn_op_gr, btn_menu_det])
         
         t_guia_rem = ttk.Treeview(vent_guia_rem, columns=("id_gr", "documento"), show="headings", style="Custom.Treeview")
         t_guia_rem.place(x=10, y=88, width=471, height=119)
