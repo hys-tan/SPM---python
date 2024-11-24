@@ -94,6 +94,13 @@ def on_leave(btn):
     fade_color((85, 85, 85), (240, 240, 240), 10, 10, btn, is_background=True)  # Fade del fondo
     fade_color((255, 255, 255), (0, 0, 0), 10, 10, btn, is_background=False)  # Fade del texto
 
+def aplicar_hover_a_botones(botones):
+    """
+    Aplica el efecto de hover a una lista de botones.
+    """
+    for btn in botones:
+        btn.bind("<Enter>", lambda e, b=btn: on_enter(b))
+        btn.bind("<Leave>", lambda e, b=btn: on_leave(b))
 
 def centrar_ventana(ventana):
     ventana.update_idletasks()

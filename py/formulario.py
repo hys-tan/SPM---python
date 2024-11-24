@@ -51,6 +51,8 @@ class alertas:
                 
         btn_no = tk.Button(salida, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=salida.destroy)
         btn_no.place(x=158, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_si, btn_no])
 
     # SELECCIONE UNA FILA
     def seleccionar_fila(self):
@@ -81,6 +83,8 @@ class alertas:
         
         btn_sec_ok = tk.Button(sec_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=sec_fila.destroy)
         btn_sec_ok.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_sec_ok])
 
     # DATO NO ENCONTRADO
     def no_datos(self):
@@ -111,6 +115,8 @@ class alertas:
         
         btn_nf_ok = tk.Button(no_file, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=no_file.destroy)
         btn_nf_ok.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_nf_ok])
 
     # PREGUNTA ELIMINAR FILA
     def quest_mat(self):
@@ -144,6 +150,8 @@ class alertas:
 
         btn_qm_no = tk.Button(q_material, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=q_material.destroy)
         btn_qm_no.place(x=158, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_qm_si, btn_qm_no])
 
     # FILA ELIMINADA
     def material_delete(self):
@@ -173,6 +181,8 @@ class alertas:
         
         btn_md_ok = tk.Button(mat_delete, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=mat_delete.destroy)
         btn_md_ok.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_md_ok])
     
     # GENERAR COTIZACION
     def generator_cotizacion(self):
@@ -205,6 +215,8 @@ class alertas:
 
         btn_gc_no = tk.Button(gener_coti, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=gener_coti.destroy)
         btn_gc_no.place(x=158, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_gc_si, btn_gc_no])
     
     # CANCELAR COTIZACION
     def cancelar_cotizacion(self):
@@ -232,11 +244,13 @@ class alertas:
         
         can_cancel_coti.create_text(79, 26, text="¿Desea cancelar la cotización?", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_cc_si = tk.Button(cancel_coti, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_cc_si.place(x=73, y=73)
+        btn_ccoti_si = tk.Button(cancel_coti, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ccoti_si.place(x=73, y=73)
 
-        btn_cc_no = tk.Button(cancel_coti, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cancel_coti.destroy)
-        btn_cc_no.place(x=158, y=73)
+        btn_ccoti_no = tk.Button(cancel_coti, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cancel_coti.destroy)
+        btn_ccoti_no.place(x=158, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_ccoti_si, btn_ccoti_no])
     
     # CAMBIOS REALIZADOS
     def cambios_realizados(self):
@@ -266,6 +280,8 @@ class alertas:
 
         btn_cr_ok = tk.Button(cambios_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cambios_confirm.destroy)
         btn_cr_ok.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_cr_ok])
 
     # CONFIRMACION DE CONTIZACION GENERADA
     def confirmacion_cotizacion(self):
@@ -295,6 +311,8 @@ class alertas:
         
         btn_coti_gen = tk.Button(coti_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=coti_confirm.destroy)
         btn_coti_gen.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_coti_gen])
 
     # COMPLETE LOS DATOS
     def question_datos(self):
@@ -326,6 +344,8 @@ class alertas:
         btn_qd_ok = tk.Button(quest_datos, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=quest_datos.destroy)
         btn_qd_ok.place(x=115, y=73)
         
+        utils.aplicar_hover_a_botones([btn_qd_ok])
+        
     # REGISTRO CORRECTO
     def registro_confirm(self):
         reg_confirm=tk.Toplevel(self.parent)
@@ -354,6 +374,8 @@ class alertas:
         
         btn_reg_conf = tk.Button(reg_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=reg_confirm.destroy)
         btn_reg_conf.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_reg_conf])
         
     # CANCELAR REGISTRO
     def cancelar_registro(self):
@@ -386,6 +408,8 @@ class alertas:
 
         btn_cc_no = tk.Button(cancel_reg, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cancel_reg.destroy)
         btn_cc_no.place(x=158, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_cc_si, btn_cc_no])
         
     # CAMBIOS SIN GUARDAR
     def cambios_sin_guardar(self):
@@ -420,6 +444,8 @@ class alertas:
         btn_uns_no = tk.Button(unsaved_changes, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=unsaved_changes.destroy)
         btn_uns_no.place(x=158, y=73)
         
+        utils.aplicar_hover_a_botones([btn_uns_si, btn_uns_no])
+        
     # REGISTRO ACTUALIZADO
     def registro_actualizado(self):
         reg_updated=tk.Toplevel(self.parent)
@@ -448,6 +474,8 @@ class alertas:
         
         btn_reg_upd = tk.Button(reg_updated, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=reg_updated.destroy)
         btn_reg_upd.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_reg_upd])
     
     # CODIGO YA UTILIZADO
     def codigo_utilizado(self):
@@ -479,6 +507,8 @@ class alertas:
         btn_code_ok = tk.Button(code_used, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=code_used.destroy)
         btn_code_ok.place(x=115, y=73)
         
+        utils.aplicar_hover_a_botones([btn_code_ok])
+        
     # CLIENTE REPETIDO
     def cliente_repetido(self):
         cli_rep=tk.Toplevel(self.parent)
@@ -509,6 +539,8 @@ class alertas:
         btn_cli_ok = tk.Button(cli_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cli_rep.destroy)
         btn_cli_ok.place(x=115, y=73)
         
+        utils.aplicar_hover_a_botones([btn_cli_ok])
+        
     # COTIZACION CON CODIGO IGUAL
     def cotizacion_codigo_igual(self):
         cot_cdg_rep=tk.Toplevel(self.parent)
@@ -538,6 +570,8 @@ class alertas:
         
         btn_cdgr_ok = tk.Button(cot_cdg_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cot_cdg_rep.destroy)
         btn_cdgr_ok.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_cdgr_ok])
 
 
 class generator_cot:
@@ -700,6 +734,7 @@ class generator_cot:
         btn_gen = tk.Button(gen_cot, text="Generar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_gen.place(x=120, y=674)
         
+        utils.aplicar_hover_a_botones([btn_ag, btn_ed, btn_del, btn_canc, btn_gen])
         
         t_material = ttk.Treeview(gen_cot, columns=("desc", "mat", "und", "p_unit", "s_total"), show="headings", style="Custom.Treeview")
         t_material.place(x=10, y=438, width=731, height=149)
@@ -786,6 +821,8 @@ class generator_cot:
 
         btn_ed_save = tk.Button(ed_material, text="Guardar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_ed_save.place(x=134, y=146)
+        
+        utils.aplicar_hover_a_botones([btn_ed_canc, btn_ed_save])
 
 
 class clientes:
