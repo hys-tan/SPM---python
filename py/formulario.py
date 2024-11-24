@@ -914,7 +914,7 @@ class clientes:
         t_cliente.heading("fecha", text="Fecha")
         
         t_cliente.column("id", anchor="center", width=50, stretch=False)
-        t_cliente.column("razon", anchor="center", width=395, stretch=False)
+        t_cliente.column("razon", anchor="center", width=383, stretch=False)
         t_cliente.column("ruc", anchor="center", width=110, stretch=False)
         t_cliente.column("fecha", anchor="center", width=100, stretch=False)
         
@@ -936,10 +936,14 @@ class clientes:
             ("15", "Constructora Lima S.A.C.", "20432109876", "2022-09-17"),
         ]
 
-        ejemplos_clientes = datos_clientes[:10]
+        ejemplos_clientes = datos_clientes[:50]
         
         for cliente in ejemplos_clientes:
             t_cliente.insert("", "end", values=cliente)
+            
+        scrllbar_t_cli = ttk.Scrollbar(vent_clientes, orient="vertical", command=t_cliente.yview)
+        t_cliente.configure(yscrollcommand=scrllbar_t_cli.set)
+        scrllbar_t_cli.place(x=955, y=80, height=329)
         
     def registrar_cliente(self):
         
