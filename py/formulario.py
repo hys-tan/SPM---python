@@ -2482,32 +2482,6 @@ class buscador:
             ("23", "Plan_Estrategico", "Plan", "2022-01-05", "D:/Estrategia/Planes/Plan_Estrategico.xlsx"),
             ("24", "Certificado_Trabajo", "Certificado", "2021-12-20", "C:/Certificados/Trabajo/Certificado_Trabajo.pdf"),
             ("25", "Informe_Financiero", "Informe", "2021-11-15", "D:/Finanzas/Informes/Informe_Financiero.docx"),
-            ("26", "Guía_Técnica", "Guía", "2021-10-10", "C:/Guías/Técnicas/Guía_Técnica.pdf"),
-            ("27", "Propuesta_Proyecto", "Propuesta", "2021-09-05", "D:/Proyectos/Propuestas/Propuesta_Proyecto.pdf"),
-            ("28", "Informe_Mensual", "Informe", "2021-08-01", "C:/Informes/Mensuales/Informe_Mensual.docx"),
-            ("29", "Acta_Solicitud", "Acta de Solicitud", "2021-07-15", "D:/Solicitudes/Actas/Acta_Solicitud.pdf"),
-            ("30", "Plan_Acción", "Plan", "2021-06-10", "C:/Planes/Acción/Plan_Acción.xlsx"),
-            ("31", "Certificado_Servicio", "Certificado", "2021-05-20", "D:/Servicios/Certificados/Certificado_Servicio.pdf"),
-            ("32", "Manual_Procedimientos", "Manual", "2021-04-25", "C:/Manuales/Procedimientos/Manual_Procedimientos.docx"),
-            ("33", "Informe_Técnico", "Informe Técnico", "2021-03-30", "D:/Informes/Técnicos/Informe_Técnico.pdf"),
-            ("34", "Guía_Implementación", "Guía", "2021-02-15", "C:/Guías/Implementación/Guía_Implementación.pdf"),
-            ("35", "Plan_Desarrollo", "Plan", "2021-01-10", "D:/Desarrollo/Planes/Plan_Desarrollo.xlsx"),
-            ("36", "Acta_Propuesta", "Acta de Propuesta", "2020-12-05", "C:/Propuestas/Actas/Acta_Propuesta.pdf"),
-            ("37", "Informe_Análisis", "Informe", "2020-11-20", "D:/Análisis/Informes/Informe_Análisis.docx"),
-            ("38", "Certificado_Conformidad", "Certificado", "2020-10-15", "C:/Certificados/Conformidad/Certificado_Conformidad.pdf"),
-            ("39", "Guía_Instalación", "Guía", "2020-09-10", "D:/Instalaciones/Guías/Guía_Instalación.pdf"),
-            ("40", "Plan_Mantenimiento", "Plan", "2020-08-05", "C:/Mantenimiento/Planes/Plan_Mantenimiento.xlsx"),
-            ("41", "Informe_Proyectos", "Informe", "2020-07-01", "D:/Proyectos/Informes/Informe_Proyectos.docx"),
-            ("42", "Acta_Compromiso", "Acta de Compromiso", "2020-06-25", "C:/Compromisos/Actas/Acta_Compromiso.pdf"),
-            ("43", "Propuesta_Colaboración", "Propuesta", "2020-05-20", "D:/Colaboraciones/Propuestas/Propuesta_Colaboración.pdf"),
-            ("44", "Certificado_Registro", "Certificado", "2020-04-15", "C:/Registros/Certificados/Certificado_Registro.pdf"),
-            ("45", "Informe_Evaluación", "Informe", "2020-03-10", "D:/Evaluaciones/Informes/Informe_Evaluación.docx"),
-            ("46", "Guía_Operativa", "Guía", "2020-02-05", "C:/Operaciones/Guías/Guía_Operativa.pdf"),
-            ("47", "Plan_Recursos", "Plan", "2020-01-01", "D:/Recursos/Planes/Plan_Recursos.xlsx"),
-            ("48", "Acta_Compromiso", "Acta de Compromiso", "2019-12-15", "C:/Compromisos/Actas/Acta_Compromiso.pdf"),
-            ("49", "Propuesta_Desarrollo", "Propuesta", "2019-11-10", "D:/Desarrollo/Propuestas/Propuesta_Desarrollo.pdf"),
-            ("50", "Certificado_Proyectos", "Certificado", "2019-10-05", "C:/Proyectos/Certificados/Certificado_Proyectos.pdf"),
-            ("51", "Informe_Final", "Informe", "2019-09-01", "D:/Informes/Finales/Informe_Final.docx"),
         ]
         
         datos_mostrados = datos_t_buscadoc[:100]
@@ -2647,7 +2621,7 @@ class ventana_inicio:
 
         tree.column("oc", anchor="center", width=115, stretch=False)
         tree.column("fact", anchor="center", width=110, stretch=False)
-        tree.column("cliente", anchor="center", width=180, stretch=False)
+        tree.column("cliente", anchor="center", width=168, stretch=False)
         tree.column("descripcion", anchor="center", width=352, stretch=False)
         tree.column("estado_fac", anchor="center", width=90, stretch=False)
         tree.column("fecha_em", anchor="center", width=115, stretch=False)
@@ -2676,10 +2650,14 @@ class ventana_inicio:
             ("OC020", "FAC020", "Empresa T", "Desarrollo de Contenido", "Aprobado", "2022-04-25", "2022-05-25"),
         ]
         
-        ejemplos_mostrados = ejemplos[:18]
+        ejemplos_mostrados = ejemplos[:50]
         
         for dato in ejemplos_mostrados:
             tree.insert("", "end", values=dato)
+            
+        scrllbar_t_fact = ttk.Scrollbar(root, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=scrllbar_t_fact.set)
+        scrllbar_t_fact.place(x=1377, y=80, height=569)
 
     def abrir_ventana_cotizacion(self):
         gen_cot = tk.Toplevel(root)
