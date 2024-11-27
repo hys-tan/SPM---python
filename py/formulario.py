@@ -834,7 +834,7 @@ class clientes:
         
         self.vent_clientes = vent_clientes
         self.vent_clientes.title("Registro de Clientes")
-        self.vent_clientes.geometry("978x458")
+        self.vent_clientes.geometry("1200x698")
         self.vent_clientes.resizable(False, False)
         self.vent_clientes.configure(bg="#373737")
         utils.centrar_ventana(self.vent_clientes)
@@ -843,11 +843,11 @@ class clientes:
 
         self.vent_clientes.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_cliente = tk.Canvas(vent_clientes, width=978, height=458, bg="#373737", highlightthickness=0)
+        canvas_cliente = tk.Canvas(vent_clientes, width=1200, height=698, bg="#373737", highlightthickness=0)
         canvas_cliente.pack()
         
-        utils.create_rounded_rectangle(canvas_cliente, 10, 10, 300, 314, radius=10, fill="#959595", outline="#959595")
-        utils.create_rounded_rectangle(canvas_cliente, 10, 324, 300, 448, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_cliente, 10, 10, 300, 554, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_cliente, 10, 564, 300, 688, radius=10, fill="#959595", outline="#959595")
         #utils.create_rounded_rectangle(canvas_cliente, 310, 80, 968, 408, radius=10, fill="#959595", outline="#959595")
         
         canvas_cliente.create_text(20, 22, text="Opciones", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
@@ -862,33 +862,33 @@ class clientes:
         btn_menu.place(x=22, y=170)
         
         btn_sig_cli = tk.Button(vent_clientes, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_sig_cli.place(x=868, y=418)
+        btn_sig_cli.place(x=1090, y=658)
         
         btn_atras_cli = tk.Button(vent_clientes, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_atras_cli.place(x=758, y=418)
+        btn_atras_cli.place(x=980, y=658)
         
         utils.aplicar_hover_a_botones([btn_reg_cliente, btn_ed_cli, btn_menu, btn_sig_cli, btn_atras_cli])
         
-        canvas_cliente.create_text(20, 336, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_cliente.create_text(20, 576, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
-        canvas_cliente.create_text(20, 390, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas_cliente.create_text(20, 630, text="Por Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         
         cbo_date = ttk.Combobox(vent_clientes, values=["Todos los registros", "Última semana", "Últimas 2 semanas", "Último mes", "Últimos 3 meses", "Últimos 6 meses", "Último año"], state="readonly", font=("Raleway", 10))
-        cbo_date.place(x=20, y=408, width=270, height=30)
+        cbo_date.place(x=20, y=648, width=270, height=30)
         cbo_date.current(0)
         
-        canvas_cliente.create_text(385, 22, text="REGISTRO DE CLIENTES", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_cliente.create_text(425, 22, text="REGISTRO DE CLIENTES", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
-        search_canvas_cliente = tk.Canvas(vent_clientes, width=191, height=40, bg="#373737", highlightthickness=0)
-        search_canvas_cliente.place(x=777, y=20)
+        search_canvas_cliente = tk.Canvas(vent_clientes, width=350, height=40, bg="#373737", highlightthickness=0)
+        search_canvas_cliente.place(x=840, y=20)
                 
-        utils.create_rounded_rectangle(search_canvas_cliente, 0, 0, 191, 40, radius=10, fill="white", outline="gray")
-        search_canvas_cliente.create_line(156, 7, 156, 34, fill="gray", width=2)
+        utils.create_rounded_rectangle(search_canvas_cliente, 0, 0, 350, 40, radius=10, fill="white", outline="gray")
+        search_canvas_cliente.create_line(315, 7, 315, 34, fill="gray", width=2)
         
         search_icon_path = os.path.join(ICON_DIR, "search.png")
         try:
             search_icon_cliente = tk.PhotoImage(file=search_icon_path)
-            search_icon_id_cliente = search_canvas_cliente.create_image(162, 8, anchor="nw", image=search_icon_cliente)
+            search_icon_id_cliente = search_canvas_cliente.create_image(321, 8, anchor="nw", image=search_icon_cliente)
             search_canvas_cliente.image = search_icon_cliente
         except Exception as e:
             raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
@@ -899,24 +899,24 @@ class clientes:
         search_entry_cliente.insert(0, "Buscar...")
         search_entry_cliente.bind("<FocusIn>", lambda event: utils.clear_placeholder(event, search_entry_cliente))
         search_entry_cliente.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry_cliente))
-        search_entry_cliente.place(x=6, y=7, width=142, height=27)
+        search_entry_cliente.place(x=6, y=7, width=301, height=27)
         
-        cbo_page_cliente = ttk.Combobox(vent_clientes, values=["1", "2"], state="readonly", font=("Arial", 10))
-        cbo_page_cliente.place(x=310, y=418, width=70, height=30)
+        cbo_page_cliente = ttk.Combobox(vent_clientes, values=["1", "2", "1000"], state="readonly", font=("Arial", 10))
+        cbo_page_cliente.place(x=310, y=658, width=70, height=30)
         cbo_page_cliente.current(0)
 
         t_cliente = ttk.Treeview(vent_clientes, columns=("id", "razon", "ruc", "fecha",), show="headings", style="Custom.Treeview")
-        t_cliente.place(x=310, y=80, width=659, height=329)
+        t_cliente.place(x=310, y=80, width=881, height=569)
         
         t_cliente.heading("id", text="ID")
         t_cliente.heading("razon", text="Razón Social / Cliente / Empresa")
         t_cliente.heading("ruc", text="RUC / DNI")
         t_cliente.heading("fecha", text="Fecha")
         
-        t_cliente.column("id", anchor="center", width=50, stretch=False)
-        t_cliente.column("razon", anchor="center", width=383, stretch=False)
-        t_cliente.column("ruc", anchor="center", width=110, stretch=False)
-        t_cliente.column("fecha", anchor="center", width=100, stretch=False)
+        t_cliente.column("id", anchor="center", width=70, stretch=False)
+        t_cliente.column("razon", anchor="center", width=485, stretch=False)
+        t_cliente.column("ruc", anchor="center", width=180, stretch=False)
+        t_cliente.column("fecha", anchor="center", width=130, stretch=False)
         
         datos_clientes = [
             ("1", "Empresa ABC S.A.", "20123456789", "2023-11-01"),
@@ -934,6 +934,12 @@ class clientes:
             ("13", "Proyectos Vega", "10456789021", "2022-11-22"),
             ("14", "Servicios Integrales Torres", "20123456780", "2022-10-05"),
             ("15", "Constructora Lima S.A.C.", "20432109876", "2022-09-17"),
+            ("16", "Empresa ABC S.A.", "20123456789", "2023-11-01"),
+            ("17", "Constructora XYZ", "10456789012", "2023-10-15"),
+            ("18", "Servicios Industriales S.R.L.", "20345678901", "2023-09-22"),
+            ("19", "Distribuidora Pérez", "10432109876", "2023-08-30"),
+            ("20", "Inversiones López S.A.C.", "20567890123", "2023-07-19"),
+            ("21", "Consultores Martínez S.A.", "20456789123", "2023-03-29"),
         ]
 
         ejemplos_clientes = datos_clientes[:50]
@@ -943,7 +949,7 @@ class clientes:
             
         scrllbar_t_cli = ttk.Scrollbar(vent_clientes, orient="vertical", command=t_cliente.yview)
         t_cliente.configure(yscrollcommand=scrllbar_t_cli.set)
-        scrllbar_t_cli.place(x=955, y=80, height=329)
+        scrllbar_t_cli.place(x=1177, y=80, height=569)
         
     def registrar_cliente(self):
         
