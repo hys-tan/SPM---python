@@ -597,19 +597,19 @@ class generator_cot:
         
         utils.create_rounded_rectangle(canvas_coti, 10, 10, 740, 252, radius=10, fill="#959595", outline="#959595")
         utils.create_rounded_rectangle(canvas_coti, 10, 262, 740, 388, radius=10, fill="#959595", outline="#959595")
-        utils.create_rounded_rectangle(canvas_coti, 10, 438, 740, 586, radius=10, fill="#959595", outline="#959595")
+        #utils.create_rounded_rectangle(canvas_coti, 10, 438, 740, 586, radius=10, fill="#959595", outline="#959595")
         utils.create_rounded_rectangle(canvas_coti, 10, 596, 740, 664, radius=10, fill="#959595", outline="#959595")
         
         
         canvas_coti.create_text(20, 20, text="Nro de Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_coti, 20, 38, 170, 68, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_coti, 20, 38, 150, 68, radius=10, fill="white", outline="#959595")
         input_gcoti = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gcoti.place(x=25, y=43, width=140, height=20)
+        input_gcoti.place(x=25, y=43, width=120, height=20)
         
-        canvas_coti.create_text(180, 20, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_coti, 180, 38, 360, 68, radius=10, fill="white", outline="#959595")
+        canvas_coti.create_text(160, 20, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_coti, 160, 38, 360, 68, radius=10, fill="white", outline="#959595")
         input_gfecha = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gfecha.place(x=185, y=43, width=170, height=20)
+        input_gfecha.place(x=165, y=43, width=190, height=20)
         
         canvas_coti.create_text(370, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 370, 38, 570, 68, radius=10, fill="white", outline="#959595")
@@ -776,51 +776,51 @@ class generator_cot:
     def editar_material(self):
         ed_material = tk.Toplevel(self.gen_cot)
         ed_material.title("Editar Material")
-        ed_material.geometry("600x186")
+        ed_material.geometry("600x244")
         ed_material.resizable(False, False)
         ed_material.configure(bg="#373737")
         ed_material.grab_set()
         utils.centrar_ventana(ed_material)
         ed_material.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_mat = tk.Canvas(ed_material, width=600, height=186, bg="#373737", highlightthickness=0)
+        canvas_mat = tk.Canvas(ed_material, width=600, height=244, bg="#373737", highlightthickness=0)
         canvas_mat.pack()
         
-        utils.create_rounded_rectangle(canvas_mat, 10, 10, 590, 136, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_mat, 10, 10, 590, 194, radius=10, fill="#959595", outline="#959595")
         
         canvas_mat.create_text(20, 20, text="Descripción", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_mat, 20, 38, 300, 68, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_mat, 20, 38, 580, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_desc = tk.Entry(ed_material, font=("Arial", 11), bd=0)
-        inpt_ed_desc.place(x=25, y=43, width=270, height=20)
+        inpt_ed_desc.place(x=25, y=43, width=550, height=20)
         
-        canvas_mat.create_text(310, 20, text="Material", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_mat, 310, 38, 580, 68, radius=10, fill="white", outline="#959595")
+        canvas_mat.create_text(20, 78, text="Material", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_mat, 20, 96, 580, 126, radius=10, fill="white", outline="#959595")
         inpt_ed_mat = tk.Entry(ed_material, font=("Arial", 11), bd=0)
-        inpt_ed_mat.place(x=315, y=43, width=260, height=20)
+        inpt_ed_mat.place(x=25, y=101, width=550, height=20)
     
-        canvas_mat.create_text(20, 78, text="Unidad(es)", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_mat, 20, 96, 90, 126, radius=10, fill="white", outline="#959595")
+        canvas_mat.create_text(20, 136, text="Unidad(es)", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_mat, 20, 154, 103, 184, radius=10, fill="white", outline="#959595")
         inpt_ed_unidad = tk.Entry(ed_material, font=("Arial", 11), bd=0)
-        inpt_ed_unidad.place(x=25, y=101, width=60, height=20)
+        inpt_ed_unidad.place(x=25, y=159, width=73, height=20)
         cbo_ed_unidad = ttk.Combobox(ed_material, values=["JUEGO", "PIEZA"], state="readonly", font=("Raleway", 10))
-        cbo_ed_unidad.place(x=100, y=96, width=90, height=31)
+        cbo_ed_unidad.place(x=113, y=154, width=90, height=31)
         cbo_ed_unidad.current(0)
         
-        canvas_mat.create_text(200, 78, text="Precio Unit.", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_mat, 200, 96, 330, 126, radius=10, fill="white", outline="#959595")
+        canvas_mat.create_text(213, 136, text="Precio Unit.", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_mat, 213, 154, 343, 184, radius=10, fill="white", outline="#959595")
         inpt_ed_precio = tk.Entry(ed_material, font=("Arial", 11), bd=0)
-        inpt_ed_precio.place(x=205, y=101, width=120, height=20)
+        inpt_ed_precio.place(x=218, y=159, width=120, height=20)
         
-        canvas_mat.create_text(340, 78, text="Sub Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_mat, 340, 96, 470, 126, radius=10, fill="white", outline="#959595")
+        canvas_mat.create_text(353, 136, text="Sub Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_mat, 353, 154, 483, 184, radius=10, fill="white", outline="#959595")
         inpt_ed_total = tk.Entry(ed_material, font=("Arial", 11), bd=0)
-        inpt_ed_total.place(x=345, y=101, width=120, height=20)
+        inpt_ed_total.place(x=358, y=159, width=120, height=20)
         
         btn_ed_canc = tk.Button(ed_material, text="Cancelar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_material.destroy)
-        btn_ed_canc.place(x=10, y=146)
+        btn_ed_canc.place(x=10, y=204)
 
         btn_ed_save = tk.Button(ed_material, text="Guardar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_ed_save.place(x=134, y=146)
+        btn_ed_save.place(x=134, y=204)
         
         utils.aplicar_hover_a_botones([btn_ed_canc, btn_ed_save])
 
