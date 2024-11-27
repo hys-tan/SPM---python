@@ -1112,22 +1112,22 @@ class clientes:
     def edit_persona_cont(self):
         ed_pers = tk.Toplevel(self.vent_clientes)
         ed_pers.title("Editar Persona de Contacto")
-        ed_pers.geometry("340x128")
+        ed_pers.geometry("450x128")
         ed_pers.resizable(False, False)
         ed_pers.configure(bg="#373737")
         ed_pers.grab_set()
         utils.centrar_ventana(ed_pers)
         ed_pers.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_ed_pers = tk.Canvas(ed_pers, width=340, height=128, bg="#373737", highlightthickness=0)
+        canvas_ed_pers = tk.Canvas(ed_pers, width=450, height=128, bg="#373737", highlightthickness=0)
         canvas_ed_pers.pack()
         
-        utils.create_rounded_rectangle(canvas_ed_pers, 10, 10, 330, 78, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_ed_pers, 10, 10, 440, 78, radius=10, fill="#959595", outline="#959595")
         
         canvas_ed_pers.create_text(20, 20, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_ed_pers, 20, 38, 320, 68, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_ed_pers, 20, 38, 430, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_pers_con = tk.Entry(ed_pers, font=("Arial", 11), bd=0)
-        inpt_ed_pers_con.place(x=25, y=43, width=290, height=20)
+        inpt_ed_pers_con.place(x=25, y=43, width=400, height=20)
         
         btn_canc_pers = tk.Button(ed_pers, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_pers.destroy)
         btn_canc_pers.place(x=10, y=88)
@@ -1140,22 +1140,22 @@ class clientes:
     def edit_area_trabajo(self):
         ed_ar_trabajo = tk.Toplevel(self.vent_clientes)
         ed_ar_trabajo.title("Editar Área de Trabajo")
-        ed_ar_trabajo.geometry("340x128")
+        ed_ar_trabajo.geometry("450x128")
         ed_ar_trabajo.resizable(False, False)
         ed_ar_trabajo.configure(bg="#373737")
         ed_ar_trabajo.grab_set()
         utils.centrar_ventana(ed_ar_trabajo)
         ed_ar_trabajo.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_ed_ar_trab = tk.Canvas(ed_ar_trabajo, width=340, height=128, bg="#373737", highlightthickness=0)
+        canvas_ed_ar_trab = tk.Canvas(ed_ar_trabajo, width=450, height=128, bg="#373737", highlightthickness=0)
         canvas_ed_ar_trab.pack()
 
-        utils.create_rounded_rectangle(canvas_ed_ar_trab, 10, 10, 330, 78, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_ed_ar_trab, 10, 10, 440, 78, radius=10, fill="#959595", outline="#959595")
     
         canvas_ed_ar_trab.create_text(20, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_ed_ar_trab, 20, 38, 320, 68, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_ed_ar_trab, 20, 38, 430, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_ar_trab = tk.Entry(ed_ar_trabajo, font=("Arial", 11), bd=0)
-        inpt_ed_ar_trab.place(x=25, y=43, width=290, height=20)
+        inpt_ed_ar_trab.place(x=25, y=43, width=400, height=20)
         
         btn_canc_ar_trab = tk.Button(ed_ar_trabajo, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_ar_trabajo.destroy)
         btn_canc_ar_trab.place(x=10, y=88)
@@ -1168,23 +1168,23 @@ class clientes:
     def edit_direx(self):
         ed_direccion = tk.Toplevel(self.vent_clientes)
         ed_direccion.title("Editar Dirección")
-        ed_direccion.geometry("340x128")
+        ed_direccion.geometry("450x128")
         ed_direccion.resizable(False, False)
         ed_direccion.configure(bg="#373737")
         ed_direccion.grab_set()
         utils.centrar_ventana(ed_direccion)
         ed_direccion.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_ed_direccion = tk.Canvas(ed_direccion, width=340, height=128, bg="#373737", highlightthickness=0)
+        canvas_ed_direccion = tk.Canvas(ed_direccion, width=450, height=128, bg="#373737", highlightthickness=0)
         canvas_ed_direccion.pack()
 
-        utils.create_rounded_rectangle(canvas_ed_direccion, 10, 10, 330, 78, radius=10, fill="#959595", outline="#959595")
+        utils.create_rounded_rectangle(canvas_ed_direccion, 10, 10, 440, 78, radius=10, fill="#959595", outline="#959595")
 
         canvas_ed_direccion.create_text(20, 20, text="Dirección", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_ed_direccion, 20, 38, 320, 68, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_ed_direccion, 20, 38, 430, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_direx = tk.Entry(ed_direccion, font=("Arial", 11), bd=0)
-        inpt_ed_direx.place(x=25, y=43, width=290, height=20)
-    
+        inpt_ed_direx.place(x=25, y=43, width=400, height=20)
+        
         btn_canc_direx = tk.Button(ed_direccion, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_direccion.destroy)
         btn_canc_direx.place(x=10, y=88)
 
