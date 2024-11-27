@@ -1184,7 +1184,7 @@ class clientes:
         utils.create_rounded_rectangle(canvas_ed_direccion, 20, 38, 430, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_direx = tk.Entry(ed_direccion, font=("Arial", 11), bd=0)
         inpt_ed_direx.place(x=25, y=43, width=400, height=20)
-        
+
         btn_canc_direx = tk.Button(ed_direccion, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_direccion.destroy)
         btn_canc_direx.place(x=10, y=88)
 
@@ -1508,18 +1508,18 @@ class cotizaciones:
         utils.create_rounded_rectangle(canvas_reg_coti, 10, 262, 580, 330, radius=10, fill="#959595", outline="#959595")
         
         canvas_reg_coti.create_text(20, 20, text="Nro de Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_reg_coti, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_reg_coti, 20, 38, 170, 68, radius=10, fill="white", outline="#959595")
         reg_cot = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
-        reg_cot.place(x=25, y=43, width=170, height=20)
+        reg_cot.place(x=25, y=43, width=140, height=20)
         
-        canvas_reg_coti.create_text(210, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_reg_coti, 210, 38, 410, 68, radius=10, fill="white", outline="#959595")
+        canvas_reg_coti.create_text(180, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 180, 38, 380, 68, radius=10, fill="white", outline="#959595")
         reg_cli_cot = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
-        reg_cli_cot.place(x=215, y=43, width=190, height=20)
+        reg_cli_cot.place(x=185, y=43, width=190, height=20)
         
-        canvas_reg_coti.create_text(420, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas_reg_coti.create_text(390, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         cbo_area_cot = ttk.Combobox(reg_coti, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
-        cbo_area_cot.place(x=420, y=38, width=150, height=31)
+        cbo_area_cot.place(x=390, y=38, width=180, height=31)
         cbo_area_cot.current(0)
         
         canvas_reg_coti.create_text(20, 78, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
@@ -1533,19 +1533,19 @@ class cotizaciones:
         reg_serv.place(x=235, y=101, width=330, height=20)
         
         canvas_reg_coti.create_text(20, 136, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_reg_coti, 20, 154, 200, 184, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_reg_coti, 20, 154, 250, 184, radius=10, fill="white", outline="#959595")
         reg_tiempo = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
-        reg_tiempo.place(x=25, y=159, width=170, height=20)
+        reg_tiempo.place(x=25, y=159, width=220, height=20)
         
-        canvas_reg_coti.create_text(210, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_reg_coti, 210, 154, 410, 184, radius=10, fill="white", outline="#959595")
+        canvas_reg_coti.create_text(260, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 260, 154, 430, 184, radius=10, fill="white", outline="#959595")
         reg_pago = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
-        reg_pago.place(x=215, y=159, width=170, height=20)
+        reg_pago.place(x=265, y=159, width=160, height=20)
         
-        canvas_reg_coti.create_text(420, 136, text="Costo Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_reg_coti, 420, 154, 570, 184, radius=10, fill="white", outline="#959595")
+        canvas_reg_coti.create_text(440, 136, text="Costo Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_reg_coti, 440, 154, 570, 184, radius=10, fill="white", outline="#959595")
         reg_costo = tk.Entry(reg_coti, font=("Arial", 11), bd=0)
-        reg_costo.place(x=425, y=159, width=140, height=20)
+        reg_costo.place(x=445, y=159, width=120, height=20)
         
         canvas_reg_coti.create_text(20, 193, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         date_coti = DateEntry(reg_coti, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
@@ -1594,18 +1594,18 @@ class cotizaciones:
         utils.create_rounded_rectangle(canvas_det_cot, 10, 262, 580, 330, radius=10, fill="#959595", outline="#959595")
         
         canvas_det_cot.create_text(20, 20, text="Nro de Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_det_cot, 20, 38, 200, 68, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_det_cot, 20, 38, 170, 68, radius=10, fill="white", outline="#959595")
         det_cot = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
-        det_cot.place(x=25, y=43, width=170, height=20)
+        det_cot.place(x=25, y=43, width=140, height=20)
         
-        canvas_det_cot.create_text(210, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_det_cot, 210, 38, 410, 68, radius=10, fill="white", outline="#959595")
+        canvas_det_cot.create_text(180, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 180, 38, 380, 68, radius=10, fill="white", outline="#959595")
         det_cli_cot = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
-        det_cli_cot.place(x=215, y=43, width=190, height=20)
+        det_cli_cot.place(x=185, y=43, width=190, height=20)
         
-        canvas_det_cot.create_text(420, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas_det_cot.create_text(390, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         cbo_dar_cot = ttk.Combobox(seg_coti, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
-        cbo_dar_cot.place(x=420, y=38, width=150, height=31)
+        cbo_dar_cot.place(x=390, y=38, width=180, height=31)
         cbo_dar_cot.current(0)
         
         canvas_det_cot.create_text(20, 78, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
@@ -1619,19 +1619,19 @@ class cotizaciones:
         det_serv.place(x=235, y=101, width=330, height=20)
         
         canvas_det_cot.create_text(20, 136, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_det_cot, 20, 154, 200, 184, radius=10, fill="white", outline="#959595")
+        utils.create_rounded_rectangle(canvas_det_cot, 20, 154, 250, 184, radius=10, fill="white", outline="#959595")
         det_tiempo = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
-        det_tiempo.place(x=25, y=159, width=170, height=20)
+        det_tiempo.place(x=25, y=159, width=220, height=20)
         
-        canvas_det_cot.create_text(210, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_det_cot, 210, 154, 410, 184, radius=10, fill="white", outline="#959595")
+        canvas_det_cot.create_text(260, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 260, 154, 430, 184, radius=10, fill="white", outline="#959595")
         det_pago = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
-        det_pago.place(x=215, y=159, width=170, height=20)
+        det_pago.place(x=265, y=159, width=160, height=20)
         
-        canvas_det_cot.create_text(420, 136, text="Costo Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        utils.create_rounded_rectangle(canvas_det_cot, 420, 154, 570, 184, radius=10, fill="white", outline="#959595")
+        canvas_det_cot.create_text(440, 136, text="Costo Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        utils.create_rounded_rectangle(canvas_det_cot, 440, 154, 570, 184, radius=10, fill="white", outline="#959595")
         det_costo = tk.Entry(seg_coti, font=("Arial", 11), bd=0)
-        det_costo.place(x=425, y=159, width=140, height=20)
+        det_costo.place(x=445, y=159, width=120, height=20)
         
         canvas_det_cot.create_text(20, 193, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         date_seg_coti = DateEntry(seg_coti, font=("Raleway", 11),state="readonly" , width=17, background='#4A6984', foreground='white', borderwidth=1)
