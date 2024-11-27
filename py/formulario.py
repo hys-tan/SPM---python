@@ -2430,7 +2430,7 @@ class buscador:
         utils.create_rounded_rectangle(canvas_buscar_doc, 310, 66, 1090, 126, radius=10, fill="#959595", outline="#959595")
         #utils.create_rounded_rectangle(canvas_buscar_doc, 10, 136, 1090, 614, radius=10, fill="#959595", outline="#959595")
 
-        canvas_buscar_doc.create_text(395, 15, text="BUSCAR DOCUMENTOS", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
+        canvas_buscar_doc.create_text(523, 15, text="BUSCAR DOCUMENTOS", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         canvas_buscar_doc.create_text(20, 20, text="Filtro", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
         canvas_buscar_doc.create_text(20, 68, text="Por Tipo de Documentos", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
@@ -2438,16 +2438,16 @@ class buscador:
         cbo_tipo_doc.place(x=20, y=86, width=270, height=30)
         cbo_tipo_doc.current(0)
         
-        search_canvas_buscador = tk.Canvas(buscar_doc, width=400, height=40, bg="#373737", highlightthickness=0)
-        search_canvas_buscador.place(x=680, y=76)
+        search_canvas_buscador = tk.Canvas(buscar_doc, width=760, height=40, bg="#373737", highlightthickness=0)
+        search_canvas_buscador.place(x=320, y=76)
         
-        utils.create_rounded_rectangle(search_canvas_buscador, 0, 0, 400, 40, radius=10, fill="white", outline="#959595")
-        search_canvas_buscador.create_line(365, 7, 365, 34, fill="gray", width=2)
+        utils.create_rounded_rectangle(search_canvas_buscador, 0, 0, 760, 40, radius=10, fill="white", outline="#959595")
+        search_canvas_buscador.create_line(725, 7, 725, 34, fill="gray", width=2)
         
         search_icon_path = os.path.join(ICON_DIR, "search.png")
         try:
             search_icon_buscador = tk.PhotoImage(file=search_icon_path)
-            search_icon_id_buscador = search_canvas_buscador.create_image(371, 8, anchor="nw", image=search_icon_buscador)
+            search_icon_id_buscador = search_canvas_buscador.create_image(731, 8, anchor="nw", image=search_icon_buscador)
             search_canvas_buscador.image = search_icon_buscador
         except Exception as e:
             raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
@@ -2457,7 +2457,7 @@ class buscador:
         search_entry_buscador.insert(0, "Buscar...")
         search_entry_buscador.bind("<FocusIn>", lambda event: utils.clear_placeholder(event, search_entry_buscador))
         search_entry_buscador.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry_buscador))
-        search_entry_buscador.place(x=6, y=7, width=351, height=27)
+        search_entry_buscador.place(x=6, y=7, width=711, height=27)
 
         t_buscadoc = ttk.Treeview(buscar_doc, columns=("id_doc", "doc", "t_doc", "date_doc", "ruta"), show="headings", style="Custom.Treeview")
         t_buscadoc.place(x=10, y=136, width=1081, height=479)
