@@ -572,6 +572,38 @@ class alertas:
         btn_cdgr_ok.place(x=115, y=73)
         
         utils.aplicar_hover_a_botones([btn_cdgr_ok])
+        
+    # VALIDAR EL COSTO DE LOS MATERIALES
+    def validar_numeros(self):
+        val_prec=tk.Toplevel(self.parent)
+        val_prec.title("")
+        val_prec.geometry("300x110")
+        val_prec.resizable(False, False)
+        val_prec.configure(bg="#FFFFFF")
+        val_prec.grab_set()
+        utils.centrar_ventana(val_prec)
+        val_prec.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_val_prec = tk.Canvas(val_prec, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_val_prec.pack()
+        
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_val_prec = tk.PhotoImage(file=icono_path)
+            canvas_val_prec.create_image(30, 17, anchor="nw", image=icon_val_prec)
+            canvas_val_prec.image = icon_val_prec
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
+        
+        utils.create_rounded_rectangle(canvas_val_prec, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        canvas_val_prec.create_text(80, 19, text="Por favor, ingrese un número", anchor="nw", font=("Arial", 10), fill="Black")
+        canvas_val_prec.create_text(135, 33, text="válido", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_val_ok = tk.Button(val_prec, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=val_prec.destroy)
+        btn_val_ok.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_val_ok])
 
 
 class generator_cot:
@@ -2566,7 +2598,7 @@ class ventana_inicio:
         btn_search = tk.Button(root, text="Buscar Documentos", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.abrir_buscador)
         btn_search.place(x=22, y=350)
 
-        btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=self.alerta.cotizacion_codigo_igual, activebackground="#7F7F7F", activeforeground="white")
+        btn_act = tk.Button(root, text="Actualizar Registro", width=37, height=1, font=("Raleway", 9), command=self.alerta.confirmacion_cotizacion, activebackground="#7F7F7F", activeforeground="white")
         btn_act.place(x=22, y=395)
         
         btn_op_file_fact = tk.Button(self.root, text="Abrir Carpeta", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
