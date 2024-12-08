@@ -3,10 +3,11 @@ from tkinter import PhotoImage
 from tkinter import ttk, messagebox
 from tkinter import filedialog
 from tkcalendar import DateEntry
+from docx import Document
+from num2words import num2words
 import os
 import shutil
 import utils
-from database import Database
 
 
 # Ruta base dinámica (directorio del archivo principal)
@@ -15,6 +16,8 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 # Ruta a la carpeta de iconos
 ICON_DIR = os.path.join(BASE_DIR, "icons")
 
+# RUTA PARA WORD PLANTILLA
+COT_PLAN = os.path.join(BASE_DIR, "plantilla")
 
 # NOTIFICACIONES - CONFIRMACIONES
 class alertas:
@@ -620,10 +623,25 @@ class generator_cot:
         self.gen_cot.resizable(False, False)
         self.gen_cot.configure(bg="#373737")
         utils.centrar_ventana(self.gen_cot)
-        
         self.alerta = alertas(gen_cot)
-        
         self.gen_cot.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        self.TEMPLATE_FILE = os.path.join(COT_PLAN, "plantilla_cotizacion.docx")
+        if not os.path.exists(self.TEMPLATE_FILE):
+            raise FileNotFoundError(f"No se encontró la plantilla: {self.TEMPLATE_FILE}")
+
+        self.subtotal_general = 0.0
+        self.selected_item = None
+        
+        # Definir las cuentas
+        self.cuentas_soles = {
+            'Nro de Cuenta': '191-2539938-1-47',
+            'Cuenta Interbancaria': 'Cuenta Soles IBAN'
+        }
+        self.cuentas_dolares = {
+            'Nro de Cuenta': '12345678910987654321',
+            'Cuenta Interbancaria': 'Cuenta Dólares IBAN'
+        }
         
         canvas_coti = tk.Canvas(gen_cot, width=840, height=714, bg="#373737", highlightthickness=0)
         canvas_coti.pack()
@@ -636,177 +654,377 @@ class generator_cot:
         
         canvas_coti.create_text(20, 20, text="Nro de Cotización", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 20, 38, 170, 68, radius=10, fill="white", outline="#959595")
-        input_gcoti = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gcoti.place(x=25, y=43, width=140, height=20)
+        self.input_gcoti = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gcoti.place(x=25, y=43, width=140, height=20)
+        num_cotizacion = self.generar_numero_cotizacion()
+        self.input_gcoti.insert(0, num_cotizacion)
         
         canvas_coti.create_text(180, 20, text="Fecha", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 180, 38, 410, 68, radius=10, fill="white", outline="#959595")
-        input_gfecha = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gfecha.place(x=185, y=43, width=220, height=20)
+        self.input_gfecha = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gfecha.place(x=185, y=43, width=220, height=20)
         
         canvas_coti.create_text(420, 20, text="Cliente / Empresa", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 420, 38, 620, 68, radius=10, fill="white", outline="#959595")
-        input_gpersona = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gpersona.place(x=425, y=43, width=190, height=20)
+        self.input_gpersona = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gpersona.place(x=425, y=43, width=190, height=20)
+        
+        self.lista_sugerencias = tk.Listbox(self.gen_cot)
+        self.lista_sugerencias.place_forget()
+        self.lista_sugerencias.bind("<<ListboxSelect>>", self.on_select_cliente)
+        
+        self.input_gpersona.bind("<KeyRelease>", self.update_suggestions)
         
         canvas_coti.create_text(630, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        cbo_area = ttk.Combobox(gen_cot, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
-        cbo_area.place(x=630, y=38, width=190, height=31)
-        cbo_area.current(0)
+        self.cbo_area = ttk.Combobox(gen_cot, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        self.cbo_area.place(x=630, y=38, width=190, height=31)
+        self.cbo_area.current(0)
         
         
         canvas_coti.create_text(20, 78, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        cbo_persona = ttk.Combobox(gen_cot, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
-        cbo_persona.place(x=20, y=96, width=230, height=31)
-        cbo_persona.current(0)
+        self.cbo_persona = ttk.Combobox(gen_cot, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        self.cbo_persona.place(x=20, y=96, width=230, height=31)
+        self.cbo_persona.current(0)
         
         canvas_coti.create_text(260, 78, text="Título del Servicio", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 260, 96, 820, 126, radius=10, fill="white", outline="#959595")
-        input_gtitulo = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gtitulo.place(x=265, y=101, width=550, height=20)
+        self.input_gtitulo = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gtitulo.place(x=265, y=101, width=550, height=20)
         
         
         canvas_coti.create_text(20, 136, text="Tiempo de Ejecución", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 20, 154, 400, 184, radius=10, fill="white", outline="#959595")
-        input_gtiempo = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gtiempo.place(x=25, y=159, width=370, height=20)
+        self.input_gtiempo = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gtiempo.place(x=25, y=159, width=370, height=20)
         
         canvas_coti.create_text(410, 136, text="Forma de Pago", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 410, 154, 630, 184, radius=10, fill="white", outline="#959595")
-        input_gpago = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gpago.place(x=415, y=159, width=210, height=20)
+        self.input_gpago = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gpago.place(x=415, y=159, width=210, height=20)
         
         canvas_coti.create_text(640, 136, text="IGV", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        cbo_igv = ttk.Combobox(gen_cot, values=["SI", "NO"], state="readonly", font=("Raleway", 10))
-        cbo_igv.place(x=640, y=154, width=50, height=31)
-        cbo_igv.current(0)
+        self.cbo_igv = ttk.Combobox(gen_cot, values=["SI", "NO"], state="readonly", font=("Raleway", 10))
+        self.cbo_igv.place(x=640, y=154, width=50, height=31)
+        self.cbo_igv.current(0)
+        self.cbo_igv.bind("<<ComboboxSelected>>", self.actualizar_totales)
         
         canvas_coti.create_text(700, 136, text="Tipo de Moneda", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        cbo_moneda = ttk.Combobox(gen_cot, values=["PEN", "USD"], state="readonly", font=("Raleway", 10))
-        cbo_moneda.place(x=700, y=154, width=120, height=31)
-        cbo_moneda.current(0)
+        self.cbo_moneda = ttk.Combobox(gen_cot, values=["PEN", "USD"], state="readonly", font=("Raleway", 10))
+        self.cbo_moneda.place(x=700, y=154, width=120, height=31)
+        self.cbo_moneda.current(0)
         
         canvas_coti.create_text(20, 194, text="Tipo de Cuenta", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        cbo_cuenta = ttk.Combobox(gen_cot, values=["Cuenta Soles", "Cuenta Dólares"], state="readonly", font=("Raleway", 10))
-        cbo_cuenta.place(x=20, y=212, width=180, height=31)
-        cbo_cuenta.current(0)
+        self.cbo_cuenta = ttk.Combobox(gen_cot, values=["Cuenta Soles", "Cuenta Dólares"], state="readonly", font=("Raleway", 10))
+        self.cbo_cuenta.place(x=20, y=212, width=180, height=31)
+        self.cbo_cuenta.current(0)
+        self.cbo_cuenta.bind("<<ComboboxSelected>>", self.actualizar_cuentas)
         
         canvas_coti.create_text(210, 194, text="Nro de Cuenta", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 210, 212, 510, 242, radius=10, fill="white", outline="#959595")
-        input_gcuenta = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gcuenta.place(x=215, y=217, width=290, height=20)
+        self.input_gcuenta = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gcuenta.place(x=215, y=217, width=290, height=20)
         
         canvas_coti.create_text(520, 194, text="Cuenta Interbancaria", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 520, 212, 820, 242, radius=10, fill="white", outline="#959595")
-        input_gcuentabanc = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gcuentabanc.place(x=525, y=217, width=290, height=20)
+        self.input_gcuentabanc = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gcuentabanc.place(x=525, y=217, width=290, height=20)
         
         
         canvas_coti.create_text(20, 272, text="Descripción", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 20, 290, 820, 320, radius=10, fill="white", outline="#959595")
-        input_gdesc = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gdesc.place(x=25, y=295, width=790, height=20)
+        self.input_gdesc = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gdesc.place(x=25, y=295, width=790, height=20)
         
         canvas_coti.create_text(20, 330, text="Material(es)", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 20, 348, 485, 378, radius=10, fill="white", outline="#959595")
-        input_gmaterial = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gmaterial.place(x=25, y=353, width=455, height=20)
+        self.input_gmaterial = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gmaterial.place(x=25, y=353, width=455, height=20)
         
         canvas_coti.create_text(495, 330, text="Unidad(es)", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 495, 348, 575, 378, radius=10, fill="white", outline="#959595")
-        input_gunidad = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gunidad.place(x=500, y=353, width=70, height=20)
-        cbo_unidad = ttk.Combobox(gen_cot, values=["JUEGO", "PIEZA"], state="readonly", font=("Raleway", 10))
-        cbo_unidad.place(x=585, y=348, width=100, height=31)
-        cbo_unidad.current(0)
+        self.input_gunidad = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gunidad.place(x=500, y=353, width=70, height=20)
+        self.cbo_unidad = ttk.Combobox(gen_cot, values=["JUEGO", "PIEZA"], state="readonly", font=("Raleway", 10))
+        self.cbo_unidad.place(x=585, y=348, width=100, height=31)
+        self.cbo_unidad.current(0)
         
         canvas_coti.create_text(695, 330, text="Precio Unit.", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 695, 348, 820, 378, radius=10, fill="white", outline="#959595")
-        input_gpreciou = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gpreciou.place(x=700, y=353, width=115, height=20)
+        self.input_gpreciou = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gpreciou.place(x=700, y=353, width=115, height=20)
         
         
         canvas_coti.create_text(20, 606, text="Dscto. (%)", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 20, 624, 130, 654, radius=10, fill="white", outline="#959595")
-        input_gdescuento = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gdescuento.place(x=25, y=629, width=100, height=20)
+        self.input_gdescuento = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gdescuento.place(x=25, y=629, width=100, height=20)
+        self.descuento_var = tk.StringVar()
+        self.input_gdescuento.config(textvariable=self.descuento_var)
+        self.descuento_var.trace('w', self.actualizar_totales)
         
         canvas_coti.create_text(350, 606, text="SubTotal", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 350, 624, 460, 654, radius=10, fill="white", outline="#959595")
-        input_gsubtot = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gsubtot.place(x=355, y=629, width=100, height=20)
+        self.input_gsubtot = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gsubtot.place(x=355, y=629, width=100, height=20)
         
         canvas_coti.create_text(470, 606, text="IGV", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 470, 624, 580, 654, radius=10, fill="white", outline="#959595")
-        input_gigv = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gigv.place(x=475, y=629, width=100, height=20)
+        self.input_gigv = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gigv.place(x=475, y=629, width=100, height=20)
         
         canvas_coti.create_text(590, 606, text="Dscto.", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 590, 624, 700, 654, radius=10, fill="white", outline="#959595")
-        input_gdescto = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gdescto.place(x=595, y=629, width=100, height=20)
+        self.input_gdescto = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gdescto.place(x=595, y=629, width=100, height=20)
         
         canvas_coti.create_text(710, 606, text="Total", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_coti, 710, 624, 820, 654, radius=10, fill="white", outline="#959595")
-        input_gtotal = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
-        input_gtotal.place(x=715, y=629, width=100, height=20)
+        self.input_gtotal = tk.Entry(gen_cot, font=("Arial", 11), bd=0)
+        self.input_gtotal.place(x=715, y=629, width=100, height=20)
         
         
-        btn_ag = tk.Button(gen_cot, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ag = tk.Button(gen_cot, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_material)
         btn_ag.place(x=10, y=398)
         
         btn_ed = tk.Button(gen_cot, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.editar_material)
         btn_ed.place(x=120, y=398)
         
-        btn_del = tk.Button(gen_cot, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_del = tk.Button(gen_cot, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_material)
         btn_del.place(x=230, y=398)
             
-        btn_canc = tk.Button(gen_cot, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_canc = tk.Button(gen_cot, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.cancelar)
         btn_canc.place(x=10, y=674)
 
-        btn_gen = tk.Button(gen_cot, text="Generar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_gen = tk.Button(gen_cot, text="Generar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.guardar_registro)
         btn_gen.place(x=120, y=674)
         
         utils.aplicar_hover_a_botones([btn_ag, btn_ed, btn_del, btn_canc, btn_gen])
         
-        t_material = ttk.Treeview(gen_cot, columns=("desc", "mat", "und", "p_unit", "s_total"), show="headings", style="Custom.Treeview")
-        t_material.place(x=10, y=438, width=821, height=149)
+        self.t_material = ttk.Treeview(gen_cot, columns=("desc", "mat", "und", "p_unit", "s_total"), show="headings", style="Custom.Treeview")
+        self.t_material.place(x=10, y=438, width=821, height=149)
                                                     # - 155
         
-        t_material.heading("desc", text="Descripción")
-        t_material.heading("mat", text="Material")
-        t_material.heading("und", text="Unidad(es)")
-        t_material.heading("p_unit", text="Precio Unit.")
-        t_material.heading("s_total", text="SubTotal")
+        self.t_material.heading("desc", text="Descripción")
+        self.t_material.heading("mat", text="Material")
+        self.t_material.heading("und", text="Unidad(es)")
+        self.t_material.heading("p_unit", text="Precio Unit.")
+        self.t_material.heading("s_total", text="SubTotal")
         
-        t_material.column("desc", anchor="center", width=316, stretch=False)
-        t_material.column("mat", anchor="center", width=192, stretch=False)
-        t_material.column("und", anchor="center", width=99, stretch=False)
-        t_material.column("p_unit", anchor="center", width=99, stretch=False)
-        t_material.column("s_total", anchor="center", width=99, stretch=False)
+        self.t_material.column("desc", anchor="center", width=316, stretch=False)
+        self.t_material.column("mat", anchor="center", width=192, stretch=False)
+        self.t_material.column("und", anchor="center", width=99, stretch=False)
+        self.t_material.column("p_unit", anchor="center", width=99, stretch=False)
+        self.t_material.column("s_total", anchor="center", width=99, stretch=False)
         
-        scrollbar_vertical = ttk.Scrollbar(gen_cot, orient="vertical", command=t_material.yview)
-        t_material.configure(yscrollcommand=scrollbar_vertical.set)
+        self.t_material.bind("<Double-1>", self.editar_material)
+        
+        scrollbar_vertical = ttk.Scrollbar(gen_cot, orient="vertical", command=self.t_material.yview)
+        self.t_material.configure(yscrollcommand=scrollbar_vertical.set)
         scrollbar_vertical.place(x=817, y=438, height=149)
         
-        ejemplos_t_material = [
-            ("Soporte metálico", "Acero Inoxidable", "5", "35.00", "175.00"),
-            ("Cableado estructurado", "Cobre", "10", "25.00", "250.00"),
-            ("Panel divisor", "Policarbonato", "8", "45.50", "364.00"),
-            ("Tubos de conexión", "PVC", "12", "15.30", "183.60"),
-            ("Láminas de aislamiento", "Aluminio", "20", "22.00", "440.00"),
-            ("Juego de tornillos", "Acero galvanizado", "50", "0.80", "40.00"),
-            ("Pintura resistente al calor", "Base Epóxica", "3", "120.00", "360.00"),
-            ("Ruedas industriales", "Poliuretano", "4", "85.00", "340.00"),
-            ("Cables de alimentación", "Aluminio blindado", "15", "18.00", "270.00"),
-            ("Conectores rápidos", "Latón", "30", "2.50", "75.00"),
-        ]
+    def generar_numero_cotizacion(self):
+        archivo_numero = 'numero_cotizacion.txt'
+        try:
+            with open(archivo_numero, 'r') as f:
+                ultimo_numero = int(f.read())
+        except FileNotFoundError:
+            ultimo_numero = 1500  # Número inicial si no existe el archivo
+        nuevo_numero = ultimo_numero + 2
+        with open(archivo_numero, 'w') as f:
+            f.write(str(nuevo_numero))
+        # Formato del número de cotización
+        numero_cotizacion_formateado = f"002/{nuevo_numero}"
+        return numero_cotizacion_formateado
+    
+    def actualizar_cuentas(self, event=None):
+        tipo_cuenta = self.cbo_cuenta.get()
+        if tipo_cuenta == 'Cuenta Soles':
+            cuentas = self.cuentas_soles
+        elif tipo_cuenta == 'Cuenta Dólares':
+            cuentas = self.cuentas_dolares
+        else:
+            cuentas = {'Nro de Cuenta': '', 'Cuenta Interbancaria': ''}
+
+        self.input_gcuenta.delete(0, tk.END)
+        self.input_gcuenta.insert(0, cuentas['Nro de Cuenta'])
+
+        self.input_gcuentabanc.delete(0, tk.END)
+        self.input_gcuentabanc.insert(0, cuentas['Cuenta Interbancaria'])
         
-        for dato in ejemplos_t_material:
-            t_material.insert("", "end", values=dato)
+    def agregar_material(self):
+        descripcion = self.input_gdesc.get().strip()
+        material = self.input_gmaterial.get().strip()
+        unidades = self.input_gunidad.get().strip()
+        tipo_unidad = self.cbo_unidad.get().strip()
+        precio_unitario = self.input_gpreciou.get().strip()
+        
+        # Validar entradas
+        if not descripcion or not material or not unidades or not precio_unitario or not tipo_unidad:
+            self.alerta.question_datos()
+            return
+        try:
+            unidades = int(unidades)
+            precio_unitario = float(precio_unitario)
+        except ValueError:
+            self.alerta.validar_numeros()
+            return
+
+        subtotal = unidades * precio_unitario
+        
+        # Insertar en la tabla
+        self.t_material.insert("", "end", values=(
+            descripcion,
+            material,
+            f"{unidades} {tipo_unidad}",
+            f"{precio_unitario:.2f}",
+            f"{subtotal:.2f}"
+        ))
+        
+        # Recalcular el subtotal general
+        self.recalcular_subtotal_general()
+
+        # Actualizar los totales
+        self.actualizar_totales()
+
+        # Limpiar campos de entrada
+        self.limpiar_campos_material()
+
+        # Mostrar alerta de registro exitoso
+        self.alerta.registro_confirm()
+        
+    def guardar_registro(self):
+        incluir_igv = self.cbo_igv.get() == "SI"
+        moneda = self.cbo_moneda.get()
+
+        # Validar que el subtotal no esté vacío
+        subtotal_str = self.input_gsubtot.get()
+        if not subtotal_str:
+            self.alerta.question_datos()
+            return
+        
+        # Obtener valores de descuento y totales
+        try:
+            descuento_monto_str = self.input_gdescto.get().strip()
+            if descuento_monto_str == '':
+                descuento_monto = 0.0
+            else:
+                descuento_monto = float(descuento_monto_str)
+
+            descuento_porc_str = self.descuento_var.get().strip()
+            if descuento_porc_str == '':
+                descuento_porc = 0.0
+            else:
+                descuento_porc = float(descuento_porc_str)
+
+            subtotal_descuento = float(self.input_gsubtot.get())
+            igv = float(self.input_gigv.get())
+            total = float(self.input_gtotal.get())
+        except ValueError:
+            self.alerta.validar_numeros()
+            return
+        
+        # Recopilar datos de la cotización
+        data_cotizacion = {
+            'N° de Cotización': self.input_gcoti.get(),
+            'Fecha': self.input_gfecha.get(),
+            'Persona de contacto': self.cbo_persona.get(),
+            'Empresa': self.input_gpersona.get(),
+            'Área de Trabajo': self.cbo_area.get(),
+            'Servicio': self.input_gtitulo.get(),
+            'Subtotal': self.subtotal_general,  # Subtotal antes del descuento
+            'Descuento (%)': descuento_porc,
+            'Descuento': descuento_monto,
+            'Subtotal con Descuento': subtotal_descuento,
+            'IGV (18%)': igv,
+            'Total': total,
+            'Tiempo de Ejecución': self.input_gtiempo.get(),
+            'Forma de Pago': self.input_gpago.get(),
+            'Cuenta': self.input_gcuenta.get(),
+            'Cuenta Interbancaria': self.input_gcuentabanc.get(),
+            'Tipo de Cuenta': self.cbo_cuenta.get(),
+            'Tipo de Pago': 'Cuenta Corriente BCP soles' if self.cbo_cuenta.get() == 'Cuenta Soles' else 'Cuenta Corriente BCP dólares',
+            'Estado': 'Pendiente',
+            'confirmacion': 'Pendiente'
+        }
+        
+        # Obtener los materiales de la tabla
+        materiales = []
+        for item in self.t_material.get_children():
+            valores = self.t_material.item(item, "values")
+            unidades_str, tipo_unidad = valores[2].split()
+            materiales.append({
+                "Descripción": valores[0],
+                "Material": valores[1],
+                "Unidades": int(unidades_str),
+                "Tipo Unidad": tipo_unidad,
+                "Precio Unitario": float(valores[3]),
+                "Subtotal Unidades": float(valores[4])
+            })
+            
+        # Generar el documento Word
+        output_file = self.crear_documento_word(data_cotizacion, materiales, moneda, incluir_igv)
+
+        # Mostrar alerta de confirmación
+        self.alerta.confirmacion_cotizacion()
+
+        # Cerrar la ventana actual y volver a la principal
+        self.gen_cot.destroy()
+        self.root.deiconify()
+        
+        # Confirmar la generación de la cotización
+        def confirmar_generacion():
+            # Generar el documento Word
+            output_file = self.crear_documento_word(data_cotizacion, materiales, moneda, incluir_igv)
+
+            if output_file:
+                # Mostrar alerta de registro exitoso
+                self.alerta.confirmacion_cotizacion()
+
+                # Cerrar la ventana actual y volver a la principal
+                self.gen_cot.destroy()
+                self.root.deiconify()
+            else:
+                # Mostrar alerta si no se pudo generar el documento
+                self.alerta.mostrar_mensaje("No se pudo generar la cotización.")
+
+        # Mostrar alerta de confirmación
+        self.alerta.generator_cotizacion(confirmar_generacion)
+        
+    def eliminar_material(self):
+        selected_items = self.t_material.selection()
+        if not selected_items:
+            self.alerta.mostrar_mensaje("Por favor, seleccione una fila para eliminar.")
+            return
+
+        # Mostrar la alerta de confirmación sin callback
+        self.alerta.quest_mat()
+
+        # Eliminar las filas seleccionadas
+        for item in selected_items:
+            self.t_material.delete(item)
+        
+        # Recalcular el subtotal general y actualizar totales
+        self.recalcular_subtotal_general()
+        self.actualizar_totales()
+        
+        # Mostrar alerta de eliminación exitosa
+        self.alerta.material_delete()
+        
+    def cancelar(self):
+        self.gen_cot.destroy()
+        self.root.deiconify()
     
     
     def editar_material(self):
+        
+        selected_items = self.t_material.selection()
+        if not selected_items:
+            self.alerta.seleccionar_fila()
+            return
+
+        item_id = selected_items[0]
+        item_values = self.t_material.item(item_id, "values")
+        
         ed_material = tk.Toplevel(self.gen_cot)
         ed_material.title("Editar Material")
         ed_material.geometry("600x244")
@@ -814,6 +1032,7 @@ class generator_cot:
         ed_material.configure(bg="#373737")
         ed_material.grab_set()
         utils.centrar_ventana(ed_material)
+        self.alerta = alertas(ed_material)
         ed_material.protocol("WM_DELETE_WINDOW", lambda: None)
         
         canvas_mat = tk.Canvas(ed_material, width=600, height=244, bg="#373737", highlightthickness=0)
@@ -851,11 +1070,253 @@ class generator_cot:
         
         btn_ed_canc = tk.Button(ed_material, text="Cancelar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_material.destroy)
         btn_ed_canc.place(x=10, y=204)
+        
+        def guardar_edicion():
+            descripcion = inpt_ed_desc.get().strip()
+            material = inpt_ed_mat.get().strip()
+            try:
+                unidades = int(inpt_ed_unidad.get().strip())
+                precio_unitario = float(inpt_ed_precio.get().strip())
+            except ValueError:
+                self.alerta.mostrar_mensaje("Por favor, ingrese un número válido en 'Unidad(es)' y 'Precio Unit.'")
+                return
+            tipo_unidad = cbo_ed_unidad.get().strip()
+            subtotal = unidades * precio_unitario
+            
+            # Actualizar el Treeview
+            self.t_material.item(item_id, values=(
+                descripcion,
+                material,
+                f"{unidades} {tipo_unidad}",
+                f"{precio_unitario:.2f}",
+                f"{subtotal:.2f}"
+            ))
+            
+            # Recalcular el subtotal general y actualizar totales
+            self.recalcular_subtotal_general()
+            self.actualizar_totales()
+            
+            # Cerrar la ventana de edición
+            ed_material.destroy()
+            
+            # Mostrar alerta de edición exitosa
+            self.alerta.registro_confirm()
 
-        btn_ed_save = tk.Button(ed_material, text="Guardar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ed_save = tk.Button(ed_material, text="Guardar", width=15, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=guardar_edicion)
         btn_ed_save.place(x=134, y=204)
         
         utils.aplicar_hover_a_botones([btn_ed_canc, btn_ed_save])
+        
+    def actualizar_totales(self, *args):
+        incluir_igv = self.cbo_igv.get() == "SI"
+
+        # Obtener el porcentaje de descuento
+        descuento_porc_str = self.descuento_var.get().strip()
+        if descuento_porc_str == '':
+            descuento_porc = 0.0
+        else:
+            try:
+                descuento_porc = float(descuento_porc_str)
+            except ValueError:
+                self.alerta.mostrar_mensaje("Por favor, ingrese un porcentaje válido en 'Dscto. (%)'")
+                descuento_porc = 0.0  # Si la entrada no es válida, se asume 0%
+
+        descuento_monto, subtotal_descuento, igv, total = self.calcular_totales(
+            self.subtotal_general, descuento_porc, incluir_igv
+        )
+        
+        # Actualizar los campos en la interfaz
+        self.input_gsubtot.config(state='normal')
+        self.input_gsubtot.delete(0, tk.END)
+        self.input_gsubtot.insert(0, f"{subtotal_descuento:.2f}")
+        self.input_gsubtot.config(state='readonly')
+
+        self.input_gigv.config(state='normal')
+        self.input_gigv.delete(0, tk.END)
+        self.input_gigv.insert(0, f"{igv:.2f}")
+        self.input_gigv.config(state='readonly')
+
+        self.input_gtotal.config(state='normal')
+        self.input_gtotal.delete(0, tk.END)
+        self.input_gtotal.insert(0, f"{total:.2f}")
+        self.input_gtotal.config(state='readonly')
+
+        self.input_gdescto.config(state='normal')
+        self.input_gdescto.delete(0, tk.END)
+        self.input_gdescto.insert(0, f"{descuento_monto:.2f}")
+        self.input_gdescto.config(state='readonly')
+        
+    def calcular_totales(self, subtotal_general, descuento_porc, incluir_igv):
+        descuento_monto = subtotal_general * descuento_porc / 100.0
+        subtotal_descuento = subtotal_general - descuento_monto
+        igv = subtotal_descuento * 0.18 if incluir_igv else 0.0
+        total = subtotal_descuento + igv
+        return descuento_monto, subtotal_descuento, igv, total
+
+    def recalcular_subtotal_general(self):
+        self.subtotal_general = 0.0
+        for item in self.t_material.get_children():
+            item_values = self.t_material.item(item, "values")
+            item_subtotal = float(item_values[4])
+            self.subtotal_general += item_subtotal
+            
+    def limpiar_campos_material(self):
+        self.input_gdesc.delete(0, tk.END)
+        self.input_gmaterial.delete(0, tk.END)
+        self.input_gunidad.delete(0, tk.END)
+        self.input_gpreciou.delete(0, tk.END)
+        self.cbo_unidad.set("JUEGO")  # Restablecer al valor predeterminado
+
+    def crear_documento_word(self, data, materiales, moneda, incluir_igv):
+        # Definir el símbolo de moneda
+        simbolo_moneda = "S/" if moneda == "PEN" else "$"
+
+        # Generar el subtotal en letras
+        subtotal_para_letras = data['Subtotal']
+        subtotal_en_letras = self.convertir_numero_a_texto(subtotal_para_letras, moneda, incluir_igv)
+        
+        # Obtener el tipo de pago basado en el tipo de cuenta
+        if data['Tipo de Cuenta'] == 'Cuenta Soles':
+            tipo_pago = "Cuenta Corriente BCP Soles: 191-2539938-1-47"
+        elif data['Tipo de Cuenta'] == 'Cuenta Dólares':
+            tipo_pago = "Cuenta Corriente BCP Dólares: 12345678910987654321"
+        else:
+            tipo_pago = ''
+            
+        # Cargar la plantilla de Word
+        try:
+            doc = Document(self.TEMPLATE_FILE)  # Cargar plantilla
+        except Exception as e:
+            self.alerta.mostrar_mensaje(f"No se pudo cargar la plantilla: {e}")
+            return
+        
+        # Reemplazar los marcadores en el documento
+        for paragraph in doc.paragraphs:
+            if '[N° DE COTIZACIÓN]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[N° DE COTIZACIÓN]', data['N° de Cotización'])
+            if '[FECHA]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[FECHA]', data['Fecha'])
+            if '[NOMBRE_CLIENTE]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[NOMBRE_CLIENTE]', data['Persona de contacto'])
+            if '[EMPRESA]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[EMPRESA]', data['Empresa'])
+            if '[SERVICIO]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[SERVICIO]', data['Servicio'])
+            if '[TOTAL_EN_LETRAS]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[TOTAL_EN_LETRAS]', subtotal_en_letras)
+            if '[TIEMPO_EJECUCION]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[TIEMPO_EJECUCION]', data['Tiempo de Ejecución'])
+            if '[FORMA_PAGO]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[FORMA_PAGO]', data['Forma de Pago'])
+            if '[NOTA_IGV]' in paragraph.text:
+                nota_igv = "Los precios incluyen IGV." if incluir_igv else "Los precios no incluyen IGV."
+                paragraph.text = paragraph.text.replace('[NOTA_IGV]', nota_igv)
+            if '[TIPO_PAGO]' in paragraph.text:
+                paragraph.text = paragraph.text.replace('[TIPO_PAGO]', tipo_pago)
+
+        # Buscar la tabla en el documento donde se insertarán los servicios/materiales
+        table = doc.tables[0]
+        
+        # Añadir servicios/materiales a la tabla
+        for i, servicio in enumerate(materiales):
+            row_cells = table.add_row().cells
+            row_cells[0].text = str(i + 1)  # Número del servicio/material
+            row_cells[1].text = servicio['Descripción']  # Descripción
+            row_cells[2].text = servicio['Material']  # Material
+            row_cells[3].text = f"{servicio['Unidades']} {servicio['Tipo Unidad']}"  # Unidades
+            row_cells[4].text = f"{simbolo_moneda} {servicio['Precio Unitario']:.2f}"  # Precio Unitario
+            row_cells[5].text = f"{simbolo_moneda} {servicio['Subtotal Unidades']:.2f}"  # Subtotal de las unidades
+
+        # Añadir el subtotal antes del descuento
+        row = table.add_row().cells
+        row[4].text = "Subtotal:"
+        row[5].text = f"{simbolo_moneda} {data['Subtotal']:.2f}"
+        
+        # Añadir el descuento si existe
+        if data['Descuento'] > 0:
+            row = table.add_row().cells
+            row[4].text = f"Descuento:"
+            row[5].text = f"-{simbolo_moneda} {data['Descuento']:.2f}"
+
+        # Añadir IGV y total
+        if incluir_igv:
+            row = table.add_row().cells
+            row[4].text = "IGV (18%):"
+            row[5].text = f"{simbolo_moneda} {data['IGV (18%)']:.2f}"
+
+        # Total
+        row = table.add_row().cells
+        row[4].text = "Total:"
+        row[5].text = f"{simbolo_moneda} {data['Total']:.2f}"
+        
+        # Crear la carpeta si no existe para guardar las cotizaciones
+        carpeta_cotizaciones = os.path.join('clientes', data['Empresa'].replace('/', '_').replace('\\', '_'), 'cotizaciones')
+        os.makedirs(carpeta_cotizaciones, exist_ok=True)
+
+        # Guardar el documento en una ubicación con el número de cotización
+        cotizacion_num = data['N° de Cotización'].replace('/', '_').replace('\\', '_')
+        output_file = os.path.join(carpeta_cotizaciones, f"Cotizacion_{cotizacion_num}.docx")
+        doc.save(output_file)
+        
+        # Retornar la ruta del archivo
+        return output_file
+    
+    def convertir_numero_a_texto(self, numero, moneda, incluir_igv):
+        parte_entera = int(numero)
+        parte_decimal = round((numero - parte_entera) * 100)
+
+        parte_entera_texto = num2words(parte_entera, lang='es', to='cardinal').capitalize()
+        parte_decimal_texto = num2words(parte_decimal, lang='es', to='cardinal')
+
+        if moneda == "PEN":
+            moneda_texto = "soles"
+            simbolo_moneda = "S/"
+        else:
+            moneda_texto = "dólares americanos"
+            simbolo_moneda = "$"
+
+        # Ajustar el texto según si incluye IGV o no
+        igv_texto = " + IGV" if incluir_igv else ""
+
+        texto = f"{simbolo_moneda} {numero:.2f} ({parte_entera_texto} con {parte_decimal_texto} {moneda_texto}){igv_texto}"
+        return texto
+    
+    def on_select_cliente(self, event):
+        try:
+            seleccion = self.lista_sugerencias.curselection()
+            if seleccion:
+                indice = seleccion[0]
+                valor = self.lista_sugerencias.get(indice)
+                self.input_gpersona.delete(0, tk.END)
+                self.input_gpersona.insert(0, valor)
+                self.lista_sugerencias.place_forget()
+                # Aquí puedes agregar lógica adicional para cargar datos del cliente seleccionado si es necesario
+        except Exception as e:
+            self.alerta.mostrar_mensaje(f"Error al seleccionar el cliente: {e}")
+
+    def update_suggestions(self, event):
+        texto = self.input_gpersona.get().strip()
+        if texto == '':
+            self.lista_sugerencias.place_forget()
+            return
+        
+        # Aquí deberías implementar la lógica para buscar clientes que coincidan con 'texto'.
+        # Por ejemplo, podrías tener una lista de clientes predefinida o cargarla desde un archivo.
+        # Para este ejemplo, usaremos una lista estática.
+        clientes = ['Cliente A', 'Cliente B', 'Cliente C', 'Cliente D']
+        resultados = [cliente for cliente in clientes if texto.lower() in cliente.lower()]
+        
+        if resultados:
+            self.lista_sugerencias.delete(0, tk.END)
+            for r in resultados:
+                self.lista_sugerencias.insert(tk.END, r)
+            
+            # Posicionar el Listbox debajo del Entry
+            x = self.input_gpersona.winfo_x()
+            y = self.input_gpersona.winfo_y() + self.input_gpersona.winfo_height()
+            self.lista_sugerencias.place(x=x, y=y, width=self.input_gpersona.winfo_width())
+        else:
+            self.lista_sugerencias.place_forget()        
 
 
 class clientes:
@@ -1066,10 +1527,10 @@ class clientes:
         btn_canc_reg = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_canc_reg.place(x=75, y=462)
 
-        btn_gen_cli = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_gen_cli.place(x=185, y=462)
+        btn_gen = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_gen.place(x=185, y=462)
         
-        utils.aplicar_hover_a_botones([btn_ag_persona, btn_ed_persona, btn_del_persona, btn_ag_trabajo, btn_ed_trabajo, btn_del_trabajo, btn_ag_direx, btn_ed_direx, btn_del_direx, btn_canc_reg, btn_gen_cli])
+        utils.aplicar_hover_a_botones([btn_ag_persona, btn_ed_persona, btn_del_persona, btn_ag_trabajo, btn_ed_trabajo, btn_del_trabajo, btn_ag_direx, btn_ed_direx, btn_del_direx, btn_canc_reg])
         
         t_persona = ttk.Treeview(reg_cliente, columns=("id_p", "persona"), show="headings", style="Custom.Treeview")
         t_persona.place(x=10, y=264, width=341, height=149)
