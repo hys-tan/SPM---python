@@ -6,7 +6,8 @@ from tkcalendar import DateEntry
 import os
 import shutil
 import utils
-from database import Database
+from database import ClienteDatabase
+import sqlite3
 
 
 # Ruta base dinámica (directorio del archivo principal)
@@ -871,6 +872,7 @@ class clientes:
         self.vent_clientes.resizable(False, False)
         self.vent_clientes.configure(bg="#373737")
         utils.centrar_ventana(self.vent_clientes)
+        self.db_clientes = ClienteDatabase()
         
         self.alerta = alertas(vent_clientes)
 
@@ -994,6 +996,9 @@ class clientes:
         reg_cliente.resizable(False, False)
         reg_cliente.configure(bg="#373737")
         utils.centrar_ventana(reg_cliente)
+        self.personas_contacto = []
+        self.areas_trabajo = []
+        self.direcciones = []
 
         reg_cliente.protocol("WM_DELETE_WINDOW", lambda: None)
         
@@ -1010,32 +1015,32 @@ class clientes:
         
         canvas_reg_cli.create_text(20, 20, text="Razón Social / Empresa / Cliente", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 38, 340, 68, radius=10, fill="white", outline="#959595")
-        reg_rs_cli = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
-        reg_rs_cli.place(x=25, y=43, width=310, height=20)
+        self.reg_rs_cli = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_rs_cli.place(x=25, y=43, width=310, height=20)
         
         canvas_reg_cli.create_text(20, 78, text="RUC", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 96, 340, 126, radius=10, fill="white", outline="#959595")
-        reg_ruc_cli = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
-        reg_ruc_cli.place(x=25, y=101, width=310, height=20)
+        self.reg_ruc_cli = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_ruc_cli.place(x=25, y=101, width=310, height=20)
         
         canvas_reg_cli.create_text(20, 156, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 174, 340, 204, radius=10, fill="white", outline="#959595")
-        reg_persona = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
-        reg_persona.place(x=25, y=179, width=310, height=20)
+        self.reg_persona = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_persona.place(x=25, y=179, width=310, height=20)
         
         canvas_reg_cli.create_text(370, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 370, 38, 690, 68, radius=10, fill="white", outline="#959595")
-        reg_ar_tb = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
-        reg_ar_tb.place(x=375, y=43, width=310, height=20)
+        self.reg_ar_tb = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_ar_tb.place(x=375, y=43, width=310, height=20)
 
         canvas_reg_cli.create_text(370, 266, text="Dirección", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 370, 284, 690, 314, radius=10, fill="white", outline="#959595")
-        reg_direx = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
-        reg_direx.place(x=375, y=289, width=310, height=20)
+        self.reg_direx = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_direx.place(x=375, y=289, width=310, height=20)
         
-        btn_ag_persona = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ag_persona = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_persona_contacto)
         btn_ag_persona.place(x=20, y=214)
-        
+
         btn_ed_persona = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_persona_cont)
         btn_ed_persona.place(x=130, y=214)
         
@@ -1043,7 +1048,7 @@ class clientes:
         btn_del_persona.place(x=240, y=214)
         
         
-        btn_ag_trabajo = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ag_trabajo = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_area_trabajo)
         btn_ag_trabajo.place(x=370, y=78)
         
         btn_ed_trabajo = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_area_trabajo)
@@ -1053,7 +1058,7 @@ class clientes:
         btn_del_trabajo.place(x=590, y=78)
         
         
-        btn_ag_direx = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_ag_direx = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_direccion)
         btn_ag_direx.place(x=370, y=324)
         
         btn_ed_direx = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_direx)
@@ -1066,81 +1071,138 @@ class clientes:
         btn_canc_reg = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_canc_reg.place(x=75, y=462)
 
-        btn_gen_cli = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_gen_cli = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.guardar_cliente)
         btn_gen_cli.place(x=185, y=462)
         
         utils.aplicar_hover_a_botones([btn_ag_persona, btn_ed_persona, btn_del_persona, btn_ag_trabajo, btn_ed_trabajo, btn_del_trabajo, btn_ag_direx, btn_ed_direx, btn_del_direx, btn_canc_reg, btn_gen_cli])
         
-        t_persona = ttk.Treeview(reg_cliente, columns=("id_p", "persona"), show="headings", style="Custom.Treeview")
-        t_persona.place(x=10, y=264, width=341, height=149)
+        self.t_persona = ttk.Treeview(reg_cliente, columns=("id_p", "persona"), show="headings", style="Custom.Treeview")
+        self.t_persona.place(x=10, y=264, width=341, height=149)
         
-        t_persona.heading("id_p", text="ID")
-        t_persona.heading("persona", text="Persona de contacto")
-        t_persona.column("id_p", anchor="center", width=35, stretch=False)
-        t_persona.column("persona", anchor="center", width=290, stretch=False)
-        
-        datos_t_persona = [
-            ("1", "Carlos Rodríguez"),
-            ("2", "María López"),
-            ("3", "Javier Martínez"),
-            ("4", "Ana Fernández"),
-            ("5", "Luis Gómez"),
-        ]
+        self.t_persona.heading("id_p", text="ID")
+        self.t_persona.heading("persona", text="Persona de contacto")
+        self.t_persona.column("id_p", anchor="center", width=35, stretch=False)
+        self.t_persona.column("persona", anchor="center", width=290, stretch=False)
 
-        for persona in datos_t_persona:
-            t_persona.insert("", "end", values=persona)
-        
-        scrollbar_t_persona = ttk.Scrollbar(reg_cliente, orient="vertical", command=t_persona.yview)
-        t_persona.configure(yscrollcommand=scrollbar_t_persona.set)
+        scrollbar_t_persona = ttk.Scrollbar(reg_cliente, orient="vertical", command=self.t_persona.yview)
+        self.t_persona.configure(yscrollcommand=scrollbar_t_persona.set)
         scrollbar_t_persona.place(x=337, y=264, height=149)
         
         
-        t_area = ttk.Treeview(reg_cliente, columns=("id_a", "area"), show="headings", style="Custom.Treeview")
-        t_area.place(x=360, y=128, width=341, height=119)
+        self.t_area = ttk.Treeview(reg_cliente, columns=("id_a", "area"), show="headings", style="Custom.Treeview")
+        self.t_area.place(x=360, y=128, width=341, height=119)
         
-        t_area.heading("id_a", text="ID")
-        t_area.heading("area", text="Área de Trabajo")
-        t_area.column("id_a", anchor="center", width=35, stretch=False)
-        t_area.column("area", anchor="center", width=290, stretch=False)
-        
-        datos_t_area = [
-            ("1", "Recursos Humanos"),
-            ("2", "Desarrollo de Software"),
-            ("3", "Marketing"),
-            ("4", "Finanzas"),
-            ("5", "Logística")
-        ]
+        self.t_area.heading("id_a", text="ID")
+        self.t_area.heading("area", text="Área de Trabajo")
+        self.t_area.column("id_a", anchor="center", width=35, stretch=False)
+        self.t_area.column("area", anchor="center", width=290, stretch=False)
 
-        for dato in datos_t_area:
-            t_area.insert("", "end", values=dato)
-        
-        scrollbar_t_area = ttk.Scrollbar(reg_cliente, orient="vertical", command=t_area.yview)
-        t_area.configure(yscrollcommand=scrollbar_t_area.set)
+        scrollbar_t_area = ttk.Scrollbar(reg_cliente, orient="vertical", command=self.t_area.yview)
+        self.t_area.configure(yscrollcommand=scrollbar_t_area.set)
         scrollbar_t_area.place(x=687, y=128, height=119)
 
 
-        t_direx = ttk.Treeview(reg_cliente, columns=("id_d", "direx"), show="headings", style="Custom.Treeview")
-        t_direx.place(x=360, y=374, width=341, height=119)
+        self.t_direx = ttk.Treeview(reg_cliente, columns=("id_d", "direx"), show="headings", style="Custom.Treeview")
+        self.t_direx.place(x=360, y=374, width=341, height=119)
         
-        t_direx.heading("id_d", text="ID")
-        t_direx.heading("direx", text="Dirección")
-        t_direx.column("id_d", anchor="center", width=35, stretch=False)
-        t_direx.column("direx", anchor="center", width=290, stretch=False)
+        self.t_direx.heading("id_d", text="ID")
+        self.t_direx.heading("direx", text="Dirección")
+        self.t_direx.column("id_d", anchor="center", width=35, stretch=False)
+        self.t_direx.column("direx", anchor="center", width=290, stretch=False)
         
-        datos_t_direx = [
-            ("1", "Av. Los Olivos 123, Lima"),
-            ("2", "Jr. San Martín 456, Arequipa"),
-            ("3", "Calle Las Rosas 789, Cusco"),
-            ("4", "Av. El Sol 321, Trujillo"),
-            ("5", "Jr. Amazonas 654, Piura")
-        ]
-        
-        for dato in datos_t_direx:
-            t_direx.insert("", "end", values=dato)
-        
-        scrollbar_t_direx = ttk.Scrollbar(reg_cliente, orient="vertical", command=t_direx.yview)
-        t_direx.configure(yscrollcommand=scrollbar_t_direx.set)
+        scrollbar_t_direx = ttk.Scrollbar(reg_cliente, orient="vertical", command=self.t_direx.yview)
+        self.t_direx.configure(yscrollcommand=scrollbar_t_direx.set)
         scrollbar_t_direx.place(x=687, y=374, height=119)
+
+    def agregar_persona_contacto(self):
+        persona = self.reg_persona.get()
+        if persona:
+            # Generar un ID incremental
+            nuevo_id = len(self.personas_contacto) + 1
+            
+            # Agregar a la lista de personas
+            self.personas_contacto.append((str(nuevo_id), persona))
+            
+            # Insertar en la tabla t_persona
+            self.t_persona.insert("", "end", values=(str(nuevo_id), persona))
+            
+            # Limpiar el campo de entrada
+            self.reg_persona.delete(0, tk.END)
+            
+    def agregar_area_trabajo(self):
+        area = self.reg_ar_tb.get()
+        if area:
+            # Generar un ID incremental
+            nuevo_id = len(self.areas_trabajo) + 1
+            
+            # Agregar a la lista de áreas de trabajo
+            self.areas_trabajo.append((str(nuevo_id), area))
+            
+            # Insertar en la tabla t_area
+            self.t_area.insert("", "end", values=(str(nuevo_id), area))
+            
+            # Limpiar el campo de entrada
+            self.reg_ar_tb.delete(0, tk.END)
+    
+    def agregar_direccion(self):
+        direccion = self.reg_direx.get()
+        if direccion:
+            # Generar un ID incremental
+            nuevo_id = len(self.direcciones) + 1
+            
+            # Agregar a la lista de direcciones
+            self.direcciones.append((str(nuevo_id), direccion))
+            
+            # Insertar en la tabla t_direx
+            self.t_direx.insert("", "end", values=(str(nuevo_id), direccion))
+            
+            # Limpiar el campo de entrada
+            self.reg_direx.delete(0, tk.END)
+    
+    def guardar_cliente(self):
+        # Obtener los valores de los campos de entrada
+        razon_social = self.reg_rs_cli.get()
+        ruc = self.reg_ruc_cli.get()
+        direccion = self.reg_direx.get()
+
+        try:
+            conexion = self.db_clientes.crear_conexion()
+            cursor = conexion.cursor()
+            
+            # Insertar cliente
+            cursor.execute('''
+            INSERT INTO clientes (razon_social, ruc, direccion) 
+            VALUES (?, ?, ?)
+            ''', (razon_social, ruc, direccion))
+            
+            # Insertar personas de contacto
+            for persona in self.personas_contacto:
+                cursor.execute('''
+                INSERT INTO personas_contacto (cliente_ruc, nombre) 
+                VALUES (?, ?)
+                ''', (ruc, persona[1]))
+            
+            # Insertar áreas de trabajo
+            for area in self.areas_trabajo:
+                cursor.execute('''
+                INSERT INTO areas_trabajo (cliente_ruc, nombre) 
+                VALUES (?, ?)
+                ''', (ruc, area[1]))
+            
+            # Insertar direcciones adicionales
+            for dir_adicional in self.direcciones:
+                cursor.execute('''
+                INSERT INTO direcciones (cliente_ruc, direccion) 
+                VALUES (?, ?)
+                ''', (ruc, dir_adicional[1]))
+            
+            conexion.commit()
+            print("Cliente, personas de contacto, áreas de trabajo y direcciones registrados exitosamente")
+        except sqlite3.Error as e:
+            print(f"Error al registrar cliente: {e}")
+        finally:
+            if conexion:
+                conexion.close()
 
     def edit_persona_cont(self):
         ed_pers = tk.Toplevel(self.vent_clientes)
