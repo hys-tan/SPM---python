@@ -893,7 +893,7 @@ class clientes:
         btn_ed_cli = tk.Button(vent_clientes, text="Editar cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.detalle_cliente)
         btn_ed_cli.place(x=22, y=125)
         
-        btn_menu = tk.Button(vent_clientes, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_menu = tk.Button(vent_clientes, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: [vent_clientes.destroy(), self.root.deiconify()])
         btn_menu.place(x=22, y=170)
         
         btn_sig_cli = tk.Button(vent_clientes, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1044,7 +1044,7 @@ class clientes:
         btn_ed_persona = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_persona_cont)
         btn_ed_persona.place(x=130, y=214)
         
-        btn_del_persona = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_del_persona = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_persona_contacto)
         btn_del_persona.place(x=240, y=214)
         
         
@@ -1054,7 +1054,7 @@ class clientes:
         btn_ed_trabajo = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_area_trabajo)
         btn_ed_trabajo.place(x=480, y=78)
         
-        btn_del_trabajo = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_del_trabajo = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_area_trabajo)
         btn_del_trabajo.place(x=590, y=78)
         
         
@@ -1064,11 +1064,11 @@ class clientes:
         btn_ed_direx = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_direx)
         btn_ed_direx.place(x=480, y=324)
         
-        btn_del_direx = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_del_direx = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_direccion)
         btn_del_direx.place(x=590, y=324)
         
         
-        btn_canc_reg = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_canc_reg = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: [reg_cliente.destroy(), self.vent_clientes.deiconify()])
         btn_canc_reg.place(x=75, y=462)
 
         btn_gen_cli = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.guardar_cliente)
@@ -1246,7 +1246,14 @@ class clientes:
         # Actualizar el nombre en la tabla
         self.t_persona.item(selected_item, values=(self.t_persona.item(selected_item)['values'][0], nuevo_nombre))
         ventana.destroy()
-       
+
+    def eliminar_persona_contacto(self):
+        # Obtener el elemento seleccionado de la tabla
+        selected_item = self.t_persona.selection()
+        if selected_item:
+            # Eliminar la fila de la tabla
+            self.t_persona.delete(selected_item)
+    
     def edit_area_trabajo(self):
         # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_area.selection()
@@ -1288,7 +1295,12 @@ class clientes:
         # Actualizar el nombre en la tabla
         self.t_area.item(selected_item, values=(self.t_area.item(selected_item)['values'][0], nuevo_nombre))
         ventana.destroy()
-        
+    
+    def eliminar_area_trabajo(self):
+        selected_item = self.t_area.selection()
+        if selected_item:
+            self.t_area.delete(selected_item)
+
     def edit_direx(self):
         selected_item = self.t_direx.selection()
         if not selected_item:
@@ -1330,6 +1342,11 @@ class clientes:
         self.t_direx.item(selected_item, values=(self.t_direx.item(selected_item)['values'][0], nuevo_nombre))
         ventana.destroy()
     
+    def eliminar_direccion(self):
+        selected_item = self.t_direx.selection()
+        if selected_item:
+            self.t_direx.delete(selected_item)
+
     def detalle_cliente(self):
         
         self.vent_clientes.withdraw()
