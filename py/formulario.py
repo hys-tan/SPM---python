@@ -996,9 +996,13 @@ class clientes:
         reg_cliente.resizable(False, False)
         reg_cliente.configure(bg="#373737")
         utils.centrar_ventana(reg_cliente)
+        
         self.personas_contacto = []
+        self.ids_disponibles = set()
         self.areas_trabajo = []
+        self.ids_at_disponibles = set()
         self.direcciones = []
+        self.ids_dx_disponibles = set()
 
         reg_cliente.protocol("WM_DELETE_WINDOW", lambda: None)
         
@@ -1117,28 +1121,30 @@ class clientes:
     def agregar_persona_contacto(self):
         persona = self.reg_persona.get()
         if persona:
-            # Generar un ID incremental
-            nuevo_id = len(self.personas_contacto) + 1
-            
+            # Verificar si hay un ID disponible
+            if self.ids_disponibles:
+                nuevo_id = self.ids_disponibles.pop()  # Obtener un ID disponible
+            else:
+                nuevo_id = len(self.personas_contacto) + 1  # Generar un nuevo ID
+
             # Agregar a la lista de personas
             self.personas_contacto.append((str(nuevo_id), persona))
-            
-            # Insertar en la tabla t_persona
             self.t_persona.insert("", "end", values=(str(nuevo_id), persona))
-            
+
             # Limpiar el campo de entrada
             self.reg_persona.delete(0, tk.END)
             
     def agregar_area_trabajo(self):
         area = self.reg_ar_tb.get()
         if area:
-            # Generar un ID incremental
-            nuevo_id = len(self.areas_trabajo) + 1
+            # Verificar si hay un ID disponible
+            if self.ids_at_disponibles:
+                nuevo_id = self.ids_at_disponibles.pop()
+            else:
+                nuevo_id = len(self.areas_trabajo) + 1
             
             # Agregar a la lista de áreas de trabajo
             self.areas_trabajo.append((str(nuevo_id), area))
-            
-            # Insertar en la tabla t_area
             self.t_area.insert("", "end", values=(str(nuevo_id), area))
             
             # Limpiar el campo de entrada
@@ -1147,13 +1153,13 @@ class clientes:
     def agregar_direccion(self):
         direccion = self.reg_direx.get()
         if direccion:
-            # Generar un ID incremental
-            nuevo_id = len(self.direcciones) + 1
+            if self.ids_dx_disponibles:
+                nuevo_id = self.ids_dx_disponibles.pop()  # Obtener un ID disponible
+            else:
+                nuevo_id = len(self.direcciones) + 1
             
             # Agregar a la lista de direcciones
             self.direcciones.append((str(nuevo_id), direccion))
-            
-            # Insertar en la tabla t_direx
             self.t_direx.insert("", "end", values=(str(nuevo_id), direccion))
             
             # Limpiar el campo de entrada
@@ -1251,8 +1257,16 @@ class clientes:
         # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_persona.selection()
         if selected_item:
+            # Obtener el ID del elemento seleccionado
+            item = self.t_persona.item(selected_item)
+            id_eliminado = item['values'][0]  # Obtener el ID
+
+            # Agregar el ID al conjunto de IDs disponibles
+            self.ids_disponibles.add(int(id_eliminado))
+
             # Eliminar la fila de la tabla
             self.t_persona.delete(selected_item)
+
     
     def edit_area_trabajo(self):
         # Obtener el elemento seleccionado de la tabla
@@ -1299,6 +1313,14 @@ class clientes:
     def eliminar_area_trabajo(self):
         selected_item = self.t_area.selection()
         if selected_item:
+            item = self.t_area.item(selected_item)
+            id_eliminado = item['values'][0]
+            
+            self.ids_at_disponibles.add(int(id_eliminado))
+            self.t_area.delete(selected_item)
+
+        selected_item = self.t_area.selection()
+        if selected_item:
             self.t_area.delete(selected_item)
 
     def edit_direx(self):
@@ -1343,6 +1365,14 @@ class clientes:
         ventana.destroy()
     
     def eliminar_direccion(self):
+        selected_item = self.t_direx.selection()
+        if selected_item:
+            item = self.t_direx.item(selected_item)
+            id_eliminado = item['values'][0]
+            
+            self.ids_dx_disponibles.add(int(id_eliminado))
+            self.t_direx.delete(selected_item)
+        
         selected_item = self.t_direx.selection()
         if selected_item:
             self.t_direx.delete(selected_item)
