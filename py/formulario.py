@@ -378,7 +378,7 @@ class alertas:
         btn_reg_conf.place(x=115, y=73)
         
         utils.aplicar_hover_a_botones([btn_reg_conf])
-        
+
     # CANCELAR REGISTRO
     def cancelar_registro(self):
         cancel_reg=tk.Toplevel(self.parent)
@@ -1204,6 +1204,7 @@ class clientes:
             
             conexion.commit()
             print("Cliente, personas de contacto, áreas de trabajo y direcciones registrados exitosamente")
+            self.alerta.registro_confirm()
         except sqlite3.Error as e:
             print(f"Error al registrar cliente: {e}")
         finally:
