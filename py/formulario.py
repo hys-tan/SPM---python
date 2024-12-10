@@ -865,6 +865,7 @@ class clientes:
         self.root = root
         self.vent_clientes = vent_clientes
         self.root.withdraw()
+        self.siguiente_id = 1
         
         self.vent_clientes = vent_clientes
         self.vent_clientes.title("Registro de Clientes")
@@ -1121,15 +1122,15 @@ class clientes:
     def agregar_persona_contacto(self):
         persona = self.reg_persona.get()
         if persona:
-            # Verificar si hay un ID disponible
-            if self.ids_disponibles:
-                nuevo_id = self.ids_disponibles.pop()  # Obtener un ID disponible
-            else:
-                nuevo_id = len(self.personas_contacto) + 1  # Generar un nuevo ID
+            # Usar el siguiente ID disponible
+            nuevo_id = self.siguiente_id
 
             # Agregar a la lista de personas
             self.personas_contacto.append((str(nuevo_id), persona))
             self.t_persona.insert("", "end", values=(str(nuevo_id), persona))
+
+            # Incrementar el siguiente ID disponible
+            self.siguiente_id += 1
 
             # Limpiar el campo de entrada
             self.reg_persona.delete(0, tk.END)
@@ -1255,20 +1256,23 @@ class clientes:
         ventana.destroy()
 
     def eliminar_persona_contacto(self):
-        # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_persona.selection()
         if selected_item:
             # Obtener el ID del elemento seleccionado
             item = self.t_persona.item(selected_item)
             id_eliminado = item['values'][0]  # Obtener el ID
 
-            # Agregar el ID al conjunto de IDs disponibles
-            self.ids_disponibles.add(int(id_eliminado))
-
             # Eliminar la fila de la tabla
             self.t_persona.delete(selected_item)
 
-    
+            # Actualizar los IDs de los elementos restantes
+            for index, item in enumerate(self.t_persona.get_children(), start=1):
+                self.t_persona.item(item, values=(index, self.t_persona.item(item)['values'][1]))
+
+            # Ajustar el siguiente ID disponible si se eliminó el último contacto
+            if int(id_eliminado) == self.siguiente_id - 1:
+                self.siguiente_id -= 1
+
     def edit_area_trabajo(self):
         # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_area.selection()
