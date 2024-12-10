@@ -1205,6 +1205,15 @@ class clientes:
                 conexion.close()
 
     def edit_persona_cont(self):
+        # Obtener el elemento seleccionado de la tabla
+        selected_item = self.t_persona.selection()
+        if not selected_item:
+            return  # Si no hay selección, no hacer nada
+
+        # Obtener el ID y el nombre de la persona seleccionada
+        item = self.t_persona.item(selected_item)
+        persona_nombre = item['values'][1]  # Solo obtenemos el nombre
+        
         ed_pers = tk.Toplevel(self.vent_clientes)
         ed_pers.title("Editar Persona de Contacto")
         ed_pers.geometry("450x128")
@@ -1223,16 +1232,30 @@ class clientes:
         utils.create_rounded_rectangle(canvas_ed_pers, 20, 38, 430, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_pers_con = tk.Entry(ed_pers, font=("Arial", 11), bd=0)
         inpt_ed_pers_con.place(x=25, y=43, width=400, height=20)
+        inpt_ed_pers_con.insert(0, persona_nombre)
         
         btn_canc_pers = tk.Button(ed_pers, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_pers.destroy)
         btn_canc_pers.place(x=10, y=88)
 
-        btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: self.guardar_edicion_persona(selected_item, inpt_ed_pers_con.get(), ed_pers))
         btn_save_pers.place(x=120, y=88)
         
         utils.aplicar_hover_a_botones([btn_canc_pers, btn_save_pers])
-        
+    
+    def guardar_edicion_persona(self, selected_item, nuevo_nombre, ventana):
+        # Actualizar el nombre en la tabla
+        self.t_persona.item(selected_item, values=(self.t_persona.item(selected_item)['values'][0], nuevo_nombre))
+        ventana.destroy()
+       
     def edit_area_trabajo(self):
+        # Obtener el elemento seleccionado de la tabla
+        selected_item = self.t_area.selection()
+        if not selected_item:
+            return
+        
+        item = self.t_area.item(selected_item)
+        area_nombre = item['values'][1]
+        
         ed_ar_trabajo = tk.Toplevel(self.vent_clientes)
         ed_ar_trabajo.title("Editar Área de Trabajo")
         ed_ar_trabajo.geometry("450x128")
@@ -1251,16 +1274,29 @@ class clientes:
         utils.create_rounded_rectangle(canvas_ed_ar_trab, 20, 38, 430, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_ar_trab = tk.Entry(ed_ar_trabajo, font=("Arial", 11), bd=0)
         inpt_ed_ar_trab.place(x=25, y=43, width=400, height=20)
+        inpt_ed_ar_trab.insert(0, area_nombre)
         
         btn_canc_ar_trab = tk.Button(ed_ar_trabajo, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_ar_trabajo.destroy)
         btn_canc_ar_trab.place(x=10, y=88)
 
-        btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: self.guardar_edicion_area_trabajo(selected_item, inpt_ed_ar_trab.get(), ed_ar_trabajo))
         btn_save_ar_trab.place(x=120, y=88)
         
         utils.aplicar_hover_a_botones([btn_canc_ar_trab, btn_save_ar_trab])
         
+    def guardar_edicion_area_trabajo(self, selected_item, nuevo_nombre, ventana):
+        # Actualizar el nombre en la tabla
+        self.t_area.item(selected_item, values=(self.t_area.item(selected_item)['values'][0], nuevo_nombre))
+        ventana.destroy()
+        
     def edit_direx(self):
+        selected_item = self.t_direx.selection()
+        if not selected_item:
+            return
+        
+        item = self.t_direx.item(selected_item)
+        direx_nombre = item['values'][1]
+        
         ed_direccion = tk.Toplevel(self.vent_clientes)
         ed_direccion.title("Editar Dirección")
         ed_direccion.geometry("450x128")
@@ -1279,15 +1315,21 @@ class clientes:
         utils.create_rounded_rectangle(canvas_ed_direccion, 20, 38, 430, 68, radius=10, fill="white", outline="#959595")
         inpt_ed_direx = tk.Entry(ed_direccion, font=("Arial", 11), bd=0)
         inpt_ed_direx.place(x=25, y=43, width=400, height=20)
+        inpt_ed_direx.insert(0, direx_nombre)
+
 
         btn_canc_direx = tk.Button(ed_direccion, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_direccion.destroy)
         btn_canc_direx.place(x=10, y=88)
 
-        btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: self.guardar_edicion_direccion(selected_item, inpt_ed_direx.get(), ed_direccion))
         btn_save_direx.place(x=120, y=88)
         
         utils.aplicar_hover_a_botones([btn_canc_direx, btn_save_direx])
 
+    def guardar_edicion_direccion(self, selected_item, nuevo_nombre, ventana):
+        self.t_direx.item(selected_item, values=(self.t_direx.item(selected_item)['values'][0], nuevo_nombre))
+        ventana.destroy()
+    
     def detalle_cliente(self):
         
         self.vent_clientes.withdraw()
