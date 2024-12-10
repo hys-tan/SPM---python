@@ -1000,12 +1000,10 @@ class clientes:
         reg_cliente.configure(bg="#373737")
         utils.centrar_ventana(reg_cliente)
         
-        self.personas_contacto = []
-        self.ids_disponibles = set()
-        self.areas_trabajo = []
-        self.ids_at_disponibles = set()
-        self.direcciones = []
-        self.ids_dx_disponibles = set()
+        # Resetear los contadores de ID 
+        self.siguiente_id = 1
+        self.siguiente_id_area = 1
+        self.siguiente_id_dix = 1
 
         reg_cliente.protocol("WM_DELETE_WINDOW", lambda: None)
         
@@ -1120,6 +1118,14 @@ class clientes:
         scrollbar_t_direx = ttk.Scrollbar(reg_cliente, orient="vertical", command=self.t_direx.yview)
         self.t_direx.configure(yscrollcommand=scrollbar_t_direx.set)
         scrollbar_t_direx.place(x=687, y=374, height=119)
+        
+        # Limpiar listas y sets
+        self.personas_contacto = []
+        self.ids_disponibles = set()
+        self.areas_trabajo = []
+        self.ids_at_disponibles = set()
+        self.direcciones = []
+        self.ids_dx_disponibles = set()
 
     def agregar_persona_contacto(self):
         persona = self.reg_persona.get()
