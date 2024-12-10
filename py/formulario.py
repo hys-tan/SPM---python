@@ -866,6 +866,8 @@ class clientes:
         self.vent_clientes = vent_clientes
         self.root.withdraw()
         self.siguiente_id = 1
+        self.siguiente_id_area = 1
+        self.siguiente_id_dix = 1
         
         self.vent_clientes = vent_clientes
         self.vent_clientes.title("Registro de Clientes")
@@ -1138,34 +1140,25 @@ class clientes:
     def agregar_area_trabajo(self):
         area = self.reg_ar_tb.get()
         if area:
-            # Verificar si hay un ID disponible
-            if self.ids_at_disponibles:
-                nuevo_id = self.ids_at_disponibles.pop()
-            else:
-                nuevo_id = len(self.areas_trabajo) + 1
+            nuevo_id = self.siguiente_id_area
             
-            # Agregar a la lista de áreas de trabajo
             self.areas_trabajo.append((str(nuevo_id), area))
             self.t_area.insert("", "end", values=(str(nuevo_id), area))
             
-            # Limpiar el campo de entrada
+            self.siguiente_id_area += 1
             self.reg_ar_tb.delete(0, tk.END)
-    
+
     def agregar_direccion(self):
         direccion = self.reg_direx.get()
         if direccion:
-            if self.ids_dx_disponibles:
-                nuevo_id = self.ids_dx_disponibles.pop()  # Obtener un ID disponible
-            else:
-                nuevo_id = len(self.direcciones) + 1
+            nuevo_id = self.siguiente_id_dix
             
-            # Agregar a la lista de direcciones
             self.direcciones.append((str(nuevo_id), direccion))
             self.t_direx.insert("", "end", values=(str(nuevo_id), direccion))
             
-            # Limpiar el campo de entrada
+            self.siguiente_id_dix += 1
             self.reg_direx.delete(0, tk.END)
-    
+
     def guardar_cliente(self):
         # Obtener los valores de los campos de entrada
         razon_social = self.reg_rs_cli.get()
@@ -1313,15 +1306,12 @@ class clientes:
     def eliminar_area_trabajo(self):
         selected_item = self.t_area.selection()
         if selected_item:
-            item = self.t_area.item(selected_item)
-            id_eliminado = item['values'][0]
+            self.t_area.delete(selected_item)
             
-            self.ids_at_disponibles.add(int(id_eliminado))
-            self.t_area.delete(selected_item)
+            for index, item in enumerate(self.t_area.get_children(), start=1):
+                self.t_area.item(item, values=(index, self.t_area.item(item)['values'][1]))
 
-        selected_item = self.t_area.selection()
-        if selected_item:
-            self.t_area.delete(selected_item)
+            self.siguiente_id_area = len(self.t_area.get_children()) + 1
 
     def edit_direx(self):
         selected_item = self.t_direx.selection()
@@ -1367,15 +1357,12 @@ class clientes:
     def eliminar_direccion(self):
         selected_item = self.t_direx.selection()
         if selected_item:
-            item = self.t_direx.item(selected_item)
-            id_eliminado = item['values'][0]
+            self.t_direx.delete(selected_item)
             
-            self.ids_dx_disponibles.add(int(id_eliminado))
-            self.t_direx.delete(selected_item)
-        
-        selected_item = self.t_direx.selection()
-        if selected_item:
-            self.t_direx.delete(selected_item)
+            for index, item in enumerate(self.t_direx.get_children(), start=1):
+                self.t_direx.item(item, values=(index, self.t_direx.item(item)['values'][1]))
+                
+            self.siguiente_id_dix = len(self.t_direx.get_children()) + 1
 
     def detalle_cliente(self):
         
