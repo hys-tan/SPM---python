@@ -1215,7 +1215,8 @@ class clientes:
         # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_persona.selection()
         if not selected_item:
-            return  # Si no hay selección, no hacer nada
+            self.alerta.seleccionar_fila()
+            return
 
         # Obtener el ID y el nombre de la persona seleccionada
         item = self.t_persona.item(selected_item)
@@ -1268,9 +1269,9 @@ class clientes:
             self.siguiente_id = len(self.t_persona.get_children()) + 1
 
     def edit_area_trabajo(self):
-        # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_area.selection()
         if not selected_item:
+            self.alerta.seleccionar_fila()
             return
         
         item = self.t_area.item(selected_item)
@@ -1322,6 +1323,7 @@ class clientes:
     def edit_direx(self):
         selected_item = self.t_direx.selection()
         if not selected_item:
+            self.alerta.seleccionar_fila()
             return
         
         item = self.t_direx.item(selected_item)
