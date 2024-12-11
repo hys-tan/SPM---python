@@ -1257,16 +1257,19 @@ class clientes:
 
     def eliminar_persona_contacto(self):
         selected_item = self.t_persona.selection()
-        if selected_item:
-            # Eliminar la fila seleccionada
-            self.t_persona.delete(selected_item)
+        if not selected_item:
+            self.alerta.seleccionar_fila()
+            return
 
-            # Reajustar los IDs de manera secuencial
-            for index, item in enumerate(self.t_persona.get_children(), start=1):
-                self.t_persona.item(item, values=(index, self.t_persona.item(item)['values'][1]))
+        # Eliminar la fila seleccionada
+        self.t_persona.delete(selected_item)
 
-            # Ajustar el siguiente ID disponible
-            self.siguiente_id = len(self.t_persona.get_children()) + 1
+        # Reajustar los IDs de manera secuencial
+        for index, item in enumerate(self.t_persona.get_children(), start=1):
+            self.t_persona.item(item, values=(index, self.t_persona.item(item)['values'][1]))
+
+        # Ajustar el siguiente ID disponible
+        self.siguiente_id = len(self.t_persona.get_children()) + 1
 
     def edit_area_trabajo(self):
         selected_item = self.t_area.selection()
@@ -1312,13 +1315,16 @@ class clientes:
     
     def eliminar_area_trabajo(self):
         selected_item = self.t_area.selection()
-        if selected_item:
-            self.t_area.delete(selected_item)
+        if not selected_item:
+            self.alerta.seleccionar_fila()
+            return
+        
+        self.t_area.delete(selected_item)
             
-            for index, item in enumerate(self.t_area.get_children(), start=1):
-                self.t_area.item(item, values=(index, self.t_area.item(item)['values'][1]))
+        for index, item in enumerate(self.t_area.get_children(), start=1):
+            self.t_area.item(item, values=(index, self.t_area.item(item)['values'][1]))
 
-            self.siguiente_id_area = len(self.t_area.get_children()) + 1
+        self.siguiente_id_area = len(self.t_area.get_children()) + 1
 
     def edit_direx(self):
         selected_item = self.t_direx.selection()
@@ -1364,13 +1370,16 @@ class clientes:
     
     def eliminar_direccion(self):
         selected_item = self.t_direx.selection()
-        if selected_item:
-            self.t_direx.delete(selected_item)
+        if not selected_item:
+            self.alerta.seleccionar_fila()
+            return
+        
+        self.t_direx.delete(selected_item)
             
-            for index, item in enumerate(self.t_direx.get_children(), start=1):
-                self.t_direx.item(item, values=(index, self.t_direx.item(item)['values'][1]))
-                
-            self.siguiente_id_dix = len(self.t_direx.get_children()) + 1
+        for index, item in enumerate(self.t_direx.get_children(), start=1):
+            self.t_direx.item(item, values=(index, self.t_direx.item(item)['values'][1]))
+        
+        self.siguiente_id_dix = len(self.t_direx.get_children()) + 1
 
     def detalle_cliente(self):
         
