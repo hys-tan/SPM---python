@@ -413,6 +413,10 @@ class alertas:
         
         utils.aplicar_hover_a_botones([btn_cc_si, btn_cc_no])
         
+        cancel_reg.btn_cc_si = btn_cc_si
+
+        return cancel_reg
+        
     # CAMBIOS SIN GUARDAR
     def cambios_sin_guardar(self):
         unsaved_changes=tk.Toplevel(self.parent)
@@ -993,21 +997,21 @@ class clientes:
         
         self.vent_clientes.withdraw()
         
-        reg_cliente = tk.Toplevel(self.vent_clientes)
-        reg_cliente.title("Registro de Clientes")
-        reg_cliente.geometry("710x502")
-        reg_cliente.resizable(False, False)
-        reg_cliente.configure(bg="#373737")
-        utils.centrar_ventana(reg_cliente)
+        self.reg_cliente = tk.Toplevel(self.vent_clientes)
+        self.reg_cliente.title("Registro de Clientes")
+        self.reg_cliente.geometry("710x502")
+        self.reg_cliente.resizable(False, False)
+        self.reg_cliente.configure(bg="#373737")
+        utils.centrar_ventana(self.reg_cliente)
         
         # Resetear los contadores de ID 
         self.siguiente_id = 1
         self.siguiente_id_area = 1
         self.siguiente_id_dix = 1
 
-        reg_cliente.protocol("WM_DELETE_WINDOW", lambda: None)
+        self.reg_cliente.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_reg_cli = tk.Canvas(reg_cliente, width=710, height=502, bg="#373737", highlightthickness=0)
+        canvas_reg_cli = tk.Canvas(self.reg_cliente, width=710, height=502, bg="#373737", highlightthickness=0)
         canvas_reg_cli.pack()
         
         utils.create_rounded_rectangle(canvas_reg_cli, 10, 10, 350, 136, radius=10, fill="#959595", outline="#959595")
@@ -1020,68 +1024,68 @@ class clientes:
         
         canvas_reg_cli.create_text(20, 20, text="Razón Social / Empresa / Cliente", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 38, 340, 68, radius=10, fill="white", outline="#959595")
-        self.reg_rs_cli = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_rs_cli = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_rs_cli.place(x=25, y=43, width=310, height=20)
         
         canvas_reg_cli.create_text(20, 78, text="RUC", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 96, 340, 126, radius=10, fill="white", outline="#959595")
-        self.reg_ruc_cli = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_ruc_cli = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_ruc_cli.place(x=25, y=101, width=310, height=20)
         
         canvas_reg_cli.create_text(20, 156, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 174, 340, 204, radius=10, fill="white", outline="#959595")
-        self.reg_persona = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_persona = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_persona.place(x=25, y=179, width=310, height=20)
         
         canvas_reg_cli.create_text(370, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 370, 38, 690, 68, radius=10, fill="white", outline="#959595")
-        self.reg_ar_tb = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_ar_tb = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_ar_tb.place(x=375, y=43, width=310, height=20)
 
         canvas_reg_cli.create_text(370, 266, text="Dirección", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 370, 284, 690, 314, radius=10, fill="white", outline="#959595")
-        self.reg_direx = tk.Entry(reg_cliente, font=("Arial", 11), bd=0)
+        self.reg_direx = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_direx.place(x=375, y=289, width=310, height=20)
         
-        btn_ag_persona = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_persona_contacto)
+        btn_ag_persona = tk.Button(self.reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_persona_contacto)
         btn_ag_persona.place(x=20, y=214)
 
-        btn_ed_persona = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_persona_cont)
+        btn_ed_persona = tk.Button(self.reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_persona_cont)
         btn_ed_persona.place(x=130, y=214)
         
-        btn_del_persona = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_persona_contacto)
+        btn_del_persona = tk.Button(self.reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_persona_contacto)
         btn_del_persona.place(x=240, y=214)
         
         
-        btn_ag_trabajo = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_area_trabajo)
+        btn_ag_trabajo = tk.Button(self.reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_area_trabajo)
         btn_ag_trabajo.place(x=370, y=78)
         
-        btn_ed_trabajo = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_area_trabajo)
+        btn_ed_trabajo = tk.Button(self.reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_area_trabajo)
         btn_ed_trabajo.place(x=480, y=78)
         
-        btn_del_trabajo = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_area_trabajo)
+        btn_del_trabajo = tk.Button(self.reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_area_trabajo)
         btn_del_trabajo.place(x=590, y=78)
         
         
-        btn_ag_direx = tk.Button(reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_direccion)
+        btn_ag_direx = tk.Button(self.reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_direccion)
         btn_ag_direx.place(x=370, y=324)
         
-        btn_ed_direx = tk.Button(reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_direx)
+        btn_ed_direx = tk.Button(self.reg_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_direx)
         btn_ed_direx.place(x=480, y=324)
         
-        btn_del_direx = tk.Button(reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_direccion)
+        btn_del_direx = tk.Button(self.reg_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.eliminar_direccion)
         btn_del_direx.place(x=590, y=324)
         
         
-        btn_canc_reg = tk.Button(reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: [reg_cliente.destroy(), self.vent_clientes.deiconify()])
+        btn_canc_reg = tk.Button(self.reg_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: self.cancelar_registro_cliente())
         btn_canc_reg.place(x=75, y=462)
 
-        btn_gen_cli = tk.Button(reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.guardar_cliente)
+        btn_gen_cli = tk.Button(self.reg_cliente, text="Registrar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.guardar_cliente)
         btn_gen_cli.place(x=185, y=462)
         
         utils.aplicar_hover_a_botones([btn_ag_persona, btn_ed_persona, btn_del_persona, btn_ag_trabajo, btn_ed_trabajo, btn_del_trabajo, btn_ag_direx, btn_ed_direx, btn_del_direx, btn_canc_reg, btn_gen_cli])
         
-        self.t_persona = ttk.Treeview(reg_cliente, columns=("id_p", "persona"), show="headings", style="Custom.Treeview")
+        self.t_persona = ttk.Treeview(self.reg_cliente, columns=("id_p", "persona"), show="headings", style="Custom.Treeview")
         self.t_persona.place(x=10, y=264, width=341, height=149)
         
         self.t_persona.heading("id_p", text="ID")
@@ -1089,12 +1093,12 @@ class clientes:
         self.t_persona.column("id_p", anchor="center", width=35, stretch=False)
         self.t_persona.column("persona", anchor="center", width=290, stretch=False)
 
-        scrollbar_t_persona = ttk.Scrollbar(reg_cliente, orient="vertical", command=self.t_persona.yview)
+        scrollbar_t_persona = ttk.Scrollbar(self.reg_cliente, orient="vertical", command=self.t_persona.yview)
         self.t_persona.configure(yscrollcommand=scrollbar_t_persona.set)
         scrollbar_t_persona.place(x=337, y=264, height=149)
         
         
-        self.t_area = ttk.Treeview(reg_cliente, columns=("id_a", "area"), show="headings", style="Custom.Treeview")
+        self.t_area = ttk.Treeview(self.reg_cliente, columns=("id_a", "area"), show="headings", style="Custom.Treeview")
         self.t_area.place(x=360, y=128, width=341, height=119)
         
         self.t_area.heading("id_a", text="ID")
@@ -1102,12 +1106,12 @@ class clientes:
         self.t_area.column("id_a", anchor="center", width=35, stretch=False)
         self.t_area.column("area", anchor="center", width=290, stretch=False)
 
-        scrollbar_t_area = ttk.Scrollbar(reg_cliente, orient="vertical", command=self.t_area.yview)
+        scrollbar_t_area = ttk.Scrollbar(self.reg_cliente, orient="vertical", command=self.t_area.yview)
         self.t_area.configure(yscrollcommand=scrollbar_t_area.set)
         scrollbar_t_area.place(x=687, y=128, height=119)
 
 
-        self.t_direx = ttk.Treeview(reg_cliente, columns=("id_d", "direx"), show="headings", style="Custom.Treeview")
+        self.t_direx = ttk.Treeview(self.reg_cliente, columns=("id_d", "direx"), show="headings", style="Custom.Treeview")
         self.t_direx.place(x=360, y=374, width=341, height=119)
         
         self.t_direx.heading("id_d", text="ID")
@@ -1115,7 +1119,7 @@ class clientes:
         self.t_direx.column("id_d", anchor="center", width=35, stretch=False)
         self.t_direx.column("direx", anchor="center", width=290, stretch=False)
         
-        scrollbar_t_direx = ttk.Scrollbar(reg_cliente, orient="vertical", command=self.t_direx.yview)
+        scrollbar_t_direx = ttk.Scrollbar(self.reg_cliente, orient="vertical", command=self.t_direx.yview)
         self.t_direx.configure(yscrollcommand=scrollbar_t_direx.set)
         scrollbar_t_direx.place(x=687, y=374, height=119)
         
@@ -1126,6 +1130,20 @@ class clientes:
         self.ids_at_disponibles = set()
         self.direcciones = []
         self.ids_dx_disponibles = set()
+        
+    def cancelar_registro_cliente(self):
+        # Verificar si alguna de las casillas está llena
+        if self.reg_rs_cli.get() or self.reg_ruc_cli.get():
+            # Mostrar ventana de confirmación
+            cancel_reg = self.alerta.cancelar_registro()
+            
+            # Configurar botón SI para cerrar ventana actual y volver a clientes
+            cancel_reg.btn_cc_si.configure(command=lambda: [cancel_reg.destroy(), self.reg_cliente.destroy(), self.vent_clientes.deiconify()])
+        else:
+            # Si ambas casillas están vacías, volver directamente a clientes
+            self.reg_cliente.destroy()
+            self.vent_clientes.deiconify()
+
 
     def agregar_persona_contacto(self):
         persona = self.reg_persona.get()
