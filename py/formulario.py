@@ -546,37 +546,36 @@ class alertas:
         
         utils.aplicar_hover_a_botones([btn_code_ok])
         
-    # CLIENTE REPETIDO
-    def cliente_repetido(self):
-        cli_rep=tk.Toplevel(self.parent)
-        cli_rep.title("")
-        cli_rep.geometry("300x110")
-        cli_rep.resizable(False, False)
-        cli_rep.configure(bg="#FFFFFF")
-        cli_rep.grab_set()
-        utils.centrar_ventana(cli_rep)
-        cli_rep.protocol("WM_DELETE_WINDOW", lambda: None)
+    # RUC REPETIDO
+    def ruc_repetido(self):
+        ruc_rep=tk.Toplevel(self.parent)
+        ruc_rep.title("")
+        ruc_rep.geometry("300x110")
+        ruc_rep.resizable(False, False)
+        ruc_rep.configure(bg="#FFFFFF")
+        ruc_rep.grab_set()
+        utils.centrar_ventana(ruc_rep)
+        ruc_rep.protocol("WM_DELETE_WINDOW", lambda: None)
         
-        canvas_cli_rep = tk.Canvas(cli_rep, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
-        canvas_cli_rep.pack()
+        canvas_ruc_rep = tk.Canvas(ruc_rep, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_ruc_rep.pack()
         
         icono_path = os.path.join(ICON_DIR, "alert.png")
         try:
-            icon_cli_rep = tk.PhotoImage(file=icono_path)
-            canvas_cli_rep.create_image(30, 17, anchor="nw", image=icon_cli_rep)
-            canvas_cli_rep.image = icon_cli_rep
+            icon_ruc_rep = tk.PhotoImage(file=icono_path)
+            canvas_ruc_rep.create_image(30, 17, anchor="nw", image=icon_ruc_rep)
+            canvas_ruc_rep.image = icon_ruc_rep
         except Exception as e:
             raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
         
-        utils.create_rounded_rectangle(canvas_cli_rep, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        utils.create_rounded_rectangle(canvas_ruc_rep, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
-        canvas_cli_rep.create_text(100, 19, text="Este cliente ya existe", anchor="nw", font=("Arial", 10), fill="Black")
-        canvas_cli_rep.create_text(95, 33, text="Intente con otro nombre", anchor="nw", font=("Arial", 10), fill="Black")
+        canvas_ruc_rep.create_text(82, 26, text="El RUC ingresado ya existe", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_cli_ok = tk.Button(cli_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cli_rep.destroy)
-        btn_cli_ok.place(x=115, y=73)
+        btn_ruc_ok = tk.Button(ruc_rep, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ruc_rep.destroy)
+        btn_ruc_ok.place(x=115, y=73)
         
-        utils.aplicar_hover_a_botones([btn_cli_ok])
+        utils.aplicar_hover_a_botones([btn_ruc_ok])
         
     # COTIZACION CON CODIGO IGUAL
     def cotizacion_codigo_igual(self):
@@ -992,38 +991,7 @@ class clientes:
         self.t_cliente.column("fecha", anchor="center", width=130, stretch=False)
         
         self.actualizar_tabla_clientes()
-        '''
-        datos_clientes = [
-            ("1", "Empresa ABC S.A.", "20123456789", "2023-11-01"),
-            ("2", "Constructora XYZ", "10456789012", "2023-10-15"),
-            ("3", "Servicios Industriales S.R.L.", "20345678901", "2023-09-22"),
-            ("4", "Distribuidora Pérez", "10432109876", "2023-08-30"),
-            ("5", "Inversiones López S.A.C.", "20567890123", "2023-07-19"),
-            ("6", "Transportes Rojas", "10321098765", "2023-06-25"),
-            ("7", "Tecnología Avanzada S.A.", "20198765432", "2023-05-14"),
-            ("8", "Comercializadora García", "10456789023", "2023-04-07"),
-            ("9", "Consultores Martínez S.A.", "20456789123", "2023-03-29"),
-            ("10", "Agroindustria Chávez", "20543210987", "2023-02-18"),
-            ("11", "Corporación Rivera", "10321987654", "2023-01-09"),
-            ("12", "Soluciones Globales S.A.C.", "20345678901", "2022-12-11"),
-            ("13", "Proyectos Vega", "10456789021", "2022-11-22"),
-            ("14", "Servicios Integrales Torres", "20123456780", "2022-10-05"),
-            ("15", "Constructora Lima S.A.C.", "20432109876", "2022-09-17"),
-            ("16", "Empresa ABC S.A.", "20123456789", "2023-11-01"),
-            ("17", "Constructora XYZ", "10456789012", "2023-10-15"),
-            ("18", "Servicios Industriales S.R.L.", "20345678901", "2023-09-22"),
-            ("19", "Distribuidora Pérez", "10432109876", "2023-08-30"),
-            ("20", "Inversiones López S.A.C.", "20567890123", "2023-07-19"),
-            ("21", "Consultores Martínez S.A.", "20456789123", "2023-03-29"),
-        ]
-
-        ejemplos_clientes = datos_clientes[:50]
         
-        for cliente in ejemplos_clientes:
-            self.t_cliente.insert("", "end", values=cliente)
-        
-        '''
-         
         scrllbar_t_cli = ttk.Scrollbar(vent_clientes, orient="vertical", command=self.t_cliente.yview)
         self.t_cliente.configure(yscrollcommand=scrllbar_t_cli.set)
         scrllbar_t_cli.place(x=1177, y=80, height=569)
@@ -1062,7 +1030,7 @@ class clientes:
         self.reg_rs_cli = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_rs_cli.place(x=25, y=43, width=310, height=20)
         
-        canvas_reg_cli.create_text(20, 78, text="RUC", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
+        canvas_reg_cli.create_text(20, 78, text="RUC / DNI", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 96, 340, 126, radius=10, fill="white", outline="#959595")
         self.reg_ruc_cli = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_ruc_cli.place(x=25, y=101, width=310, height=20)
