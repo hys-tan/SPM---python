@@ -78,23 +78,19 @@ class ClienteDatabase:
         except sqlite3.Error as e:
             print(f"Error al crear las tablas: {e}")
             
-    def obtener_clientes(self, limite=50):
+    def obtener_clientes_paginados(self, offset=0, limite=50):
         try:
             conexion = self.crear_conexion()
             cursor = conexion.cursor()
             cursor.execute('''
                 SELECT id, razon_social, ruc, fecha_registro 
-                FROM (
-                    SELECT id, razon_social, ruc, fecha_registro 
-                    FROM clientes 
-                    ORDER BY fecha_registro DESC
-                    LIMIT ?
-                ) 
-                ORDER BY fecha_registro ASC
-            ''', (limite,))
+                FROM clientes 
+                ORDER BY fecha_registro DESC
+                LIMIT ? OFFSET ?
+            ''', (limite, offset))
             return cursor.fetchall()
         except sqlite3.Error as e:
-            print(f"Error al obtener clientes: {e}")
+            print(f"Error al obtener clientes paginados: {e}")
             return []
         finally:
             if conexion:

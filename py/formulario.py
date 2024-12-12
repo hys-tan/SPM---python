@@ -933,13 +933,18 @@ class clientes:
         btn_menu = tk.Button(vent_clientes, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: [vent_clientes.destroy(), self.root.deiconify()])
         btn_menu.place(x=22, y=170)
         
-        btn_sig_cli = tk.Button(vent_clientes, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_sig_cli.place(x=1090, y=658)
+        self.pagina_actual = 1
+        self.registros_por_pagina = 50
         
-        btn_atras_cli = tk.Button(vent_clientes, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
-        btn_atras_cli.place(x=980, y=658)
+        self.btn_sig_cli = tk.Button(vent_clientes, text="Siguiente", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        self.btn_sig_cli.configure(command=self.siguiente_pagina)
+        self.btn_sig_cli.place(x=1090, y=658)
         
-        utils.aplicar_hover_a_botones([btn_reg_cliente, btn_ed_cli, btn_menu, btn_sig_cli, btn_atras_cli])
+        self.btn_atras_cli = tk.Button(vent_clientes, text="Anterior", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        self.btn_atras_cli.configure(command=self.pagina_anterior)
+        self.btn_atras_cli.place(x=980, y=658)
+        
+        utils.aplicar_hover_a_botones([btn_reg_cliente, btn_ed_cli, btn_menu, self.btn_sig_cli, self.btn_atras_cli])
         
         canvas_cliente.create_text(20, 576, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
@@ -1250,11 +1255,46 @@ class clientes:
             self.t_cliente.delete(i)
         
         # Obtener los clientes de la base de datos (primeras 50 filas)
-        clientes = self.db_clientes.obtener_clientes()
+        todos_clientes = self.db_clientes.obtener_clientes_paginados(
+            offset=(self.pagina_actual - 1) * self.registros_por_pagina, 
+            limite=self.registros_por_pagina
+        )
         
         # Insertar los clientes en la tabla
-        for cliente in clientes:
+        for cliente in todos_clientes:
             self.t_cliente.insert("", "end", values=cliente)
+
+        # Habilitar/deshabilitar botones de navegación
+        self.actualizar_botones_navegacion()
+        
+    def siguiente_pagina(self):
+        # Verificar si hay más registros
+        clientes_siguientes = self.db_clientes.obtener_clientes_paginados(
+            offset=self.pagina_actual * self.registros_por_pagina, 
+            limite=self.registros_por_pagina
+        )
+        
+        if clientes_siguientes:
+            self.pagina_actual += 1
+            self.actualizar_tabla_clientes()
+
+    def pagina_anterior(self):
+        if self.pagina_actual > 1:
+            self.pagina_actual -= 1
+            self.actualizar_tabla_clientes()
+
+    def actualizar_botones_navegacion(self):
+        # Verificar si hay más registros para la siguiente página
+        clientes_siguientes = self.db_clientes.obtener_clientes_paginados(
+            offset=self.pagina_actual * self.registros_por_pagina, 
+            limite=self.registros_por_pagina
+        )
+        
+        # Habilitar/deshabilitar botón siguiente
+        self.btn_sig_cli.config(state='normal' if clientes_siguientes else 'disabled')
+        
+        # Habilitar/deshabilitar botón anterior
+        self.btn_atras_cli.config(state='normal' if self.pagina_actual > 1 else 'disabled')
 
     def edit_persona_cont(self):
         # Obtener el elemento seleccionado de la tabla
