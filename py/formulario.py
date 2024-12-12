@@ -349,7 +349,7 @@ class alertas:
         utils.aplicar_hover_a_botones([btn_qd_ok])
         
     # REGISTRO CORRECTO
-    def registro_confirm(self):
+    def registro_confirm(self, ventanas_a_cerrar=None, callback=None):
         reg_confirm=tk.Toplevel(self.parent)
         reg_confirm.title("")
         reg_confirm.geometry("300x110")
@@ -374,7 +374,21 @@ class alertas:
         
         canvas_reg_confirm.create_text(103, 26, text="¡Registro exitoso!", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_reg_conf = tk.Button(reg_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=reg_confirm.destroy)
+        def cerrar_ventanas():
+            # Cerrar ventanas si se proporcionaron
+            if ventanas_a_cerrar:
+                for ventana in ventanas_a_cerrar:
+                    ventana.destroy()
+            
+            # Ejecutar callback si se proporcionó
+            if callback:
+                callback()
+            
+            # Cerrar la ventana de confirmación
+            reg_confirm.destroy()
+
+        btn_reg_conf = tk.Button(reg_confirm, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_reg_conf.configure(command=cerrar_ventanas)
         btn_reg_conf.place(x=115, y=73)
         
         utils.aplicar_hover_a_botones([btn_reg_conf])
@@ -1222,7 +1236,9 @@ class clientes:
             
             conexion.commit()
             print("Cliente, personas de contacto, áreas de trabajo y direcciones registrados exitosamente")
-            self.alerta.registro_confirm()
+            self.alerta.registro_confirm(
+                ventanas_a_cerrar=[self.reg_cliente],   # Ventanas a cerrar
+                callback=self.vent_clientes.deiconify)  # Función para mostrar ventana de clientes
         except sqlite3.Error as e:
             self.alerta.question_datos()
             print(f"Error al registrar cliente: {e}")
