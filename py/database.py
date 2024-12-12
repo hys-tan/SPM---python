@@ -77,5 +77,27 @@ class ClienteDatabase:
                 print("Tablas de clientes, personas de contacto, áreas de trabajo y direcciones creadas exitosamente")
         except sqlite3.Error as e:
             print(f"Error al crear las tablas: {e}")
+            
+    def obtener_clientes(self, limite=50):
+        try:
+            conexion = self.crear_conexion()
+            cursor = conexion.cursor()
+            cursor.execute('''
+                SELECT id, razon_social, ruc, fecha_registro 
+                FROM (
+                    SELECT id, razon_social, ruc, fecha_registro 
+                    FROM clientes 
+                    ORDER BY fecha_registro DESC
+                    LIMIT ?
+                ) 
+                ORDER BY fecha_registro ASC
+            ''', (limite,))
+            return cursor.fetchall()
+        except sqlite3.Error as e:
+            print(f"Error al obtener clientes: {e}")
+            return []
+        finally:
+            if conexion:
+                conexion.close()
 
     # Métodos adicionales para operaciones CRUD se agregarán después

@@ -978,19 +978,21 @@ class clientes:
         cbo_page_cliente.place(x=310, y=658, width=70, height=30)
         cbo_page_cliente.current(0)
 
-        t_cliente = ttk.Treeview(vent_clientes, columns=("id", "razon", "ruc", "fecha",), show="headings", style="Custom.Treeview")
-        t_cliente.place(x=310, y=80, width=881, height=569)
+        self.t_cliente = ttk.Treeview(vent_clientes, columns=("id", "razon", "ruc", "fecha",), show="headings", style="Custom.Treeview")
+        self.t_cliente.place(x=310, y=80, width=881, height=569)
         
-        t_cliente.heading("id", text="ID")
-        t_cliente.heading("razon", text="Razón Social / Cliente / Empresa")
-        t_cliente.heading("ruc", text="RUC / DNI")
-        t_cliente.heading("fecha", text="Fecha")
+        self.t_cliente.heading("id", text="ID")
+        self.t_cliente.heading("razon", text="Razón Social / Cliente / Empresa")
+        self.t_cliente.heading("ruc", text="RUC / DNI")
+        self.t_cliente.heading("fecha", text="Fecha")
         
-        t_cliente.column("id", anchor="center", width=70, stretch=False)
-        t_cliente.column("razon", anchor="center", width=485, stretch=False)
-        t_cliente.column("ruc", anchor="center", width=180, stretch=False)
-        t_cliente.column("fecha", anchor="center", width=130, stretch=False)
+        self.t_cliente.column("id", anchor="center", width=70, stretch=False)
+        self.t_cliente.column("razon", anchor="center", width=485, stretch=False)
+        self.t_cliente.column("ruc", anchor="center", width=180, stretch=False)
+        self.t_cliente.column("fecha", anchor="center", width=130, stretch=False)
         
+        self.actualizar_tabla_clientes()
+        '''
         datos_clientes = [
             ("1", "Empresa ABC S.A.", "20123456789", "2023-11-01"),
             ("2", "Constructora XYZ", "10456789012", "2023-10-15"),
@@ -1018,10 +1020,12 @@ class clientes:
         ejemplos_clientes = datos_clientes[:50]
         
         for cliente in ejemplos_clientes:
-            t_cliente.insert("", "end", values=cliente)
-            
-        scrllbar_t_cli = ttk.Scrollbar(vent_clientes, orient="vertical", command=t_cliente.yview)
-        t_cliente.configure(yscrollcommand=scrllbar_t_cli.set)
+            self.t_cliente.insert("", "end", values=cliente)
+        
+        '''
+         
+        scrllbar_t_cli = ttk.Scrollbar(vent_clientes, orient="vertical", command=self.t_cliente.yview)
+        self.t_cliente.configure(yscrollcommand=scrllbar_t_cli.set)
         scrllbar_t_cli.place(x=1177, y=80, height=569)
         
     def registrar_cliente(self):
@@ -1222,45 +1226,61 @@ class clientes:
         try:
             conexion = self.db_clientes.crear_conexion()
             cursor = conexion.cursor()
-            
+
             # Insertar cliente
-            cursor.execute('''
+            cursor.execute(''' 
             INSERT INTO clientes (razon_social, ruc, direccion) 
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?) 
             ''', (razon_social, ruc, direccion))
-            
-            # Insertar personas de contacto
-            for persona in self.personas_contacto:
-                cursor.execute('''
+
+            # Insertar personas de contacto 
+            for persona in self.personas_contacto: 
+                cursor.execute(''' 
                 INSERT INTO personas_contacto (cliente_ruc, nombre) 
-                VALUES (?, ?)
-                ''', (ruc, persona[1]))
-            
-            # Insertar áreas de trabajo
-            for area in self.areas_trabajo:
-                cursor.execute('''
+                VALUES (?, ?) 
+                ''', (ruc, persona[1])) 
+
+            # Insertar áreas de trabajo 
+            for area in self.areas_trabajo: 
+                cursor.execute(''' 
                 INSERT INTO areas_trabajo (cliente_ruc, nombre) 
-                VALUES (?, ?)
-                ''', (ruc, area[1]))
-            
-            # Insertar direcciones adicionales
-            for dir_adicional in self.direcciones:
-                cursor.execute('''
+                VALUES (?, ?) 
+                ''', (ruc, area[1])) 
+
+            # Insertar direcciones adicionales 
+            for dir_adicional in self.direcciones: 
+                cursor.execute(''' 
                 INSERT INTO direcciones (cliente_ruc, direccion) 
-                VALUES (?, ?)
-                ''', (ruc, dir_adicional[1]))
-            
+                VALUES (?, ?) 
+                ''', (ruc, dir_adicional[1])) 
+
             conexion.commit()
             print("Cliente, personas de contacto, áreas de trabajo y direcciones registrados exitosamente")
-            self.alerta.registro_confirm(
-                ventanas_a_cerrar=[self.reg_cliente],   # Ventanas a cerrar
-                callback=self.vent_clientes.deiconify)  # Función para mostrar ventana de clientes
-        except sqlite3.Error as e:
-            self.alerta.question_datos()
+            
+            # Actualizar la tabla de clientes
+            self.actualizar_tabla_clientes()
+            
+            self.alerta.registro_confirm( 
+                ventanas_a_cerrar=[self.reg_cliente],   # Ventanas a cerrar 
+                callback=self.vent_clientes.deiconify)  # Función para mostrar ventana de clientes 
+        except sqlite3.Error as e: 
+            self.alerta.question_datos() 
             print(f"Error al registrar cliente: {e}")
-        finally:
-            if conexion:
+        finally: 
+            if conexion: 
                 conexion.close()
+
+    def actualizar_tabla_clientes(self):
+        # Limpiar la tabla actual
+        for i in self.t_cliente.get_children():
+            self.t_cliente.delete(i)
+        
+        # Obtener los clientes de la base de datos (primeras 50 filas)
+        clientes = self.db_clientes.obtener_clientes()
+        
+        # Insertar los clientes en la tabla
+        for cliente in clientes:
+            self.t_cliente.insert("", "end", values=cliente)
 
     def edit_persona_cont(self):
         # Obtener el elemento seleccionado de la tabla
