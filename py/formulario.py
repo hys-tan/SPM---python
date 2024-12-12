@@ -57,7 +57,11 @@ class alertas:
         utils.aplicar_hover_a_botones([btn_si, btn_no])
 
     # SELECCIONE UNA FILA
-    def seleccionar_fila(self):
+    def seleccionar_fila(self, callback=None, parent=None):
+        
+        if parent is None:
+            parent = self.root
+        
         sec_fila=tk.Toplevel(self.parent)
         sec_fila.title("")
         sec_fila.geometry("300x110")
@@ -83,7 +87,13 @@ class alertas:
         
         canvas_sec_fila.create_text(79, 26, text="Por favor, seleccione una fila", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_sec_ok = tk.Button(sec_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=sec_fila.destroy)
+        def cerrar_ventana():
+            sec_fila.destroy()
+            # Ejecutar callback si está definido
+            if callback:
+                callback()
+        
+        btn_sec_ok = tk.Button(sec_fila, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cerrar_ventana)
         btn_sec_ok.place(x=115, y=73)
         
         utils.aplicar_hover_a_botones([btn_sec_ok])
@@ -394,7 +404,7 @@ class alertas:
         utils.aplicar_hover_a_botones([btn_reg_conf])
 
     # CANCELAR REGISTRO
-    def cancelar_registro(self):
+    def cancelar_registro(self, callback=None, parent=None):
         cancel_reg=tk.Toplevel(self.parent)
         cancel_reg.title("")
         cancel_reg.geometry("300x110")
@@ -421,6 +431,13 @@ class alertas:
         
         btn_cc_si = tk.Button(cancel_reg, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_cc_si.place(x=73, y=73)
+        
+        def cerrar_ventana():
+            cancel_reg.destroy()
+            if callback:
+                callback()
+        
+        btn_cc_si.configure(command=cerrar_ventana)
 
         btn_cc_no = tk.Button(cancel_reg, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=cancel_reg.destroy)
         btn_cc_no.place(x=158, y=73)
@@ -1149,15 +1166,14 @@ class clientes:
         # Verificar si alguna de las casillas está llena
         if self.reg_rs_cli.get() or self.reg_ruc_cli.get():
             # Mostrar ventana de confirmación
-            cancel_reg = self.alerta.cancelar_registro()
-            
-            # Configurar botón SI para cerrar ventana actual y volver a clientes
-            cancel_reg.btn_cc_si.configure(command=lambda: [cancel_reg.destroy(), self.reg_cliente.destroy(), self.vent_clientes.deiconify()])
+            cancel_reg = self.alerta.cancelar_registro(callback=lambda: [
+                                                        cancel_reg.destroy(), 
+                                                        self.reg_cliente.destroy(), 
+                                                        self.vent_clientes.deiconify()])
         else:
             # Si ambas casillas están vacías, volver directamente a clientes
             self.reg_cliente.destroy()
             self.vent_clientes.deiconify()
-
 
     def agregar_persona_contacto(self):
         persona = self.reg_persona.get()
@@ -1250,7 +1266,8 @@ class clientes:
         # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_persona.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila()
+            self.alerta.seleccionar_fila(
+                parent=self.vent_clientes)
             return
 
         # Obtener el ID y el nombre de la persona seleccionada
@@ -1293,7 +1310,8 @@ class clientes:
     def eliminar_persona_contacto(self):
         selected_item = self.t_persona.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila()
+            self.alerta.seleccionar_fila(
+                parent=self.vent_clientes)
             return
 
         # Eliminar la fila seleccionada
@@ -1309,7 +1327,8 @@ class clientes:
     def edit_area_trabajo(self):
         selected_item = self.t_area.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila()
+            self.alerta.seleccionar_fila(
+                parent=self.vent_clientes)
             return
         
         item = self.t_area.item(selected_item)
@@ -1351,7 +1370,8 @@ class clientes:
     def eliminar_area_trabajo(self):
         selected_item = self.t_area.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila()
+            self.alerta.seleccionar_fila(
+                parent=self.vent_clientes)
             return
         
         self.t_area.delete(selected_item)
@@ -1364,7 +1384,8 @@ class clientes:
     def edit_direx(self):
         selected_item = self.t_direx.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila()
+            self.alerta.seleccionar_fila(
+                parent=self.vent_clientes)
             return
         
         item = self.t_direx.item(selected_item)
@@ -1406,7 +1427,8 @@ class clientes:
     def eliminar_direccion(self):
         selected_item = self.t_direx.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila()
+            self.alerta.seleccionar_fila(
+                parent=self.vent_clientes)
             return
         
         self.t_direx.delete(selected_item)
