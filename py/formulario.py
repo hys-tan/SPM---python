@@ -560,7 +560,7 @@ class alertas:
         canvas_ruc_rep = tk.Canvas(ruc_rep, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_ruc_rep.pack()
         
-        icono_path = os.path.join(ICON_DIR, "alert.png")
+        icono_path = os.path.join(ICON_DIR, "stop.png")
         try:
             icon_ruc_rep = tk.PhotoImage(file=icono_path)
             canvas_ruc_rep.create_image(30, 17, anchor="nw", image=icon_ruc_rep)
@@ -1191,6 +1191,10 @@ class clientes:
         ruc = self.reg_ruc_cli.get()
         direccion = self.reg_direx.get()
 
+        if not self.reg_rs_cli.get() or not self.reg_ruc_cli.get():
+            self.alerta.question_datos()  # Mostrar alerta de campos vacíos
+            return
+        
         try:
             conexion = self.db_clientes.crear_conexion()
             cursor = conexion.cursor()
@@ -1231,11 +1235,13 @@ class clientes:
             self.alerta.registro_confirm( 
                 ventanas_a_cerrar=[self.reg_cliente],   # Ventanas a cerrar 
                 callback=self.vent_clientes.deiconify)  # Función para mostrar ventana de clientes 
-        except sqlite3.Error as e: 
-            self.alerta.question_datos() 
+        
+        except sqlite3.IntegrityError as e:
+            self.alerta.ruc_repetido()
+        except sqlite3.Error as e:
             print(f"Error al registrar cliente: {e}")
-        finally: 
-            if conexion: 
+        finally:
+            if conexion:
                 conexion.close()
 
     def actualizar_tabla_clientes(self):
