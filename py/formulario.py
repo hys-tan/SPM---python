@@ -655,13 +655,13 @@ class generator_cot:
         input_gpersona.place(x=425, y=43, width=190, height=20)
         
         canvas_coti.create_text(630, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        cbo_area = ttk.Combobox(gen_cot, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        cbo_area = ttk.Combobox(gen_cot, values=["Escoja una Opción", " "], state="readonly", font=("Raleway", 10))
         cbo_area.place(x=630, y=38, width=190, height=31)
         cbo_area.current(0)
         
         
         canvas_coti.create_text(20, 78, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
-        cbo_persona = ttk.Combobox(gen_cot, values=["Escoja una Opción", "Ejemplo1"], state="readonly", font=("Raleway", 10))
+        cbo_persona = ttk.Combobox(gen_cot, values=["Escoja una Opción", " "], state="readonly", font=("Raleway", 10))
         cbo_persona.place(x=20, y=96, width=230, height=31)
         cbo_persona.current(0)
         
@@ -1224,6 +1224,7 @@ class clientes:
             print("Cliente, personas de contacto, áreas de trabajo y direcciones registrados exitosamente")
             self.alerta.registro_confirm()
         except sqlite3.Error as e:
+            self.alerta.question_datos()
             print(f"Error al registrar cliente: {e}")
         finally:
             if conexion:
