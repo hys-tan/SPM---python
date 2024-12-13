@@ -1499,6 +1499,17 @@ class clientes:
         self.siguiente_id_dix = len(self.t_direx.get_children()) + 1
 
     def detalle_cliente(self):
+
+        selected_item = self.t_cliente.selection()  # Obtener el elemento seleccionado de la tabla
+        
+        # Verificar si se ha seleccionado una fila
+        if not selected_item:
+            # Si no hay fila seleccionada, mostrar la alerta
+            self.alerta.seleccionar_fila(parent=self.vent_clientes)
+            return
+        
+        item = self.t_cliente.item(selected_item)
+        cliente_id, razon_social, ruc, fecha = item['values']
         
         self.vent_clientes.withdraw()
         
@@ -1550,7 +1561,7 @@ class clientes:
         btn_det_ag_persona = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_ag_persona.place(x=20, y=214)
         
-        btn_det_ed_persona = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_persona_cont)
+        btn_det_ed_persona = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_ed_persona.place(x=130, y=214)
         
         btn_det_del_persona = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1560,7 +1571,7 @@ class clientes:
         btn_det_ag_trabajo = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_ag_trabajo.place(x=370, y=78)
         
-        btn_det_ed_trabajo = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_area_trabajo)
+        btn_det_ed_trabajo = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_ed_trabajo.place(x=480, y=78)
         
         btn_det_del_trabajo = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1570,7 +1581,7 @@ class clientes:
         btn_det_ag_direx = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_ag_direx.place(x=370, y=324)
         
-        btn_det_ed_direx = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.edit_direx)
+        btn_det_ed_direx = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
         btn_det_ed_direx.place(x=480, y=324)
         
         btn_det_del_direx = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1595,17 +1606,6 @@ class clientes:
         t_det_persona.column("id_dp", anchor="center", width=35, stretch=False)
         t_det_persona.column("dpersona", anchor="center", width=290, stretch=False)
         
-        datos_t_dpersona = [
-            ("1", "AAA"),
-            ("2", "BBB"),
-            ("3", "CCC"),
-            ("4", "DDD"),
-            ("5", "EEE"),
-        ]
-
-        for d_persona in datos_t_dpersona:
-            t_det_persona.insert("", "end", values=d_persona)
-        
         scrollbar_t_dpersona = ttk.Scrollbar(det_cliente, orient="vertical", command=t_det_persona.yview)
         t_det_persona.configure(yscrollcommand=scrollbar_t_dpersona.set)
         scrollbar_t_dpersona.place(x=337, y=264, height=149)
@@ -1618,18 +1618,7 @@ class clientes:
         t_det_area.heading("darea", text="Área de Trabajo")
         t_det_area.column("id_da", anchor="center", width=35, stretch=False)
         t_det_area.column("darea", anchor="center", width=290, stretch=False)
-        
-        datos_t_darea = [
-            ("1", "AAA"),
-            ("2", "BBB"),
-            ("3", "CCC"),
-            ("4", "DDD"),
-            ("5", "EEE")
-        ]
 
-        for d_area in datos_t_darea:
-            t_det_area.insert("", "end", values=d_area)
-        
         scrollbar_t_darea = ttk.Scrollbar(det_cliente, orient="vertical", command=t_det_area.yview)
         t_det_area.configure(yscrollcommand=scrollbar_t_darea.set)
         scrollbar_t_darea.place(x=687, y=128, height=119)
@@ -1643,20 +1632,48 @@ class clientes:
         t_det_direx.column("id_dd", anchor="center", width=35, stretch=False)
         t_det_direx.column("ddirex", anchor="center", width=290, stretch=False)
         
-        datos_t_ddirex = [
-            ("1", "AAA"),
-            ("2", "BBB"),
-            ("3", "CCC"),
-            ("4", "DDD"),
-            ("5", "EEE")
-        ]
-        
-        for d_direx in datos_t_ddirex:
-            t_det_direx.insert("", "end", values=d_direx)
-        
         scrollbar_t_ddirex = ttk.Scrollbar(det_cliente, orient="vertical", command=t_det_direx.yview)
         t_det_direx.configure(yscrollcommand=scrollbar_t_ddirex.set)
-        scrollbar_t_ddirex.place(x=687, y=374, height=119)   
+        scrollbar_t_ddirex.place(x=687, y=374, height=119)
+        
+        self.det_rs_cli = det_rs_cli
+        self.det_ruc_cli = det_ruc_cli
+        self.t_det_persona = t_det_persona
+        self.t_det_area = t_det_area
+        self.t_det_direx = t_det_direx
+        
+        # Cargar datos principales
+        det_rs_cli.insert(0, razon_social)
+        det_ruc_cli.insert(0, ruc)
+
+        # Cargar personas de contacto, áreas y direcciones
+        try:
+            conexion = self.db_clientes.crear_conexion()
+            cursor = conexion.cursor()
+
+            # Cargar personas de contacto
+            cursor.execute('SELECT nombre FROM personas_contacto WHERE cliente_ruc = ?', (ruc,))
+            personas = cursor.fetchall()
+            for persona in personas:
+                t_det_persona.insert("", "end", values=(len(t_det_persona.get_children()) + 1, persona[0]))
+
+            # Cargar áreas de trabajo
+            cursor.execute('SELECT nombre FROM areas_trabajo WHERE cliente_ruc = ?', (ruc,))
+            areas = cursor.fetchall()
+            for area in areas:
+                t_det_area.insert("", "end", values=(len(t_det_area.get_children()) + 1, area[0]))
+
+            # Cargar direcciones adicionales
+            cursor.execute('SELECT direccion FROM direcciones WHERE cliente_ruc = ?', (ruc,))
+            direcciones = cursor.fetchall()
+            for direccion in direcciones:
+                t_det_direx.insert("", "end", values=(len(t_det_direx.get_children()) + 1, direccion[0]))
+
+        except sqlite3.Error as e:
+            print(f"Error al cargar datos del cliente: {e}")
+        finally:
+            if conexion:
+                conexion.close()
 
 
 class cotizaciones:
