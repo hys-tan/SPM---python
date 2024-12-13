@@ -83,9 +83,9 @@ class ClienteDatabase:
             conexion = self.crear_conexion()
             cursor = conexion.cursor()
             cursor.execute('''
-                SELECT id, razon_social, ruc, fecha_registro 
+                SELECT id, razon_social, ruc, strftime('%d/%m/%Y', fecha_registro) AS fecha_registro 
                 FROM clientes 
-                ORDER BY fecha_registro DESC
+                ORDER BY id DESC
                 LIMIT ? OFFSET ?
             ''', (limite, offset))
             return cursor.fetchall()
