@@ -96,4 +96,18 @@ class ClienteDatabase:
             if conexion:
                 conexion.close()
 
+    def obtener_total_clientes(self):
+        try:
+            conexion = self.crear_conexion()
+            cursor = conexion.cursor()
+            cursor.execute('SELECT COUNT(*) FROM clientes')
+            total = cursor.fetchone()[0]
+            return total
+        except sqlite3.Error as e:
+            print(f"Error al obtener total de clientes: {e}")
+            return 0
+        finally:
+            if conexion:
+                conexion.close()
+    
     # Métodos adicionales para operaciones CRUD se agregarán después

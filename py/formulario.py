@@ -978,9 +978,8 @@ class clientes:
         search_entry_cliente.bind("<FocusOut>", lambda event: utils.placeholder_search(event, search_entry_cliente))
         search_entry_cliente.place(x=6, y=7, width=301, height=27)
         
-        cbo_page_cliente = ttk.Combobox(vent_clientes, values=["1", "2", "1000"], state="readonly", font=("Arial", 10))
-        cbo_page_cliente.place(x=310, y=658, width=70, height=30)
-        cbo_page_cliente.current(0)
+        self.cbo_page_cliente = ttk.Combobox(vent_clientes, state="readonly", font=("Arial", 10))
+        self.cbo_page_cliente.place(x=310, y=658, width=70, height=30)
 
         self.t_cliente = ttk.Treeview(vent_clientes, columns=("id", "razon", "ruc", "fecha",), show="headings", style="Custom.Treeview")
         self.t_cliente.place(x=310, y=80, width=881, height=569)
@@ -995,12 +994,13 @@ class clientes:
         self.t_cliente.column("ruc", anchor="center", width=180, stretch=False)
         self.t_cliente.column("fecha", anchor="center", width=130, stretch=False)
         
-        self.actualizar_tabla_clientes()
-        
         scrllbar_t_cli = ttk.Scrollbar(vent_clientes, orient="vertical", command=self.t_cliente.yview)
         self.t_cliente.configure(yscrollcommand=scrllbar_t_cli.set)
         scrllbar_t_cli.place(x=1177, y=80, height=569)
         
+        self.actualizar_tabla_clientes()
+        self.cbo_page_cliente.bind('<<ComboboxSelected>>', self.cambiar_pagina_desde_combo)
+
     def registrar_cliente(self):
         
         self.vent_clientes.withdraw()
@@ -1253,13 +1253,29 @@ class clientes:
         # Limpiar la tabla actual
         for i in self.t_cliente.get_children():
             self.t_cliente.delete(i)
+
+        # Obtener el número total de clientes
+        total_clientes = self.db_clientes.obtener_total_clientes()
         
-        # Obtener los clientes de la base de datos (primeras 50 filas)
+        # Calcular el número de páginas
+        num_paginas = (total_clientes + self.registros_por_pagina - 1) // self.registros_por_pagina
+        
+        # Actualizar el ComboBox de páginas
+        paginas = [str(i+1) for i in range(num_paginas)]
+        self.cbo_page_cliente['values'] = paginas
+        
+        # Establecer la página actual si es necesario
+        if self.pagina_actual > num_paginas:
+            self.pagina_actual = num_paginas
+        
+        self.cbo_page_cliente.set(str(self.pagina_actual))
+
+        # Obtener los clientes de la página actual
         todos_clientes = self.db_clientes.obtener_clientes_paginados(
             offset=(self.pagina_actual - 1) * self.registros_por_pagina, 
             limite=self.registros_por_pagina
         )
-        
+
         # Insertar los clientes en la tabla
         for cliente in todos_clientes:
             self.t_cliente.insert("", "end", values=cliente)
@@ -1295,7 +1311,17 @@ class clientes:
         
         # Habilitar/deshabilitar botón anterior
         self.btn_atras_cli.config(state='normal' if self.pagina_actual > 1 else 'disabled')
-
+    
+    def cambiar_pagina_desde_combo(self, event=None):
+        # Obtener el número de página seleccionado
+        pagina_seleccionada = int(self.cbo_page_cliente.get())
+        
+        # Actualizar la página actual
+        self.pagina_actual = pagina_seleccionada
+        
+        # Actualizar la tabla
+        self.actualizar_tabla_clientes()
+    
     def edit_persona_cont(self):
         # Obtener el elemento seleccionado de la tabla
         selected_item = self.t_persona.selection()
