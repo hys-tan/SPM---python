@@ -998,6 +998,8 @@ class clientes:
         self.t_cliente.configure(yscrollcommand=scrllbar_t_cli.set)
         scrllbar_t_cli.place(x=1177, y=80, height=569)
         
+        self.t_cliente.bind('<Double-1>', lambda event: self.detalle_cliente())
+        
         self.actualizar_tabla_clientes()
         self.cbo_page_cliente.bind('<<ComboboxSelected>>', self.cambiar_pagina_desde_combo)
 
@@ -1138,6 +1140,10 @@ class clientes:
         self.ids_at_disponibles = set()
         self.direcciones = []
         self.ids_dx_disponibles = set()
+        
+        self.t_persona.bind('<Double-1>', lambda event: self.edit_persona_cont())
+        self.t_area.bind('<Double-1>', lambda event: self.edit_area_trabajo())
+        self.t_direx.bind('<Double-1>', lambda event: self.edit_direx())
         
     def cancelar_registro_cliente(self):
         # Verificar si alguna de las casillas está llena
