@@ -465,7 +465,7 @@ class alertas:
         return cancel_reg
         
     # CAMBIOS SIN GUARDAR
-    def cambios_sin_guardar(self):
+    def cambios_sin_guardar(self, callback_si=None, callback_no=None):
         unsaved_changes=tk.Toplevel(self.parent)
         unsaved_changes.title("")
         unsaved_changes.geometry("300x110")
@@ -491,10 +491,22 @@ class alertas:
         can_uns_ch.create_text(79, 19, text="Tiene cambios sin guardar,", anchor="nw", font=("Arial", 10), fill="Black")
         can_uns_ch.create_text(102, 33, text="¿Desea cancelar?", anchor="nw", font=("Arial", 10), fill="Black")
         
+        def on_si():
+            unsaved_changes.destroy()
+            if callback_si:
+                callback_si()
+
+        def on_no():
+            unsaved_changes.destroy()
+            if callback_no:
+                callback_no()
+        
         btn_uns_si = tk.Button(unsaved_changes, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_uns_si.configure(command=on_si)
         btn_uns_si.place(x=73, y=73)
 
-        btn_uns_no = tk.Button(unsaved_changes, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=unsaved_changes.destroy)
+        btn_uns_no = tk.Button(unsaved_changes, text="No", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_uns_no.configure(command=on_no)
         btn_uns_no.place(x=158, y=73)
         
         utils.aplicar_hover_a_botones([btn_uns_si, btn_uns_no])
@@ -1665,6 +1677,7 @@ class clientes:
         
         
         btn_det_canc = tk.Button(det_cliente, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_canc.configure(command=self.verificar_cambios)
         btn_det_canc.place(x=75, y=462)
 
         btn_det_save = tk.Button(det_cliente, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1712,44 +1725,124 @@ class clientes:
         t_det_direx.configure(yscrollcommand=scrollbar_t_ddirex.set)
         scrollbar_t_ddirex.place(x=687, y=374, height=119)
         
+        self.det_cliente = det_cliente
         self.det_rs_cli = det_rs_cli
         self.det_ruc_cli = det_ruc_cli
         self.t_det_persona = t_det_persona
         self.t_det_area = t_det_area
         self.t_det_direx = t_det_direx
         
-        # Cargar datos principales
-        det_rs_cli.insert(0, razon_social)
-        det_ruc_cli.insert(0, ruc)
-
-        # Cargar personas de contacto, áreas y direcciones
+        # Cargar datos originales de la base de datos
         try:
             conexion = self.db_clientes.crear_conexion()
             cursor = conexion.cursor()
 
+            # Limpiar tablas antes de cargar
+            for item in self.t_det_persona.get_children():
+                self.t_det_persona.delete(item)
+            for item in self.t_det_area.get_children():
+                self.t_det_area.delete(item)
+            for item in self.t_det_direx.get_children():
+                self.t_det_direx.delete(item)
+
             # Cargar personas de contacto
             cursor.execute('SELECT nombre FROM personas_contacto WHERE cliente_ruc = ?', (ruc,))
             personas = cursor.fetchall()
-            for persona in personas:
-                t_det_persona.insert("", "end", values=(len(t_det_persona.get_children()) + 1, persona[0]))
+            for i, (persona,) in enumerate(personas, 1):
+                self.t_det_persona.insert("", "end", values=(str(i), persona))
 
             # Cargar áreas de trabajo
             cursor.execute('SELECT nombre FROM areas_trabajo WHERE cliente_ruc = ?', (ruc,))
             areas = cursor.fetchall()
-            for area in areas:
-                t_det_area.insert("", "end", values=(len(t_det_area.get_children()) + 1, area[0]))
+            for i, (area,) in enumerate(areas, 1):
+                self.t_det_area.insert("", "end", values=(str(i), area))
 
-            # Cargar direcciones adicionales
+            # Cargar direcciones
             cursor.execute('SELECT direccion FROM direcciones WHERE cliente_ruc = ?', (ruc,))
             direcciones = cursor.fetchall()
-            for direccion in direcciones:
-                t_det_direx.insert("", "end", values=(len(t_det_direx.get_children()) + 1, direccion[0]))
+            for i, (direccion,) in enumerate(direcciones, 1):
+                self.t_det_direx.insert("", "end", values=(str(i), direccion))
+
+            # Almacenar los valores originales para comparación
+            self.valores_originales = {
+                'razon_social': razon_social,
+                'ruc': ruc,
+                'personas_contacto_originales': [(str(i), persona[0]) for i, persona in enumerate(personas, 1)],
+                'areas_trabajo_originales': [(str(i), area[0]) for i, area in enumerate(areas, 1)],
+                'direcciones_originales': [(str(i), direccion[0]) for i, direccion in enumerate(direcciones, 1)],
+                'personas_contacto_actuales': [(str(i), persona[0]) for i, persona in enumerate(personas, 1)],
+                'areas_trabajo_actuales': [(str(i), area[0]) for i, area in enumerate(areas, 1)],
+                'direcciones_actuales': [(str(i), direccion[0]) for i, direccion in enumerate(direcciones, 1)]
+            }
 
         except sqlite3.Error as e:
-            print(f"Error al cargar datos del cliente: {e}")
+            print(f"Error al cargar datos originales: {e}")
         finally:
             if conexion:
                 conexion.close()
+
+        # Cargar datos en los campos de entrada
+        self.det_rs_cli.insert(0, razon_social)
+        self.det_ruc_cli.insert(0, ruc)
+
+    def verificar_cambios(self):
+        # Verificar si hay cambios en los campos principales
+        cambios_razon_social = self.det_rs_cli.get().strip() != str(self.valores_originales['razon_social']).strip()
+        cambios_ruc = self.det_ruc_cli.get().strip() != str(self.valores_originales['ruc']).strip()
+
+        # Actualizar los valores actuales de las tablas
+        def obtener_valores_tabla(tabla):
+            return [(tabla.item(item)['values'][0], tabla.item(item)['values'][1]) 
+                    for item in tabla.get_children()]
+
+        self.valores_originales['personas_contacto_actuales'] = obtener_valores_tabla(self.t_det_persona)
+        self.valores_originales['areas_trabajo_actuales'] = obtener_valores_tabla(self.t_det_area)
+        self.valores_originales['direcciones_actuales'] = obtener_valores_tabla(self.t_det_direx)
+
+        # Función para comparar solo los elementos añadidos manualmente
+        def comparar_tablas_nuevos(originales, actuales):
+            # Si la longitud actual es mayor que la original, hay nuevos elementos
+            if len(actuales) > len(originales):
+                # Comparar solo los elementos que no están en los originales
+                nuevos = actuales[len(originales):]
+                return len(nuevos) > 0
+            return False
+
+        # Verificar cambios en las tablas
+        cambios_personas = comparar_tablas_nuevos(
+            self.valores_originales['personas_contacto_originales'], 
+            self.valores_originales['personas_contacto_actuales']
+        )
+        cambios_areas = comparar_tablas_nuevos(
+            self.valores_originales['areas_trabajo_originales'], 
+            self.valores_originales['areas_trabajo_actuales']
+        )
+        cambios_direcciones = comparar_tablas_nuevos(
+            self.valores_originales['direcciones_originales'], 
+            self.valores_originales['direcciones_actuales']
+        )
+
+        # Verificar si hay cambios
+        if (cambios_razon_social or cambios_ruc or 
+            cambios_personas or cambios_areas or cambios_direcciones):
+            # Mostrar ventana de cambios sin guardar
+            def callback_si():
+                # Acción cuando se presiona "Sí"
+                self.det_cliente.destroy()
+                self.vent_clientes.deiconify()
+            
+            def callback_no():
+                # Acción cuando se presiona "No" (permanecer en la ventana actual)
+                pass
+            
+            self.alerta.cambios_sin_guardar(
+                callback_si=callback_si,
+                callback_no=callback_no
+            )
+        else:
+            # Si no hay cambios, cerrar directamente
+            self.det_cliente.destroy()
+            self.vent_clientes.deiconify()
 
 
 class cotizaciones:
