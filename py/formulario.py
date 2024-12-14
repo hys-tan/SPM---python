@@ -21,6 +21,7 @@ ICON_DIR = os.path.join(BASE_DIR, "icons")
 class alertas:
     def __init__(self, parent):
         self.parent = parent
+        self._no_datos_window = None
     
     # CERRAR EL PROGRAMA --
     def cerrar_prog(self):
@@ -99,7 +100,10 @@ class alertas:
         utils.aplicar_hover_a_botones([btn_sec_ok])
 
     # DATO NO ENCONTRADO
-    def no_datos(self):
+    def no_datos(self, callback=None):
+        if self._no_datos_window and self._no_datos_window.winfo_exists():
+            return
+        
         no_file=tk.Toplevel(self.parent)
         no_file.title("")
         no_file.geometry("300x110")
@@ -108,6 +112,8 @@ class alertas:
         no_file.grab_set()
         utils.centrar_ventana(no_file)
         no_file.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        self._no_datos_window = no_file
         
         canvas_no_file = tk.Canvas(no_file, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
         canvas_no_file.pack()
@@ -125,7 +131,17 @@ class alertas:
         
         canvas_no_file.create_text(94, 26, text="Datos no encontrados", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_nf_ok = tk.Button(no_file, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=no_file.destroy)
+        def cerrar_ventana():
+            # Resetear la referencia cuando se cierra
+            self._no_datos_window = None
+            no_file.destroy()
+            
+            # Ejecutar callback si está definido
+            if callback:
+                callback()
+        
+        btn_nf_ok = tk.Button(no_file, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_nf_ok.configure(command=cerrar_ventana)
         btn_nf_ok.place(x=115, y=73)
         
         utils.aplicar_hover_a_botones([btn_nf_ok])
@@ -970,8 +986,8 @@ class clientes:
         except Exception as e:
             raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {search_icon_path}. Error: {e}")
         
-        search_canvas_cliente.tag_bind(search_icon_id_cliente, "<Button-1>", lambda e: self.alerta.no_datos())
-                
+        search_canvas_cliente.tag_bind(search_icon_id_cliente, "<Button-1>", self.buscar_cliente)
+        
         search_entry_cliente = tk.Entry(search_canvas_cliente, font=("Arial", 13), width=40, bd=0, relief="flat", fg='grey')
         search_entry_cliente.insert(0, "Buscar...")
         search_entry_cliente.bind("<FocusIn>", lambda event: utils.clear_placeholder(event, search_entry_cliente))
@@ -1000,8 +1016,58 @@ class clientes:
         
         self.t_cliente.bind('<Double-1>', lambda event: self.detalle_cliente())
         
+        self.search_entry_cliente = search_entry_cliente
+        
+        search_entry_cliente.bind("<Return>", self.buscar_cliente)
+
+        search_canvas_cliente.tag_bind(search_icon_id_cliente, "<Button-1>", self.buscar_cliente)
+        
         self.actualizar_tabla_clientes()
         self.cbo_page_cliente.bind('<<ComboboxSelected>>', self.cambiar_pagina_desde_combo)
+
+    def buscar_cliente(self, event=None):
+        # Obtener el término de búsqueda
+        termino_busqueda = self.search_entry_cliente.get().strip().lower()
+
+        # Verificar si el término de búsqueda está vacío o es el placeholder
+        if not termino_busqueda or termino_busqueda == "buscar...":
+            # Mostrar la ventana no_datos
+            self.alerta.no_datos()
+            return
+
+        try:
+            # Crear conexión a la base de datos
+            conexion = self.db_clientes.crear_conexion()
+            cursor = conexion.cursor()
+
+            # Consulta para buscar por Razón Social o RUC
+            cursor.execute('''
+                SELECT id, razon_social, ruc, strftime('%d/%m/%Y', fecha_registro) AS fecha_registro 
+                FROM clientes 
+                WHERE LOWER(razon_social) LIKE ? OR LOWER(ruc) LIKE ?
+                ORDER BY id DESC
+            ''', (f'%{termino_busqueda}%', f'%{termino_busqueda}%'))
+
+            # Obtener resultados
+            resultados = cursor.fetchall()
+
+            # Limpiar tabla actual
+            for item in self.t_cliente.get_children():
+                self.t_cliente.delete(item)
+
+            # Insertar resultados en la tabla
+            if resultados:
+                for cliente in resultados:
+                    self.t_cliente.insert("", "end", values=cliente)
+            else:
+                # Mostrar mensaje si no hay resultados
+                self.alerta.no_datos(callback=self.actualizar_tabla_clientes)
+
+        except sqlite3.Error as e:
+            print(f"Error al buscar clientes: {e}")
+        finally:
+            if conexion:
+                conexion.close()
 
     def registrar_cliente(self):
         
@@ -1256,38 +1322,42 @@ class clientes:
                 conexion.close()
 
     def actualizar_tabla_clientes(self):
-        # Limpiar la tabla actual
-        for i in self.t_cliente.get_children():
-            self.t_cliente.delete(i)
+        try:
+            # Limpiar la tabla actual
+            for i in self.t_cliente.get_children():
+                self.t_cliente.delete(i)
 
-        # Obtener el número total de clientes
-        total_clientes = self.db_clientes.obtener_total_clientes()
-        
-        # Calcular el número de páginas
-        num_paginas = (total_clientes + self.registros_por_pagina - 1) // self.registros_por_pagina
-        
-        # Actualizar el ComboBox de páginas
-        paginas = [str(i+1) for i in range(num_paginas)]
-        self.cbo_page_cliente['values'] = paginas
-        
-        # Establecer la página actual si es necesario
-        if self.pagina_actual > num_paginas:
-            self.pagina_actual = num_paginas
-        
-        self.cbo_page_cliente.set(str(self.pagina_actual))
+            # Obtener el número total de clientes
+            total_clientes = self.db_clientes.obtener_total_clientes()
+            
+            # Calcular el número de páginas
+            num_paginas = (total_clientes + self.registros_por_pagina - 1) // self.registros_por_pagina
+            
+            # Actualizar el ComboBox de páginas
+            paginas = [str(i + 1) for i in range(num_paginas)]
+            self.cbo_page_cliente['values'] = paginas
+            
+            # Establecer la página actual si es necesario
+            if self.pagina_actual > num_paginas:
+                self.pagina_actual = num_paginas
+            
+            self.cbo_page_cliente.set(str(self.pagina_actual))
 
-        # Obtener los clientes de la página actual
-        todos_clientes = self.db_clientes.obtener_clientes_paginados(
-            offset=(self.pagina_actual - 1) * self.registros_por_pagina, 
-            limite=self.registros_por_pagina
-        )
+            # Obtener los clientes de la página actual
+            todos_clientes = self.db_clientes.obtener_clientes_paginados(
+                offset=(self.pagina_actual - 1) * self.registros_por_pagina, 
+                limite=self.registros_por_pagina
+            )
 
-        # Insertar los clientes en la tabla
-        for cliente in todos_clientes:
-            self.t_cliente.insert("", "end", values=cliente)
+            # Insertar los clientes en la tabla
+            for cliente in todos_clientes:
+                self.t_cliente.insert("", "end", values=cliente)
 
-        # Habilitar/deshabilitar botones de navegación
-        self.actualizar_botones_navegacion()
+            # Habilitar/deshabilitar botones de navegación
+            self.actualizar_botones_navegacion()
+
+        except sqlite3.Error as e:
+            print(f"Error al actualizar tabla de clientes: {e}")
         
     def siguiente_pagina(self):
         # Verificar si hay más registros
