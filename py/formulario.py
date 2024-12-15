@@ -1124,16 +1124,20 @@ class clientes:
         utils.create_rounded_rectangle(canvas_reg_cli, 20, 174, 340, 204, radius=10, fill="white", outline="#959595")
         self.reg_persona = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_persona.place(x=25, y=179, width=310, height=20)
+        self.reg_persona.bind("<Return>", lambda event: self.agregar_persona_contacto())
         
         canvas_reg_cli.create_text(370, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 370, 38, 690, 68, radius=10, fill="white", outline="#959595")
         self.reg_ar_tb = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_ar_tb.place(x=375, y=43, width=310, height=20)
+        self.reg_ar_tb.bind("<Return>", lambda event: self.agregar_area_trabajo())
 
         canvas_reg_cli.create_text(370, 266, text="Dirección", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_reg_cli, 370, 284, 690, 314, radius=10, fill="white", outline="#959595")
         self.reg_direx = tk.Entry(self.reg_cliente, font=("Arial", 11), bd=0)
         self.reg_direx.place(x=375, y=289, width=310, height=20)
+        self.reg_direx.bind("<Return>", lambda event: self.agregar_direccion())
+
         
         btn_ag_persona = tk.Button(self.reg_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.agregar_persona_contacto)
         btn_ag_persona.place(x=20, y=214)
@@ -1633,20 +1637,24 @@ class clientes:
         
         canvas_det_cli.create_text(20, 156, text="Persona de Contacto", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_det_cli, 20, 174, 340, 204, radius=10, fill="white", outline="#959595")
-        det_persona = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
-        det_persona.place(x=25, y=179, width=310, height=20)
+        self.det_persona = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        self.det_persona.place(x=25, y=179, width=310, height=20)
+        self.det_persona.bind("<Return>", lambda event: self.agregar_persona_contacto_detalle())
         
         canvas_det_cli.create_text(370, 20, text="Área de Trabajo", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_det_cli, 370, 38, 690, 68, radius=10, fill="white", outline="#959595")
-        det_ar_tb = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
-        det_ar_tb.place(x=375, y=43, width=310, height=20)
+        self.det_ar_tb = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        self.det_ar_tb.place(x=375, y=43, width=310, height=20)
+        self.det_ar_tb.bind("<Return>", lambda event: self.agregar_area_trabajo_detalle())
 
         canvas_det_cli.create_text(370, 266, text="Dirección", anchor="nw", font=("Raleway", 10, "bold"), fill="black")
         utils.create_rounded_rectangle(canvas_det_cli, 370, 284, 690, 314, radius=10, fill="white", outline="#959595")
-        det_direx = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
-        det_direx.place(x=375, y=289, width=310, height=20)
+        self.det_direx = tk.Entry(det_cliente, font=("Arial", 11), bd=0)
+        self.det_direx.place(x=375, y=289, width=310, height=20)
+        self.det_direx.bind("<Return>", lambda event: self.agregar_direccion_detalle())
         
         btn_det_ag_persona = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_ag_persona.configure(command=self.agregar_persona_contacto_detalle)
         btn_det_ag_persona.place(x=20, y=214)
         
         btn_det_ed_persona = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1657,6 +1665,7 @@ class clientes:
         
         
         btn_det_ag_trabajo = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_ag_trabajo.configure(command=self.agregar_area_trabajo_detalle)
         btn_det_ag_trabajo.place(x=370, y=78)
         
         btn_det_ed_trabajo = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1667,6 +1676,7 @@ class clientes:
         
         
         btn_det_ag_direx = tk.Button(det_cliente, text="Agregar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_ag_direx.configure(command=self.agregar_direccion_detalle)
         btn_det_ag_direx.place(x=370, y=324)
         
         btn_det_ed_direx = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1843,6 +1853,36 @@ class clientes:
             # Si no hay cambios, cerrar directamente
             self.det_cliente.destroy()
             self.vent_clientes.deiconify()
+
+    def agregar_persona_contacto_detalle(self):
+        persona = self.det_persona.get()
+        if persona:
+            # Obtener el siguiente ID disponible
+            siguiente_id = len(self.t_det_persona.get_children()) + 1
+
+            # Insertar en la tabla
+            self.t_det_persona.insert("", "end", values=(str(siguiente_id), persona))
+
+            # Limpiar el campo de entrada
+            self.det_persona.delete(0, tk.END)
+            
+    def agregar_area_trabajo_detalle(self):
+        area = self.det_ar_tb.get()
+        if area:
+            siguiente_id = len(self.t_det_area.get_children()) + 1
+
+            self.t_det_area.insert("", "end", values=(str(siguiente_id), area))
+
+            self.det_ar_tb.delete(0, tk.END)
+            
+    def agregar_direccion_detalle(self):
+        direccion = self.det_direx.get()
+        if direccion:
+            siguiente_id = len(self.t_det_direx.get_children()) + 1
+
+            self.t_det_direx.insert("", "end", values=(str(siguiente_id), direccion))
+
+            self.det_direx.delete(0, tk.END)
 
 
 class cotizaciones:
