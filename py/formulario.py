@@ -1661,6 +1661,7 @@ class clientes:
         btn_det_ed_persona.place(x=130, y=214)
         
         btn_det_del_persona = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_del_persona.configure(command=self.eliminar_persona_contacto_det)
         btn_det_del_persona.place(x=240, y=214)
         
         
@@ -1672,6 +1673,7 @@ class clientes:
         btn_det_ed_trabajo.place(x=480, y=78)
         
         btn_det_del_trabajo = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_del_trabajo.configure(command=self.eliminar_area_trabajo_det)
         btn_det_del_trabajo.place(x=590, y=78)
         
         
@@ -1683,6 +1685,7 @@ class clientes:
         btn_det_ed_direx.place(x=480, y=324)
         
         btn_det_del_direx = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_del_direx.configure(command=self.eliminar_direccion_det)
         btn_det_del_direx.place(x=590, y=324)
         
         
@@ -1883,6 +1886,50 @@ class clientes:
             self.t_det_direx.insert("", "end", values=(str(siguiente_id), direccion))
 
             self.det_direx.delete(0, tk.END)
+            
+    def eliminar_persona_contacto_det(self):
+        # Obtener el elemento seleccionado de la tabla
+        selected_item = self.t_det_persona.selection()
+        
+        # Verificar si hay una fila seleccionada
+        if not selected_item:
+            # Si no hay fila seleccionada, mostrar la alerta
+            self.alerta.seleccionar_fila(
+                parent=self.det_cliente)
+            return
+
+        # Eliminar la fila seleccionada
+        self.t_det_persona.delete(selected_item)
+
+        # Reajustar los IDs de manera secuencial
+        for index, item in enumerate(self.t_det_persona.get_children(), start=1):
+            self.t_det_persona.item(item, values=(index, self.t_det_persona.item(item)['values'][1]))
+            
+    def eliminar_area_trabajo_det(self):
+        selected_item = self.t_det_area.selection()
+        
+        if not selected_item:
+            self.alerta.seleccionar_fila(
+                parent=self.det_cliente)
+            return
+        
+        self.t_det_area.delete(selected_item)
+        
+        for index, item in enumerate(self.t_det_area.get_children(), start=1):
+            self.t_det_area.item(item, values=(index, self.t_det_area.item(item)['values'][1]))
+    
+    def eliminar_direccion_det(self):
+        selected_item = self.t_det_direx.selection()
+        
+        if not selected_item:
+            self.alerta.seleccionar_fila(
+                parent=self.det_cliente)
+            return
+        
+        self.t_det_direx.delete(selected_item)
+        
+        for index, item in enumerate(self.t_det_direx.get_children(), start=1):
+            self.t_det_direx.item(item, values=(index, self.t_det_direx.item(item)['values'][1]))
 
 
 class cotizaciones:
