@@ -1414,19 +1414,27 @@ class clientes:
         # Actualizar la tabla
         self.actualizar_tabla_clientes()
     
-    def edit_persona_cont(self):
+    def edit_persona_cont(self, tabla=None, parent=None):
+        
+        if tabla is None:
+            tabla = self.t_persona
+    
+        # Si no se especifica parent, usar la ventana por defecto
+        if parent is None:
+            parent = self.vent_clientes
+
         # Obtener el elemento seleccionado de la tabla
-        selected_item = self.t_persona.selection()
+        selected_item = tabla.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila(
-                parent=self.vent_clientes)
+            # Si no hay fila seleccionada, mostrar alerta
+            self.alerta.seleccionar_fila(parent=parent)
             return
 
         # Obtener el ID y el nombre de la persona seleccionada
-        item = self.t_persona.item(selected_item)
+        item = tabla.item(selected_item)
         persona_nombre = item['values'][1]  # Solo obtenemos el nombre
         
-        ed_pers = tk.Toplevel(self.vent_clientes)
+        ed_pers = tk.Toplevel(parent)
         ed_pers.title("Editar Persona de Contacto")
         ed_pers.geometry("450x128")
         ed_pers.resizable(False, False)
@@ -1449,14 +1457,18 @@ class clientes:
         btn_canc_pers = tk.Button(ed_pers, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_pers.destroy)
         btn_canc_pers.place(x=10, y=88)
 
-        btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: self.guardar_edicion_persona(selected_item, inpt_ed_pers_con.get(), ed_pers))
+        btn_save_pers = tk.Button(ed_pers, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_save_pers.configure(command=lambda: self.guardar_edicion_persona(selected_item, inpt_ed_pers_con.get(), ed_pers, tabla))
         btn_save_pers.place(x=120, y=88)
         
         utils.aplicar_hover_a_botones([btn_canc_pers, btn_save_pers])
     
-    def guardar_edicion_persona(self, selected_item, nuevo_nombre, ventana):
+    def guardar_edicion_persona(self, selected_item, nuevo_nombre, ventana, tabla=None):
+        if tabla is None:
+            tabla = self.t_persona
+
         # Actualizar el nombre en la tabla
-        self.t_persona.item(selected_item, values=(self.t_persona.item(selected_item)['values'][0], nuevo_nombre))
+        tabla.item(selected_item, values=(tabla.item(selected_item)['values'][0], nuevo_nombre))
         ventana.destroy()
 
     def eliminar_persona_contacto(self):
@@ -1476,17 +1488,23 @@ class clientes:
         # Ajustar el siguiente ID disponible
         self.siguiente_id = len(self.t_persona.get_children()) + 1
 
-    def edit_area_trabajo(self):
-        selected_item = self.t_area.selection()
+    def edit_area_trabajo(self, tabla=None, parent=None):
+        if tabla is None:
+            tabla = self.t_det_area
+
+        if parent is None:
+            parent = self.vent_clientes
+
+        selected_item = tabla.selection()
+
         if not selected_item:
-            self.alerta.seleccionar_fila(
-                parent=self.vent_clientes)
+            self.alerta.seleccionar_fila(parent=parent)
             return
-        
-        item = self.t_area.item(selected_item)
+
+        item = tabla.item(selected_item)
         area_nombre = item['values'][1]
         
-        ed_ar_trabajo = tk.Toplevel(self.vent_clientes)
+        ed_ar_trabajo = tk.Toplevel(parent)
         ed_ar_trabajo.title("Editar Área de Trabajo")
         ed_ar_trabajo.geometry("450x128")
         ed_ar_trabajo.resizable(False, False)
@@ -1509,14 +1527,17 @@ class clientes:
         btn_canc_ar_trab = tk.Button(ed_ar_trabajo, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_ar_trabajo.destroy)
         btn_canc_ar_trab.place(x=10, y=88)
 
-        btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: self.guardar_edicion_area_trabajo(selected_item, inpt_ed_ar_trab.get(), ed_ar_trabajo))
+        btn_save_ar_trab = tk.Button(ed_ar_trabajo, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_save_ar_trab.configure(command=lambda: self.guardar_edicion_area_trabajo(selected_item, inpt_ed_ar_trab.get(), ed_ar_trabajo, tabla))
         btn_save_ar_trab.place(x=120, y=88)
         
         utils.aplicar_hover_a_botones([btn_canc_ar_trab, btn_save_ar_trab])
         
-    def guardar_edicion_area_trabajo(self, selected_item, nuevo_nombre, ventana):
-        # Actualizar el nombre en la tabla
-        self.t_area.item(selected_item, values=(self.t_area.item(selected_item)['values'][0], nuevo_nombre))
+    def guardar_edicion_area_trabajo(self, selected_item, nuevo_nombre, ventana, tabla=None):
+        if tabla is None:
+            tabla = self.t_area
+        
+        tabla.item(selected_item, values=(tabla.item(selected_item)['values'][0], nuevo_nombre))
         ventana.destroy()
     
     def eliminar_area_trabajo(self):
@@ -1533,14 +1554,19 @@ class clientes:
 
         self.siguiente_id_area = len(self.t_area.get_children()) + 1
 
-    def edit_direx(self):
-        selected_item = self.t_direx.selection()
+    def edit_direx(self, tabla=None, parent=None):
+        if tabla is None:
+            tabla = self.t_direx
+
+        if parent is None:
+            parent = self.vent_clientes
+
+        selected_item = tabla.selection()
         if not selected_item:
-            self.alerta.seleccionar_fila(
-                parent=self.vent_clientes)
+            self.alerta.seleccionar_fila(parent=parent)
             return
-        
-        item = self.t_direx.item(selected_item)
+
+        item = tabla.item(selected_item)
         direx_nombre = item['values'][1]
         
         ed_direccion = tk.Toplevel(self.vent_clientes)
@@ -1567,13 +1593,17 @@ class clientes:
         btn_canc_direx = tk.Button(ed_direccion, text="Cancelar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=ed_direccion.destroy)
         btn_canc_direx.place(x=10, y=88)
 
-        btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: self.guardar_edicion_direccion(selected_item, inpt_ed_direx.get(), ed_direccion))
+        btn_save_direx = tk.Button(ed_direccion, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_save_direx.configure(command=lambda: self.guardar_edicion_direccion(selected_item, inpt_ed_direx.get(), ed_direccion, tabla))
         btn_save_direx.place(x=120, y=88)
         
         utils.aplicar_hover_a_botones([btn_canc_direx, btn_save_direx])
 
-    def guardar_edicion_direccion(self, selected_item, nuevo_nombre, ventana):
-        self.t_direx.item(selected_item, values=(self.t_direx.item(selected_item)['values'][0], nuevo_nombre))
+    def guardar_edicion_direccion(self, selected_item, nuevo_nombre, ventana, tabla=None):
+        if tabla is None:
+            tabla = self.t_direx
+        
+        tabla.item(selected_item, values=(tabla.item(selected_item)['values'][0], nuevo_nombre))
         ventana.destroy()
     
     def eliminar_direccion(self):
@@ -1658,6 +1688,7 @@ class clientes:
         btn_det_ag_persona.place(x=20, y=214)
         
         btn_det_ed_persona = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_ed_persona.configure(command=lambda: self.edit_persona_cont(tabla=self.t_det_persona, parent=self.det_cliente))
         btn_det_ed_persona.place(x=130, y=214)
         
         btn_det_del_persona = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1670,6 +1701,7 @@ class clientes:
         btn_det_ag_trabajo.place(x=370, y=78)
         
         btn_det_ed_trabajo = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_ed_trabajo.configure(command=lambda: self.edit_area_trabajo(tabla=self.t_det_area, parent=self.det_cliente))
         btn_det_ed_trabajo.place(x=480, y=78)
         
         btn_det_del_trabajo = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1682,6 +1714,7 @@ class clientes:
         btn_det_ag_direx.place(x=370, y=324)
         
         btn_det_ed_direx = tk.Button(det_cliente, text="Editar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_ed_direx.configure(command=lambda: self.edit_direx(tabla=self.t_det_direx, parent=self.det_cliente))
         btn_det_ed_direx.place(x=480, y=324)
         
         btn_det_del_direx = tk.Button(det_cliente, text="Eliminar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
@@ -1744,6 +1777,18 @@ class clientes:
         self.t_det_persona = t_det_persona
         self.t_det_area = t_det_area
         self.t_det_direx = t_det_direx
+        
+        self.t_det_persona.bind('<Double-1>', lambda event: self.edit_persona_cont(
+            tabla=self.t_det_persona, 
+            parent=self.det_cliente))
+        
+        self.t_det_area.bind('<Double-1>', lambda event: self.edit_area_trabajo(
+            tabla=self.t_det_area,
+            parent=self.det_cliente))
+        
+        self.t_det_direx.bind('<Double-1>', lambda event: self.edit_direx(
+            tabla=self.t_det_direx,
+            parent=self.det_cliente))
         
         # Cargar datos originales de la base de datos
         try:
