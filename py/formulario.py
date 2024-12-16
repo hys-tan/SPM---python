@@ -512,7 +512,7 @@ class alertas:
         utils.aplicar_hover_a_botones([btn_uns_si, btn_uns_no])
         
     # REGISTRO ACTUALIZADO
-    def registro_actualizado(self):
+    def registro_actualizado(self, callback=None):
         reg_updated=tk.Toplevel(self.parent)
         reg_updated.title("")
         reg_updated.geometry("300x110")
@@ -537,7 +537,13 @@ class alertas:
         
         canvas_reg_updated.create_text(92, 26, text="¡Registro actualizado!", anchor="nw", font=("Arial", 10), fill="Black")
         
-        btn_reg_upd = tk.Button(reg_updated, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=reg_updated.destroy)
+        def cerrar_ventana():
+            reg_updated.destroy()
+            if callback:
+                callback()
+        
+        btn_reg_upd = tk.Button(reg_updated, text="Aceptar", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_reg_upd.configure(command=cerrar_ventana)
         btn_reg_upd.place(x=115, y=73)
         
         utils.aplicar_hover_a_botones([btn_reg_upd])
@@ -1727,6 +1733,7 @@ class clientes:
         btn_det_canc.place(x=75, y=462)
 
         btn_det_save = tk.Button(det_cliente, text="Guardar", width=13, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_det_save.configure(command=self.guardar_cambios_cliente)
         btn_det_save.place(x=185, y=462)
         
         utils.aplicar_hover_a_botones([btn_det_ag_persona, btn_det_ed_persona, btn_det_del_persona, btn_det_ag_trabajo, 
@@ -1975,6 +1982,72 @@ class clientes:
         
         for index, item in enumerate(self.t_det_direx.get_children(), start=1):
             self.t_det_direx.item(item, values=(index, self.t_det_direx.item(item)['values'][1]))
+            
+    def guardar_cambios_cliente(self):
+        # Obtener los valores actuales
+        nueva_razon_social = self.det_rs_cli.get().strip()
+        nuevo_ruc = self.det_ruc_cli.get().strip()
+
+        # Validar campos obligatorios
+        if not nueva_razon_social or not nuevo_ruc:
+            self.alerta.question_datos()
+            return
+
+        try:
+            conexion = self.db_clientes.crear_conexion()
+            cursor = conexion.cursor()
+
+            # Actualizar cliente
+            cursor.execute('''
+                UPDATE clientes 
+                SET razon_social = ?, ruc = ? 
+                WHERE ruc = ?
+            ''', (nueva_razon_social, nuevo_ruc, self.valores_originales['ruc']))
+
+            # Actualizar personas de contacto
+            cursor.execute('DELETE FROM personas_contacto WHERE cliente_ruc = ?', (self.valores_originales['ruc'],))
+            for persona in self.t_det_persona.get_children():
+                nombre = self.t_det_persona.item(persona)['values'][1]
+                cursor.execute('''
+                    INSERT INTO personas_contacto (cliente_ruc, nombre) 
+                    VALUES (?, ?)
+                ''', (nuevo_ruc, nombre))
+
+            # Actualizar áreas de trabajo
+            cursor.execute('DELETE FROM areas_trabajo WHERE cliente_ruc = ?', (self.valores_originales['ruc'],))
+            for area in self.t_det_area.get_children():
+                nombre = self.t_det_area.item(area)['values'][1]
+                cursor.execute('''
+                    INSERT INTO areas_trabajo (cliente_ruc, nombre) 
+                    VALUES (?, ?)
+                ''', (nuevo_ruc, nombre))
+
+            # Actualizar direcciones
+            cursor.execute('DELETE FROM direcciones WHERE cliente_ruc = ?', (self.valores_originales['ruc'],))
+            for direccion in self.t_det_direx.get_children():
+                dir_nombre = self.t_det_direx.item(direccion)['values'][1]
+                cursor.execute('''
+                    INSERT INTO direcciones (cliente_ruc, direccion) 
+                    VALUES (?, ?)
+                ''', (nuevo_ruc, dir_nombre))
+
+            conexion.commit()
+
+            # Mostrar ventana de registro actualizado
+            def callback_registro_actualizado():
+                self.det_cliente.destroy()
+                self.actualizar_tabla_clientes()
+                self.vent_clientes.deiconify()
+
+            self.alerta.registro_actualizado(callback=callback_registro_actualizado)
+
+        except sqlite3.IntegrityError:
+            self.alerta.ruc_repetido()
+        except sqlite3.Error as e:
+            print(f"Error al actualizar cliente: {e}")
+        finally:
+            if conexion:
+                conexion.close()
 
 
 class cotizaciones:
