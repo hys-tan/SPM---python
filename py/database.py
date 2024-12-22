@@ -85,7 +85,7 @@ class ClienteDatabase:
             cursor.execute('''
                 SELECT id, razon_social, ruc, strftime('%d/%m/%Y', fecha_registro) AS fecha_registro 
                 FROM clientes 
-                ORDER BY id DESC
+                ORDER BY id ASC
                 LIMIT ? OFFSET ?
             ''', (limite, offset))
             return cursor.fetchall()

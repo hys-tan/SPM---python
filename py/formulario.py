@@ -129,7 +129,7 @@ class alertas:
 
         utils.create_rounded_rectangle(canvas_no_file, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
         
-        canvas_no_file.create_text(94, 26, text="Datos no encontrados", anchor="nw", font=("Arial", 10), fill="Black")
+        canvas_no_file.create_text(94, 26, text="Dato no encontrado", anchor="nw", font=("Arial", 10), fill="Black")
         
         def cerrar_ventana():
             # Resetear la referencia cuando se cierra
@@ -145,6 +145,38 @@ class alertas:
         btn_nf_ok.place(x=115, y=73)
         
         utils.aplicar_hover_a_botones([btn_nf_ok])
+
+    # ESCRIBA UN TERMINO DE BUSQUEDA
+    def validar_busqueda(self):
+        val_busq=tk.Toplevel(self.parent)
+        val_busq.title("")
+        val_busq.geometry("300x110")
+        val_busq.resizable(False, False)
+        val_busq.configure(bg="#FFFFFF")
+        val_busq.grab_set()
+        utils.centrar_ventana(val_busq)
+        val_busq.protocol("WM_DELETE_WINDOW", lambda: None)
+        
+        canvas_val_busq = tk.Canvas(val_busq, width=300, height=110, bg="#FFFFFF", highlightthickness=0)
+        canvas_val_busq.pack()
+        
+        icono_path = os.path.join(ICON_DIR, "alert.png")
+        try:
+            icon_val_busq = tk.PhotoImage(file=icono_path)
+            canvas_val_busq.create_image(30, 17, anchor="nw", image=icon_val_busq)
+            canvas_val_busq.image = icon_val_busq
+        except Exception as e:
+            raise FileNotFoundError(f"El archivo del icono no se encontró en la ruta: {icono_path}. Error: {e}")
+        
+        utils.create_rounded_rectangle(canvas_val_busq, 0, 66, 300, 110, radius=0, fill="#EEEEE4", outline="#EEEEE4")
+        
+        canvas_val_busq.create_text(79, 26, text="Ingrese un término de búsqueda", anchor="nw", font=("Arial", 10), fill="Black")
+        
+        btn_vb_ok = tk.Button(val_busq, text="Si", width=9, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_vb_ok.configure(command=val_busq.destroy)
+        btn_vb_ok.place(x=115, y=73)
+        
+        utils.aplicar_hover_a_botones([btn_vb_ok])
 
     # PREGUNTA ELIMINAR FILA
     def quest_mat(self):
@@ -964,8 +996,12 @@ class clientes:
         btn_ed_cli = tk.Button(vent_clientes, text="Editar cliente", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=self.detalle_cliente)
         btn_ed_cli.place(x=22, y=125)
         
+        btn_rev_tab = tk.Button (vent_clientes, text="Reestablcer la vista de la tabla", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white")
+        btn_rev_tab.configure()
+        btn_rev_tab.place(x=22, y=170)
+        
         btn_menu = tk.Button(vent_clientes, text="Volver al inicio", width=37, height=1, font=("Raleway", 9), activebackground="#7F7F7F", activeforeground="white", command=lambda: [vent_clientes.destroy(), self.root.deiconify()])
-        btn_menu.place(x=22, y=170)
+        btn_menu.place(x=22, y=215)
         
         self.pagina_actual = 1
         self.registros_por_pagina = 50
@@ -978,7 +1014,7 @@ class clientes:
         self.btn_atras_cli.configure(command=self.pagina_anterior)
         self.btn_atras_cli.place(x=980, y=658)
         
-        utils.aplicar_hover_a_botones([btn_reg_cliente, btn_ed_cli, btn_menu, self.btn_sig_cli, self.btn_atras_cli])
+        utils.aplicar_hover_a_botones([btn_reg_cliente, btn_ed_cli, btn_rev_tab, btn_menu, self.btn_sig_cli, self.btn_atras_cli])
         
         canvas_cliente.create_text(20, 576, text="Filtros", anchor="nw", font=("Raleway", 20, "bold"), fill="White")
         
@@ -1063,7 +1099,7 @@ class clientes:
                 SELECT id, razon_social, ruc, strftime('%d/%m/%Y', fecha_registro) AS fecha_registro 
                 FROM clientes 
                 WHERE LOWER(razon_social) LIKE ? OR LOWER(ruc) LIKE ?
-                ORDER BY id DESC
+                ORDER BY id ASC
             ''', (f'%{termino_busqueda}%', f'%{termino_busqueda}%'))
 
             # Obtener resultados
